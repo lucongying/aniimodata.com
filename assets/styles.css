@@ -1,0 +1,1819 @@
+/* ============================================================
+   Aniimo 攻略索引 — 元素光谱系统
+   底色：冷调矿物纸（避开米色/纯黑两个 AI 默认）
+   字：Bricolage Grotesque（拉丁显示）+ IBM Plex Mono（数据）+ 系统 CJK
+
+   背景的两层：
+   1. 纸纹（body 的 SVG 噪点平铺）—— 全页统一的材质，同时消除色带
+   2. 落光（.lightfall）—— 页顶那条 10 段光谱投到纸面上的光，860px 内衰减完
+   ============================================================ */
+
+:root{
+  /* 底色。10 个属性色是页面唯一的彩色来源，底色必须尽量中性，否则会跟它们抢。 */
+  --paper:#F2F4F3;
+
+  --bg:var(--paper);      /* 不透明。用作文字色和小面积填充 */
+  /* 抬升面必须不透明。半透明白叠在 --line 上（详情页的 .glance-grid /
+     .skill-grid / .form-cards 仍然用 gap:1px 铺 --line 的写法），算出来
+     和纸面只差 3 个色阶 —— 卡片读起来不是「抬起」而是「纸上的洞」。 */
+  --surface:#FCFDFC;
+  --ink:#15181B;
+  --ink-2:#5A6268;
+  /* 底色比原来深了一档，这个值跟着压深，把对比度补回 3.5:1 左右 */
+  --ink-3:#7E868D;
+  --line:#DEE2DF;
+  --line-2:#C2C8C4;
+
+  /* 属性的色值不在这里定义 —— 唯一来源是 src/data.js 的 ANIIMO_TYPES，
+     由 build.js 烘进页面。元素色通过内联 style="--c:…" 注入，避免两处定义产生偏差。 */
+
+  --display:"Bricolage Grotesque","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --cjk:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+
+  --max:1180px;
+  --gut:clamp(18px,4vw,40px);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+
+/* z-index:0 建立层叠上下文是必需的：没有它，.lightfall 的 z-index:-1
+   会跑到 body 自己的背景之后，落到画布最底层，等于看不见。 */
+body{
+  position:relative; z-index:0;
+  margin:0;
+  background-color:var(--paper);
+  /* 纸纹：内联 SVG 噪点。不透明度约 3%，作用是消除大面积的 8bit 色带，
+     顺便给整页一个统一的材质——一个资源干两件事。
+     空格编码成 %20，避免个别浏览器对 data URI 里的裸空格处理不一致。 */
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='4'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='160'%20height='160'%20filter='url(%23n)'%20opacity='0.10'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+  background-repeat:repeat;
+  color:var(--ink);
+  font-family:var(--cjk);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{color:inherit}
+h1,h2,h3{margin:0;line-height:1.25;font-weight:800;letter-spacing:-0.01em}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+dl,dd,dt{margin:0}
+table{border-collapse:collapse;width:100%}
+
+:focus-visible{outline:2px solid var(--ink); outline-offset:2px; border-radius:2px}
+
+/* ── 双语 ────────────────────────────────────────────────────
+   两种语言都在 HTML 里，这里决定显示哪一个。开关只有一个：<html> 上的
+   data-lang 属性，由 assets/app.js 设置并存进 localStorage。没有 JS 时
+   页面是英文 —— 对一个 <title>/<meta> 都是英文、也靠英文词排名的站来说，
+   这才是诚实的默认值。
+
+   为什么不换成 JS 替换文本：那样中文就不在页面源码里了，爬虫一个字都读不到；
+   而且首屏会闪一下错误的语言。现在两种语言一起发出去，浏览器在首次绘制前
+   就解析完了该显示哪个。
+
+   display:contents 是必需的 —— .t-en/.t-zh 这两层只是给 CSS 当钩子用的，
+   不能产生盒子。否则它们会变成 flex/grid 的子项，把 .chip、.readout-list
+   这些地方的版式拆散。（原先这里还举了 .stats，那块可见的数值网格
+   2026-09-28 已删。） */
+.t-en,.t-zh{display:contents}
+[data-lang="zh"] .t-en{display:none}
+html:not([data-lang="zh"]) .t-zh{display:none}
+
+/* ── 语言切换按钮 ──
+   默认隐藏，等 app.js 跑起来往 <html> 加 .lang-on 才显示。不用 [hidden]：
+   作者样式里的 display 规则永远压过浏览器默认的 [hidden]{display:none}，
+   这个坑本文件里已经踩过一次（见下面 .is-hidden 的注释）。 */
+.lang-toggle{
+  display:none; flex:none;
+  font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.06em;
+  color:var(--ink-2); background:var(--surface);
+  border:1px solid var(--line-2); border-radius:3px;
+  padding:5px 10px; cursor:pointer;
+  transition:color .15s, border-color .15s;
+}
+.lang-toggle:hover{color:var(--ink); border-color:var(--ink)}
+.lang-on .lang-toggle{display:inline-block}
+
+/* ── 落光：页顶光谱投到纸面上的光 ──
+   做法是一条 10 色线性渐变（色序 = 光谱条色序，位置由 app.js 按
+   (i+0.5)/n 算好，色值仍只有一个来源），再用大半径模糊把它化开。
+   这里必须用「平滑渐变 + 模糊」而不是「多个半透明色斑」：
+   色斑互相重叠时每个点都在平均 2–3 个色相，10 色叠出来是灰，
+   参数怎么调都救不回来；模糊一条有序渐变则局部均值仍落在渐变上，色相保得住。
+   结构上分两层是必需的，不能让 .lightfall 自己出血：
+   它左右各要溢出 14%（给模糊留余地，否则两端颜色被吃掉、看着像褪色），
+   而出血会变成整页 197px 的横向滚动。实测写在 html 上的 overflow-x:clip
+   兜不住（根元素 overflow 向视口传播，Chrome 里 scrollX 照样能到 197），
+   所以由这一层做局部裁剪 —— 盒宽等于视口，裁剪不外泄。
+   往下 900px 衰减到零，图鉴表格完全不受影响。 */
+.lightfall{
+  position:absolute; z-index:-1; top:5px; left:0; right:0;
+  height:900px;
+  overflow:clip;
+  pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.5) 28%,transparent 88%);
+          mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.5) 28%,transparent 88%);
+}
+/* 上下各多出 90px：不给模糊留出实体，wrapper 上边缘会被 kernel 采到「外面」的透明，
+   结果最该最亮的地方（光谱条正下方）反而发虚。 */
+.lightfall::before{
+  content:""; position:absolute; top:-90px; bottom:-90px; left:-14%; right:-14%;
+  opacity:.34;
+  background-image:var(--lf);
+  background-repeat:no-repeat;
+  filter:blur(54px);
+  animation:lightfall .9s cubic-bezier(.2,.7,.25,1) backwards;
+}
+/* 只动 opacity：这一层带 blur，动 transform 会让每帧重新光栅化约 2000×1080 的区域 */
+@keyframes lightfall{from{opacity:0}}
+
+/* ── 元素光谱条 ── */
+.spectrum{
+  display:flex; height:5px; width:100%;
+  position:sticky; top:0; z-index:60;
+}
+.spectrum i{
+  flex:1; background:var(--c);
+  transform-origin:left center;
+  animation:spectrumIn .55s cubic-bezier(.2,.8,.25,1) backwards;
+}
+.spectrum i:nth-child(1){animation-delay:.02s}
+.spectrum i:nth-child(2){animation-delay:.06s}
+.spectrum i:nth-child(3){animation-delay:.10s}
+.spectrum i:nth-child(4){animation-delay:.14s}
+.spectrum i:nth-child(5){animation-delay:.18s}
+.spectrum i:nth-child(6){animation-delay:.22s}
+.spectrum i:nth-child(7){animation-delay:.26s}
+.spectrum i:nth-child(8){animation-delay:.30s}
+.spectrum i:nth-child(9){animation-delay:.34s}
+.spectrum i:nth-child(10){animation-delay:.38s}
+@keyframes spectrumIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* ── 导航 ── */
+.nav{
+  max-width:var(--max); margin:0 auto;
+  padding:20px var(--gut);
+  display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+}
+.nav-brand{display:flex; align-items:center; gap:10px; text-decoration:none}
+/* 站标不再是两个字母，是 src/brand.js#markHTML() 画的那块点阵 A —— 同一份
+   几何也印在 favicon 和 Google 搜索结果那个图标上（src/icons.js）。
+   方块底和圆角仍是 CSS 的事，点阵只画点 —— 它用 currentColor，所以下面
+   那个 color 不是文字颜色，是「墨底上的纸色」。字号那一组随字母一起去掉了。
+   宽高写死 30，和 SVG 自己的 viewBox 一致，所以点阵落在整像素上不糊。
+   下面的 3px 是 brand.js 里的 MARK_RADIUS（30 格里的 3 格）—— 图标文件
+   用同一个值磨圆，所以两处是一件事写了两遍，改一个就得改另一个。 */
+.nav-mark{
+  width:30px; height:30px; display:grid; place-items:center;
+  background:var(--ink); color:var(--bg);
+  border-radius:3px;
+}
+.nav-name{font-weight:600; font-size:15px; letter-spacing:.01em}
+.nav-links{display:flex; gap:24px; flex-wrap:wrap}
+.nav-links a{
+  text-decoration:none; font-size:14px; color:var(--ink-2);
+  padding-bottom:2px; border-bottom:1px solid transparent;
+  transition:color .15s, border-color .15s;
+}
+.nav-links a:hover{color:var(--ink); border-bottom-color:var(--ink)}
+/* 当前页。导航长起来之后，读者已经没办法只靠页面本身判断自己在哪一格。
+   aria-current 由 view-lib.js 的 shell() 按页面路径标出 —— 先在标记里说清楚，
+   颜色只是把它画出来；看不见颜色的读者同样得到这条信息。 */
+.nav-links a[aria-current]{color:var(--ink); border-bottom-color:var(--ink)}
+
+/* ── 分组按钮与下拉菜单 ──
+   物种、物品、BOSS 三张表收进一个「数据库」按钮，菜单挂在它下面。点击和
+   悬停都展开它，两者都不离开当前页。
+
+   这里有两套开合，按 JS 在不在分工：
+   · 没有 JS：下面这条 :hover / :focus-within 通道管用 —— 鼠标悬停展开、
+     Tab 落在按钮上就展开，再按一下 Tab 直接走进条目。按钮在标记里仍是一
+     个真 href，所以这种读者点下去进的是物种表，而不是一个按了没反应的
+     按钮（这一点和语言切换按钮同理，见上面 .lang-toggle 那段）。
+   · 有 JS：app.js 往 <html> 加 .nav-on，把上面那条通道整体关掉，改由它
+     在 .is-open 上统一开合。
+
+   为什么必须二者取一，而不是让两套并存：鼠标停在按钮上时，点击「关闭」会
+   被同一帧的 :hover 立刻又打开，按 Esc 同理关不掉 —— 看起来像两个功能都
+   坏了，实际是两套开合在互相抢。 */
+.nav-item{position:relative; display:flex}
+.nav-caret{
+  display:inline-block; margin-left:6px; vertical-align:middle;
+  border-left:3.5px solid transparent; border-right:3.5px solid transparent;
+  border-top:4px solid currentColor;
+  transition:transform .15s;
+}
+.nav-item:hover .nav-caret,
+.nav-item:focus-within .nav-caret{transform:rotate(180deg)}
+.nav-menu{
+  position:absolute; top:100%; left:50%; transform:translateX(-50%); z-index:40;
+  min-width:150px; padding:6px 0;
+  background:var(--surface); border:1px solid var(--line-2); border-radius:3px;
+  display:none;
+}
+.nav-item:hover .nav-menu,
+.nav-item:focus-within .nav-menu{display:block}
+/* JS 接管之后。两条 display 的优先级相同，所以顺序就是裁决：关掉的那条在
+   前，打开的那条在后，两边同时命中时后者胜。 */
+.nav-on .nav-item:hover .nav-menu,
+.nav-on .nav-item:focus-within .nav-menu{display:none}
+.nav-on .nav-item.is-open .nav-menu{display:block}
+.nav-on .nav-item:hover .nav-caret,
+.nav-on .nav-item:focus-within .nav-caret{transform:none}
+.nav-on .nav-item.is-open .nav-caret{transform:rotate(180deg)}
+/* 菜单里的当前项。外层的下划线在这里是 0 宽，所以直接用底色和字重说清楚。 */
+.nav-links .nav-menu a{
+  display:block; padding:7px 14px; font-size:13.5px;
+  border-bottom:0; white-space:nowrap;
+}
+.nav-links .nav-menu a:hover{background:var(--paper)}
+.nav-links .nav-menu a[aria-current]{background:var(--paper); font-weight:600}
+/* 分组里有页面命中时按钮自己也要亮 —— 否则从菜单进到物品页，导航栏上
+   什么也没标，看起来像这一页不属于任何一格。 */
+.nav-item.nav-here > a{color:var(--ink); border-bottom-color:var(--ink)}
+
+/* ── HERO ── */
+.hero{
+  max-width:var(--max); margin:0 auto;
+  padding:clamp(28px,5vw,56px) var(--gut) clamp(40px,6vw,64px);
+  display:grid; grid-template-columns:minmax(0,1fr) 232px;
+  gap:clamp(28px,5vw,64px); align-items:start;
+}
+.eyebrow{
+  font-family:var(--mono); font-size:11.5px; font-weight:500;
+  letter-spacing:.10em; text-transform:uppercase; color:var(--ink-3);
+  margin-bottom:16px;
+}
+.hero-title{
+  font-family:var(--display);
+  font-size:clamp(34px,6.2vw,62px);
+  font-weight:800; letter-spacing:-0.035em; line-height:1.02;
+}
+.hero-title em{
+  font-style:normal; font-weight:400;
+  color:var(--ink-2);
+  display:block; font-size:clamp(20px,3.2vw,30px);
+  letter-spacing:-0.015em; margin-top:10px; line-height:1.3;
+}
+.hero-lede{
+  margin-top:20px; max-width:56ch;
+  font-size:16px; color:var(--ink-2);
+}
+
+/* ── 标本墙：hero 的第三条 ──
+   首页上唯一一张游戏本身的图。hero 上面是两栏（.hero-main + .readout），
+   这一条 grid-column:1/-1 压在两者下面 —— 所以它和标题同宽，不和右边那栏挤，
+   而 .hero 的行间距已经把它和上面隔开，这里不再另加 margin-top。
+   12 列是因为 SPECIMEN_N 是 24，正好两行；两档窄屏各减到 8 和 6，24 仍能被
+   两者整除，所以每一档都收在整行上，不会剩一个孤零零的尾巴。
+   它是首页专属类，不需要 .home 作用域 —— 全站只有 index 上有这块标记。 */
+.specimen{
+  grid-column:1/-1;
+  padding-top:22px;
+  border-top:1px solid var(--ink);
+}
+.specimen-label{
+  font-family:var(--mono); font-size:11.5px; font-weight:500;
+  letter-spacing:.10em; text-transform:uppercase; color:var(--ink-3);
+}
+.specimen-wall{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:clamp(6px,.9vw,12px);
+  margin-top:14px;
+}
+/* 头像源是 128px 方图，格子约 82px，1x 下够用。width/height 属性写的也是
+   128，`height:auto` 靠那对属性推出 1:1 —— 图还没落进来时格子已经是方的，
+   落进来不会把墙上下一撑。padding 留在内侧，只是为了相邻两只不贴到一起；
+   再大就是拿图片去喂留白，墙上每一只都会小一圈。
+   底色取 --card-raised 而不是 --surface：和它斜上方那张一览卡同色，
+   hero 里两个白面才不会差出十个色阶。 */
+.specimen-img{
+  display:block; width:100%; height:auto;
+  background:var(--card-raised);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:clamp(3px,.45vw,6px);
+}
+.specimen-note{
+  margin-top:14px;
+  font-family:var(--mono); font-size:12px; color:var(--ink-2);
+}
+.specimen-note a{color:var(--ink)}
+
+/* 搜索 */
+.search{position:relative; margin-top:32px; max-width:560px}
+.search-label{
+  display:block; font-family:var(--mono); font-size:11px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:8px;
+}
+.search-input{
+  width:100%; padding:15px 44px 15px 16px;
+  font-family:var(--cjk); font-size:16px; color:var(--ink);
+  background:var(--surface);
+  border:1.5px solid var(--line-2); border-radius:4px;
+  transition:border-color .15s, box-shadow .15s;
+}
+.search-input::placeholder{color:var(--ink-3)}
+.search-input:focus{
+  outline:none; border-color:var(--ink);
+  box-shadow:0 0 0 3px rgba(21,24,27,.08);
+}
+.search-kbd{
+  position:absolute; right:12px; bottom:13px;
+  font-family:var(--mono); font-size:11px; color:var(--ink-3);
+  border:1px solid var(--line-2); border-radius:3px;
+  padding:2px 6px; pointer-events:none; background:var(--bg);
+}
+
+/* 属性筛选 chips */
+.chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:22px}
+.chip{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:6px 11px 6px 8px;
+  font-size:13px; font-family:var(--cjk); color:var(--ink-2);
+  background:var(--surface); border:1px solid var(--line); border-radius:100px;
+  cursor:pointer; transition:border-color .15s, color .15s, background .15s;
+}
+.chip:hover{border-color:var(--line-2); color:var(--ink)}
+.chip-dot{
+  width:9px; height:9px; border-radius:50%; background:var(--c);
+  border:1px solid rgba(21,24,27,.16); flex:none;
+}
+.chip[aria-pressed="true"]{
+  background:var(--ink); border-color:var(--ink); color:var(--bg);
+}
+.chip[aria-pressed="true"] .chip-dot{border-color:rgba(255,255,255,.4)}
+.chip-count{font-family:var(--mono); font-size:11px; color:var(--ink-3)}
+.chip[aria-pressed="true"] .chip-count{color:rgba(245,246,243,.6)}
+
+/* 速览 */
+.readout{
+  border:1px solid var(--line); border-radius:4px;
+  background:var(--surface); padding:18px;
+}
+.readout-title{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  margin-bottom:14px;
+}
+.readout-list > div{
+  display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  padding:7px 0; border-bottom:1px dashed var(--line);
+}
+.readout-list > div:last-child{border-bottom:0}
+.readout-list dt{font-size:13px; color:var(--ink-2)}
+.readout-list dd{font-family:var(--mono); font-size:15px; font-weight:500}
+.readout-list dd.warn{font-size:11.5px; color:var(--fire)}
+.readout-foot{
+  margin-top:14px; padding-top:12px; border-top:1px solid var(--line);
+  font-size:12px; color:var(--ink-3);
+}
+
+/* 九属性色带（.elband 那一整块）2026-09-30 晚随首页那一段一起删掉了。
+   它曾经是首页唯一大声的东西 —— 图鉴在九个属性上的分布，顺序和页顶那条
+   光谱条、和落光渐变一致。用户看了首页说「这个板块不要」。
+   色带没了，但属性色本身还在用在别处：光谱条、物种页的类型标签、图鉴表的
+   类型列，都还是从 ANIIMO_TYPES 取的 --c。 */
+
+/* ── 本站是什么 ──
+   三张卡从左往右一排，第四张的位置留着。2026-09-30 晚用户说「用四个卡片从左
+   往右排列」，并点名了四张各写什么：完整的流程 / 完善的数据库 / 全面的攻略 /
+   游戏的各种问题解答。**「全面的攻略」这一张还没进来** —— 它要指的是
+   guides.html，而那一页仍是全站唯一的骨架页（页面自己写着「这一页目前只有
+   框架」）。首页不许印一个站里没有的板块，所以那张卡等那页毕业再补。
+
+   补的时候是三处一起改：points 数组按顺序插进第三位、这里的列数改成 4、
+   三张卡的正文按 285px 的卡宽重写一遍（现在是照 380px 写的）。
+
+   排列本身没有先后，所以没有 01/02/03 —— 编号会暗示一个顺序，而三者之间
+   没有顺序。 */
+.about-list{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.about-point{background:var(--surface); border:1px solid var(--line); padding:22px 20px}
+.about-title{font-family:var(--display); font-size:18px; font-weight:600; letter-spacing:-0.015em}
+.about-body{margin-top:9px; font-size:14px; color:var(--ink-2)}
+.about-body strong{color:var(--ink); font-weight:600}
+
+/* ── 首页：hero 以下，基本一列到底 ────────────────────────────────
+   2026-09-30 用户点名的第二件事：除了最上面那一处，首页下面全部改成一列。
+   hero 是本页唯一还并着两栏的地方（.hero 的 1fr / 232px 不动），它下面每
+   一块都改成整幅宽的单栏 —— 四张系统卡上下四张、元素图例九行铺满。
+
+   **唯一一处后来改回去的是「本站是什么」那一排**：当天晚些用户说「用四个
+   卡片从左往右排列」，所以 .about-list 又变回三列（第四列留着，理由见它自己
+   那一段）。其余的仍然单列 —— 所以下面这条规则现在只管 .sys-grid，不要顺手
+   把 .about-list 加回选择器里。
+
+   选择器一律带 .home，因为下面这几个类里有三个是 team.html 也在用的共用类
+   （.readout / .sys-grid / .sys-card），直接改会改到那一页去。.home 只挂在
+   首页从 hero 开始的五个 <section> 上（build.js 的 page()），全站没有第二处。
+
+   ── 2026-09-30 晚，第三次：用户附了一张参考图，要求「板块做成这个样式」。
+   参考图的语言和本站原来的几乎相反 —— 圆角、纯白浮面、软投影、卡片顶上
+   一道粗色条、药丸状的小标签和出口按钮、虚线分隔的注脚行、带粗左线的提示
+   框。原来那一版是直角加发丝线。照着改了，卡片语言现在以参考图为准。
+
+   两处没有跟着改，都是有理由的：
+   1. 字体和纸色不动。参考图用的是通用无衬线；本站的显示字是 Bricolage、
+      数据字是 IBM Plex Mono、底是冷调矿物纸。参考图给的是「面怎么抬起来」，
+      不是「该用什么字」。
+   2. 卡片顶那道 4px 条一律是墨色，不按卡分配颜色。参考图里三张卡是绿／黄／
+      红三条，那是拿颜色给「第几天」分类；本站的颜色只有一个语义 —— 属性色，
+      唯一来源是 ANIIMO_TYPES。给十二张页面卡各配一个属性色纯属装饰，会把
+      「颜色 = 属性」这条读法弄脏。真按属性来的地方（下面的元素图例）照旧
+      一行一色，用 --c。
+
+   --lift / --card-raised 定义在 .home 上而不是 :root：它们只服务于首页这五段，
+   而 :root 是另外十二页也在读的地方。--card-raised 比 --surface(#FCFDFC) 再白
+   一档 —— 参考图的卡是纯白压在浅灰纸上，而 --surface 压在 --paper 上只差十个
+   色阶，抬不起来。投影补一部分，纯白再补一部分。 */
+.home{
+  --card-raised:#FFFFFF;
+  --lift:0 1px 2px rgba(21,24,27,.05), 0 14px 32px -16px rgba(21,24,27,.16);
+}
+.home .sys-grid{
+  display:grid; grid-template-columns:minmax(0,1fr);
+  gap:clamp(14px,1.8vw,20px);
+}
+/* 卡片长相。四类盒子共用一套，否则一页里会出现两种卡片 —— 上一版正是栽在
+   这里：页面墙是一种，这两块是另一种。
+
+   顶那道 4px 墨条取代了上一版的 3px 左脊。直角换成圆角之后左脊会被圆角切掉
+   两头，读起来是断的；顶条在圆角上拐得过去，而参考图用的也正是这一道。 */
+.home .about-point,
+.home .sys-card,
+.home .readout{
+  background:var(--card-raised);
+  border:1px solid var(--line);
+  border-top:4px solid var(--ink);
+  border-radius:12px;
+  padding:clamp(22px,2.6vw,30px);
+  box-shadow:var(--lift);
+}
+/* 三列之后卡内宽只有三百多，86ch 够不着，这条现在是空转的 —— **保留是有意的**：
+   900px 以下这三张卡叠回单列（见那条 @media），那时卡内宽七百多，上限又回来了。
+   86ch 和 .hub-body 同一个数。 */
+.home .about-body{max-width:86ch}
+/* 系统卡的四段正文原来也是这样：.sys-card p / li 没有行长上限，两列时代
+   无所谓（内宽五百多），单列之后每行要排一百三十多个西文字符。 */
+.home .sys-card p,
+.home .sys-card li{max-width:86ch}
+/* 「核心心法」那个提示框（.game.home > .sp-note）2026-09-30 晚随 .game 整段
+   一起删了 —— 它是照着参考图做的粗左线浅底框，压在 .game 那段导语上，
+   导语没了它也就没有可压的东西。 */
+
+/* ── 页面墙 ──
+   一页一条，每条一整幅宽，从上往下排。这是首页现在的主职：让人不点进去也知道
+   站里有什么。
+
+   这条墙改过四次，前三次都在同一个问题上打转 —— 盒子不够实。第一次是十二道
+   实线（只有线没有面），第二次把卡做实（面 + 描边 + 3px 左脊），第三次换成
+   圆角白卡（参考图那一套）。**第四次是结构变了，不是皮肤变了**：用户要求
+   「把标题、开头介绍放在卡片外面，分开来」，所以 .hub-card 不再是一个盒子，
+   而是一条「条目」——
+
+     纸面：标签（药丸） / 名字 / 数字 / 开头介绍     ← .hub-head
+     卡片：这一页自己的内容（表格、步骤、路线……）    ← .hub-content
+     纸面：右对齐的出口按钮                          ← .hub-more
+
+   卡里只剩这一条自己的内容。上面「本站是什么」那一段本来就是这个形状（段标题
+   和导语在纸面上，三条规矩在白卡里），用户是拿它当样板的。
+
+   条目之间因此需要真正的间距：上一版是十二个盒子互相挨着，2px 的缝就够；现在
+   两条之间是「一段纸 + 一个盒子」，间距不够就会读成上一条的注脚。
+
+   列写成 minmax(0,1fr) 而不是留空：单列的 auto 轨道会被内容的 max-content
+   撑开，而块里有 min-width:952px 的 .dex-table。写死后轨道永远是容器宽，
+   表格退回 .table-wrap 里横滑 —— 和它在自己页上的行为一致。
+
+   整条仍不可点。块里有表格，铺满整块的链接会把每一行都变成跳转，读者想选中
+   一行里的码都做不到。出口是一枚普通的按钮，键盘读屏看到的仍然是「一条指向
+   这一页的链接」。 */
+.hub-grid{display:grid; grid-template-columns:minmax(0,1fr); gap:clamp(44px,5vw,64px)}
+.hub-card{background:none; border:0; border-radius:0; box-shadow:none; padding:0}
+/* 头。这一层自己不画任何东西 —— 标签、名字、数字、介绍各自的版式都在自己的
+   类里。它的用处是把这四行归成一个块，让下面那张卡的 margin-top 有个明确的
+   参照，也让「这一条的标题部分」在标记里是一件事而不是四个散件。 */
+.hub-head{min-width:0}
+/* 标签。颜色从 --ink-3 提到 --ink-2：10.5px 的大写等宽在 --ink-3 上对纸色只有
+   3.3:1，小字读不清。
+   底色现在是 --card-raised（纯白），不是 --paper —— 它从卡里搬到了纸面上，
+   而 --paper 就是纸本身，底色取纸色等于这枚药丸只剩一圈描边。
+   display:inline-block 是必要的：.hub-tag 是 <p>，不改成行内块它会铺满整行，
+   底色跟着铺成一条通栏的白带子。 */
+.hub-tag{
+  display:inline-block;
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-2);
+  background:var(--card-raised);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:4px 11px;
+  min-width:0;
+}
+/* 名字。它现在自己占一行，不再跟标签抢一栏，所以字号只受行宽限制。 */
+.hub-title{
+  margin-top:12px;
+  font-family:var(--display); font-size:clamp(23px,2.8vw,30px); font-weight:800;
+  letter-spacing:-.025em; line-height:1.15;
+}
+.hub-link{text-decoration:none}
+.hub-link:hover{text-decoration:underline; text-underline-offset:3px}
+/* 数字。排在名字下面一行，是这块里唯一一句「确实如此」的断言，其余都是转述，
+   所以颜色给到实黑。等宽数字让十二张卡的数字位数停在同一个位置上。
+   上一版它不换行、右对齐，因为它是页面右侧一列里的一格；现在它不是了，
+   长一点的（"15 areas, in the order they open"）该折就折。 */
+.hub-stat{
+  margin-top:9px;
+  font-family:var(--mono); font-size:13px; color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+/* 行宽从 72ch 放到 86ch。卡是一整幅宽（内宽 1038px），72ch 只有 540px ——
+   正文在卡的左半边就折行，右边空出四成，读起来不像留白，像卡没填满。 */
+.hub-body{margin-top:12px; font-size:15px; color:var(--ink-2); max-width:86ch}
+.hub-body strong{color:var(--ink); font-weight:600}
+
+/* 这条条目自己的内容 —— 整条里唯一的那个盒子。圆角、纯白、软投影、顶上 4px
+   墨条，和上面 .home 那一段里的四类盒子是同一套值，全部来自 .home 上的
+   --card-raised / --lift。
+   它还挂着 .sp-block（在 src/view-pages.js 的 homeWrap 里），得把那个类给的
+   border-top 和 padding-top 一起接管过来：.sp-block 那道发丝线是给纸面上的
+   段落当分界用的，这里是卡片的顶边，4px 墨条已经在那儿了，再来一道就是两道。
+   选择器写成两段是为了压过 .sp-block，与它在文件里的先后无关。 */
+.hub-card .hub-content{
+  margin-top:22px; min-width:0;
+  background:var(--card-raised);
+  border:1px solid var(--line);
+  border-top:4px solid var(--ink);
+  border-radius:12px;
+  padding:clamp(22px,2.6vw,30px);
+  box-shadow:var(--lift);
+}
+/* 卡里不再套卡。队伍那张卡的内容块里是一个 .sys-grid，装着五张定位卡 —— 它们
+   再各自带描边和面就是盒子里套盒子。压成一道上实线加内边距，读作这一段里的
+   五个小节。这两条比首页那条 .home .sys-card 更专，压得过它，与先后无关。 */
+.hub-card .hub-content .sys-grid{gap:22px}
+.hub-card .hub-content .sys-card{
+  background:none; border:0; box-shadow:none; border-radius:0;
+  border-top:1px solid var(--line); padding:22px 0 0;
+}
+/* 表在这张卡里铺满。2026-09-30 晚改过一次判断：原来这两张表是 width:auto，
+   理由是「拉到 1100px 每一格都被平均撑开」。那时卡还装着标题和介绍，表面上看
+   表格缩在左上角像是刻意的留白。现在卡里只剩内容，一张 460px 的表蹲在 1100px
+   的白底上、右边空出六百多像素，看起来就是没做完（用户的原话：「右边太空了」）。
+   铺满之后行线一直画到卡的右边缘，右边缘由卡自己的下沿收住。
+   余量由浏览器按各列的 max-content 宽度按比例分掉，别的什么都不加：试过给最后
+   一列 width:100% 让它独吞余量，结果一列要 100% 就等于总宽超出了容器，浏览器
+   反过来把前面几列压到 min-content —— 「Nimbus Fields」折成两行、「Lv 5–15」
+   断成「Lv 5–」和「15」、「Blaze Stone」折行。那条路是错的。
+   .dex-table 有自己的 min-width，不受这条影响，仍旧退回 .table-wrap 里横滑。 */
+.hub-card .hub-content .form-table,
+.hub-card .hub-content .conf-table{width:100%; max-width:100%}
+/* 铺满这一招救不了家园那张表。上面那段写的是「让余量由浏览器按各列的
+   max-content 按比例分掉」—— 那是假设各列都有 max-content 可要。RV 那张表
+   的第三栏（开出什么）通栏是「储物单元」「生态模块」，max-content 只有四五个字，
+   整幅宽 1038 里它只占不到 300，剩下的七百多像素全堆在它右边，看上去像没加载完。
+   （2026-10-01 用户：「首页的家园板块右边有点空」。）
+   所以换成结构：前十条拆成两张半表并排，表头各带一份。**这不是 CSS 能补的洞** ——
+   三四个字的单元格，怎么写列宽都不会往右挪。
+   栏距比 .hub-media 大一点（表格相邻两栏挨太近会读成一张六列表）。 */
+.hub-card .hub-split{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:0 clamp(24px,3vw,44px);
+}
+/* 表头不许折。两个半表的栏宽是各算各的（auto 版式按内容算），右半「开出什么」
+   那栏内容长，就把「RV level」挤成上下两行的「RV / LEVEL」—— 同一行表头左右
+   两半一个一行一个两行，看着像坏了。不许折之后浏览器会给第一栏留出表头那么宽，
+   两半的第一、第二栏因此都是同一个宽度。.dex-table 的表头早就是这么办的。
+   全局的 .form-table th 不动：这一条只对半宽的表成立。 */
+.hub-card .hub-split th{white-space:nowrap}
+/* 两半的栏宽要对上。auto 版式是按内容分余量的：右半「开出什么」那栏内容长，
+   分到的余量就多，连带把前两栏挤窄 —— 结果左半的表头在 204 / 296 / 366，
+   右半在 214 / 306 / 366，「RV LEVEL」和「ANIIMO」两栏左右差十几个像素。单看
+   不觉得，并排看就是两张没对齐的表。定死前两栏的宽度，两半就完全一样，读起来
+   才像一张表折成两半。
+   用 px 不用 fr/ch：这一页的列宽全是 px（.dex-table 的和就写在上面那条注释里）。
+   80/76 是「RV LEVEL」「ANIIMO」在最宽的那个 monospace 下再加右内边距的值。 */
+.hub-card .hub-split .form-table{table-layout:fixed}
+.hub-card .hub-split th:first-child{width:80px}
+.hub-card .hub-split th:nth-child(2){width:76px}
+/* 两张半表各自 100% 铺满自己那一栏，所以那两条 width:100% 在这里仍然生效，
+   `.hub-card .hub-content .form-table` 是祖先选择器，不用另写。 */
+/* 被截断的块下面那行「前 N 条 / 共 M 条」。它是标注，不是行文，所以走等宽小字，
+   并且压掉 .sp-note 给正文的 66ch 上限 —— 它只有一行，不该被折。 */
+.hub-card .sp-note{
+  margin-top:14px; font-family:var(--mono); font-size:12px;
+  color:var(--ink-2); max-width:none;
+}
+/* 出口。2026-09-30 晚跟参考图改成一枚药丸按钮，现在落在卡**外面**的纸面上，
+   右对齐 —— 它是这一条的最后一行，不是盒子里的最后一行。
+   上一版它上面还有一道虚线，那是给卡内用的：卡片的下沿就是虚线的位置，读者
+   因此看得见内容区到哪儿为止。现在卡自己的下边缘已经说了这件事，再来一道
+   虚线就是重复。
+   它留在 .hub-content 外面还有一个用处：没有任何内容块的那一条（攻略，还是
+   骨架页）不会剩下一个空盒子，也不会凭空多出一道画在空白上的虚线 —— 它和
+   另外十一条收尾的方式一模一样。
+   下划线换成描边之后，hover 就翻成实底：描边颜色变深这一招在细线上看得出来，
+   在药丸的圆角上几乎看不出来。 */
+.hub-card .hub-more{
+  margin-top:16px;
+  font-family:var(--mono); font-size:12px;
+  text-align:right;
+}
+.hub-card .hub-more a{
+  display:inline-block;
+  color:var(--ink); text-decoration:none;
+  background:var(--card-raised);
+  border:1px solid var(--line-2); border-radius:999px;
+  padding:8px 16px;
+  transition:background-color .15s, border-color .15s, color .15s;
+}
+.hub-card .hub-more a:hover{
+  background:var(--ink); border-color:var(--ink); color:var(--card-raised);
+}
+/* 地图块的静态预览。首页不引 Leaflet，所以这里就是那张世界图本身，点它进地图页。
+   底色用海洋色，图片加载出来之前那一格是地图的一部分而不是一块白。
+
+   2026-10-01 用户说「首页互动地图这里不用卡片，直接放图片就行。还有地图下面
+   的一堆地点也不要」—— 所以这一块是**全站唯一不走 homeWrap() 的页面块**：
+   它不再是 .hub-content，而是 .hub-card 的直接子元素，图上没有白卡，
+   下面那十六个地区名也删了。
+
+   连带两处：**图现在是整栏宽**（原来卡内还留着 22–30px 的内边距），所以它比
+   以前大一圈；**描边去掉了** —— 那道 1px 是照着卡片边缘画的，卡没了就没有
+   可对齐的东西。圆角和 overflow:hidden 留着：图是 <img>，不裁一刀方角会顶在
+   圆角版面的角上。半径从 10 提到 12，跟卡片语言一致。 */
+.hub-card .hub-map{
+  display:block; background:#0C1E32; line-height:0;
+  border-radius:12px; overflow:hidden;
+}
+.hub-card .hub-map img{display:block; width:100%; height:auto}
+/* 2026-10-01 第二版：用户说「这张图片缩小一点，放在左边，右边加一点介绍」。
+   于是图不再独占整栏，它和介绍并排 —— 左图右文，两栏。
+
+   图的比值是 1110×874（1.27:1），不是宽扁条，所以两栏接近等宽时图很高；
+   左栏给 0.85fr、右栏 1.15fr，图缩掉三成左右，正文也能有三百多像素放行。
+   `align-items:center`：正文比图矮得多，靠上对齐图的下半截会空出一大片，
+   居中读起来才像「图旁边配一段话」。
+
+   上边距 22px 是明写的，不是继承来的 —— 全局重置里 p/h1/h2/h3 的 margin 全
+   是 0，这个网格的两侧都没有自带间距（图那条 .hub-map 也没有），不写就会
+   贴着上面的 .hub-stat 走。和 .hub-content 取同一个数。
+
+   右栏里 .hub-body 的 12px 上边距要抹掉：那条是给「正文接在标题下面」用的，
+   这里它是栏内的第一行，留着就是凭空多出 12px 的白。 */
+.hub-card .hub-media{
+  display:grid;
+  grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr);
+  gap:clamp(20px,2.4vw,34px);
+  align-items:center;
+  margin-top:22px;
+}
+.hub-media-copy .hub-body{margin-top:0}
+/* 三个历史锚点（#dex / #start / #codes）现在落在这些变高的块上，直接跳过去时
+   得留出顶上那条 5px 光谱条和一点余量，否则目标行会贴着浏览器顶端。
+   和 .faq-item 取同一个数，站点里落点留白只有这一个尺度。 */
+.hub-card[id]{scroll-margin-top:24px}
+
+/* ── 区块通用 ── */
+/* `.game` 原来在这条选择器表里，2026-09-30 晚那一整段撤掉后它就没有标记了。 */
+.systems,.about,.hub{
+  max-width:var(--max); margin:0 auto;
+  padding:clamp(48px,6vw,80px) var(--gut);
+}
+.sec-head{margin-bottom:28px; border-top:1px solid var(--ink); padding-top:20px}
+.sec-title{font-family:var(--display); font-size:clamp(26px,4vw,38px); font-weight:800; letter-spacing:-0.03em}
+.sec-sub{margin-top:8px; font-size:14.5px; color:var(--ink-2); max-width:62ch}
+
+/* ── 筛选器 ── */
+.filters{margin-bottom:20px; display:flex; flex-direction:column; gap:12px}
+.filters-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.filters-label{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); min-width:34px;
+}
+.chips-sm{margin-top:0}
+.chip-sm{
+  padding:4px 10px; font-size:12.5px; border-radius:3px; gap:6px;
+}
+.filters-bar{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding-top:12px; border-top:1px solid var(--line);
+}
+.filters-count{font-family:var(--mono); font-size:12px; color:var(--ink-2)}
+.btn-reset{
+  font-family:var(--cjk); font-size:12.5px; color:var(--ink-2);
+  background:none; border:0; border-bottom:1px solid var(--line-2);
+  padding:0 0 1px; cursor:pointer; transition:color .15s, border-color .15s;
+}
+.btn-reset:hover{color:var(--ink); border-bottom-color:var(--ink)}
+
+/* ── 图鉴表 ── */
+.table-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+/* 882px 是旧列宽之和（No.64 + Name.232 + Type.150 + Role.96 + Evo.130 +
+   Habitat.130 + Tier.72 + 边框）。栖息地一列从 130 放宽到 200 是为了装下
+   多值：Emberpup 的栖息地形态有 5 个栖息地，挤在 130px 里只能换成横向滚动，
+   或者每格都折成三行。182→200 只加 70px，表格其余部分不动。 */
+.dex-table{min-width:952px; font-size:14px}
+
+.dex-table thead th{
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  text-align:left; padding:0 12px 10px; border-bottom:1px solid var(--ink);
+  white-space:nowrap;
+}
+.dex-table td{
+  padding:13px 12px; border-bottom:1px solid var(--line); vertical-align:middle;
+}
+.dex-table tbody tr{transition:background .12s}
+.dex-table tbody tr:hover{background:var(--surface)}
+
+/* Hidden by the filters in app.js. This has to be a class rather than the
+   [hidden] attribute: the ≤680px block below sets `display:block` on these
+   rows to turn them into cards, and an author rule always outranks the
+   UA's [hidden]{display:none}. */
+.dex-table tbody tr.is-hidden{display:none}
+
+.c-no{width:64px}
+/* 表头与首个单元格对齐（单元格含 3px 元素色脊 + 11px 内边距） */
+.dex-table thead th.c-no{padding-left:14px}
+/* 190px 是纯排印时留给名字的宽度；加了 34px 头像 + 8px 间距之后放宽到 232px，
+   免得长名字被挤成两行。.dex-table 的 min-width 同步加 42px。 */
+.c-name{width:232px}
+.c-type{width:150px}
+.c-role{width:96px}
+/* 栖息地是多值（官方维基最多给一个物种列 5 个），所以这一列比其余宽，
+   并且允许在逗号处折行 —— 见 .cell-region。 */
+.c-region{width:200px}
+.c-tier{width:72px}
+
+.cell-no{
+  font-family:var(--mono); font-size:12px; color:var(--ink-3); font-weight:500;
+  /* 行左侧的元素色脊 */
+  border-left:3px solid var(--row-c,var(--line-2));
+  padding-left:11px;
+}
+.cell-name{
+  font-family:var(--display); font-weight:600; font-size:16px;
+  letter-spacing:-0.01em; line-height:1.2;
+}
+/* 官方头像。走行内 + vertical-align:middle，而不是把整格改成 flex ——
+   td 一旦变成 flex 容器就不再是表格单元，列宽会跟着一起变。
+   四只官方索引里没有的物种没有图，这一格就只剩名字，不需要额外规则。 */
+.dex-head{vertical-align:middle; margin-right:8px}
+/* 道具图标。宽度定在**外框**上而不是 img 上，这是关键：
+   items.html 103 行里只有 41 行有图，图直接把文字推开 ~41px，
+   于是同一列里「有图的」和「没图的」名字对不齐。外框让没图的行
+   也占住同样的宽度，只留空框不画东西。
+   空框是 <span> 不是占位图 —— 里面什么都没有，读不成「这件道具就长这样」，
+   和上面 dex-head 那条「没图就是没图」并不冲突。
+   高度也必须给：空 <span> 的高度是 0，没有它的话「有图的行」行盒高 34px、
+   「没图的行」只有一行文字，两种行的文字会落在不同的垂直位置上，
+   横向对齐了、纵向又歪了。写死高度，两种行的行盒才一样高。
+   尺寸仍然只声明一处：窄屏改 .item-icon-box 的宽高即可，img 跟着走。 */
+.item-icon-box{display:inline-block; width:34px; height:34px; margin-right:7px; vertical-align:middle}
+.item-icon{display:block; width:100%; height:auto; border-radius:5px}
+
+.types{display:flex; flex-wrap:wrap; gap:5px}
+.type{
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:12px; color:var(--ink-2); white-space:nowrap;
+}
+.type::before{
+  content:""; width:8px; height:8px; border-radius:50%;
+  background:var(--c); border:1px solid rgba(21,24,27,.16); flex:none;
+}
+
+.type-unknown{
+  font-family:var(--mono); font-size:11px; color:var(--ink-3);
+  border-bottom:1px dashed var(--line-2); padding-bottom:1px;
+}
+
+.role{font-size:13px; color:var(--ink-2); white-space:nowrap}
+.role-tag{
+  display:inline-block; white-space:nowrap;
+  /* 移动端卡片模式下本元素是网格项，会被拉伸成整行宽度的输入框样子 */
+  justify-self:start;
+  font-family:var(--mono); font-size:11px;
+  padding:2px 6px; border:1px solid var(--line-2); border-radius:3px;
+  color:var(--ink-2);
+}
+
+.cell-evo{font-size:12.5px; color:var(--ink-2); font-family:var(--mono); line-height:1.5}
+/* 这一格允许折行，因为一个物种可以有五个栖息地。折行只发生在名字之间
+   （选择器里的 , 是纯文本，两边的空格就是断点），名字内部不折 —— 所以
+   「Beast Fang Ridge」不会断成两行。以前这里是 nowrap，那时一格里只有
+   一个地区名。 */
+.cell-region{font-size:13px; color:var(--ink-2); white-space:normal}
+.cell-region .t-en,.cell-region .t-zh{white-space:nowrap}
+
+.cell-tier{display:flex; align-items:center; gap:7px}
+.tier-badge{
+  width:26px; height:26px; display:grid; place-items:center; flex:none;
+  font-family:var(--mono); font-size:13px; font-weight:600;
+  border:1.5px solid var(--line-2); border-radius:3px; color:var(--ink-2);
+}
+.tier-S{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.tier-A{border-color:var(--ink); color:var(--ink)}
+.tier-D{color:var(--ink-3); border-style:dashed}
+
+.tag{
+  display:inline-block; margin-left:6px;
+  font-family:var(--mono); font-size:10px; font-weight:400;
+  padding:1px 5px; border-radius:2px; letter-spacing:.04em;
+  vertical-align:2px; white-space:nowrap;
+}
+.tag-pending{
+  color:var(--earth); border:1px dashed var(--earth);
+}
+
+.table-empty{
+  padding:40px 12px; text-align:center; color:var(--ink-3); font-size:14.5px;
+}
+
+/* ── 开局步骤 ── */
+.steps{display:grid; gap:0}
+.step{
+  display:grid; grid-template-columns:72px minmax(0,1fr); gap:clamp(16px,3vw,36px);
+  padding:24px 0; border-top:1px solid var(--line);
+}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step-no{
+  font-family:var(--mono); font-size:22px; font-weight:500;
+  color:var(--ink-3); letter-spacing:-0.02em; line-height:1.3;
+}
+.step-title{font-family:var(--display); font-size:19px; font-weight:600; letter-spacing:-0.015em; margin-bottom:6px}
+.step-body p{font-size:14.5px; color:var(--ink-2); max-width:68ch}
+.step-body strong{color:var(--ink); font-weight:600}
+
+/* ── 系统卡片 ──
+   四张，所以列数是写死的两列 —— 一个 2×2，每张卡都拿到一样宽的版面。
+   auto-fill 在这个宽度上会排成三列，第四张自己占半行，孤零零的。
+   和页面墙同一套板块语言：各自描边、之间留缝。窄屏一列。 */
+.sys-grid{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.sys-card{
+  background:var(--surface); padding:24px 22px;
+  border:1px solid var(--line);
+}
+.sys-title{font-family:var(--display); font-size:18px; font-weight:600; letter-spacing:-0.015em; margin-bottom:10px}
+.sys-card p{font-size:14px; color:var(--ink-2)}
+.sys-card ul{margin-top:10px; display:grid; gap:8px}
+.sys-card li{
+  font-size:13.5px; color:var(--ink-2); padding-left:14px; position:relative;
+}
+.sys-card li::before{
+  content:""; position:absolute; left:0; top:10px;
+  width:5px; height:5px; background:var(--ink-3); border-radius:1px;
+}
+.sys-card strong{color:var(--ink); font-weight:600}
+.sys-note{
+  margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);
+  font-size:13px !important; color:var(--ink-3) !important;
+}
+
+/* ── 页脚 ──
+   一条横贯的墨线底下分两段：先是一行品牌块加五栏链接，再是一条细线、
+   线下居中两行小字（免责声明与版权）。
+
+   列数从 auto-fit 改成写死的 1.6fr + 5×1fr（2026-10-05）：品牌块要比
+   链接栏宽一档，auto-fit 给不了这个比例，而且五栏等宽是这一版的重点 ——
+   导航的 15 条按「这一页是什么」摊进五栏，没有哪一栏需要自己再分列。
+   1.6 是量出来的：再窄下去那句介绍就折成四行、每行只剩三四个词，比旁边
+   的链接栏还碎；再宽下去五栏就装不下「互动地图」这样的四字链接了。
+   代价是窄屏不能自己收拢了，所以两条断点也归这一段管 —— 见文件末尾
+   「响应式」。
+
+   五栏等宽还带走了上一版的 .foot-col-wide / .foot-lists：那一栏一个人
+   装着 11 条，只能在自己内部排成左右两列，切点还要按行高算。现在最多
+   的一栏五条，比品牌块那句介绍还短，用不着了。 */
+.foot{border-top:1px solid var(--ink); margin-top:clamp(40px,6vw,72px); background:var(--surface)}
+.foot-grid{
+  max-width:var(--max); margin:0 auto; padding:clamp(36px,5vw,56px) var(--gut) 36px;
+  display:grid; gap:34px 32px;
+  grid-template-columns:minmax(0,1.6fr) repeat(5,minmax(0,1fr));
+}
+/* 品牌块。站名用墨色加粗，不上色 —— 全站只有属性色这一个颜色语义，
+   品牌给自己单开一色就是在说另一件事；它在这一栏里靠字号和字重站头。
+   介绍那句压一条阅读宽度上限，否则它会跟着 1.6fr 长成一整行长文。 */
+.foot-brand{max-width:36ch}
+.foot-name{
+  font-family:var(--display); font-size:18px; font-weight:600;
+  letter-spacing:-0.015em; color:var(--ink); margin:0 0 10px;
+}
+/* 站名就是回首页那条路（2026-10-05，「站内」栏里那行「首页」按用户要求
+   去掉，目标挪到了名字上）。**链接的默认样式要全部抹掉**：站名是签名，
+   不是路牌 —— 一个下划线或一处颜色会让它读起来像旁边那五栏里的条目，
+   而它站头靠的是字号和字重。悬停才给一道下划线，用来告诉读者它可点。 */
+.foot-name a{
+  color:inherit; text-decoration:none; border-bottom:1px solid transparent;
+  transition:border-color .15s;
+}
+.foot-name a:hover{border-bottom-color:var(--line-2)}
+.foot-blurb{font-size:13.5px; color:var(--ink-2); line-height:1.75}
+/* margin-top 归零是必需的：h3 自带 1em 的上边距，而品牌块里是一个 p。
+   不清掉的话四条链接栏的标题会比站名低十几个像素，整行头就歪了。 */
+.foot-title{
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  margin:0 0 14px;
+}
+.foot-col ul{display:grid; gap:9px}
+.foot-col a{
+  font-size:13.5px; color:var(--ink-2); text-decoration:none;
+  border-bottom:1px solid transparent; transition:color .15s, border-color .15s;
+}
+.foot-col a:hover{color:var(--ink); border-bottom-color:var(--line-2)}
+/* ⚠️ `.foot-sub` 整个类没了（2026-10-05，用户连着两步拆掉的）：先撤左侧
+   那道细线（「全部 aniimo 下面的那条关系竖线也不要了」），再撤缩进
+   （「把物品、BOSS 跟另外子页对齐，不需要从属关系」）。现在分组项的
+   children 就是**兄弟节点** —— 同一个 <ul>、同一个 9px 间距、和下面的
+   「互动地图」「兑换码」同一条左边缘，`siteFootHTML` 里的 `entryHTML`
+   返回的是数组，由栏循环 flatMap 出去。
+   类从样式表里也删掉是这一步的重点：缩进是 0、间距和父级相等，那不是一个
+   样式，而是一个**看着像在说什么、其实什么都没说**的样式。读者想判断
+   「物品」是归「全部 Aniimo」管还是自己一个目的地，现在版面上不给任何
+   暗示 —— 这才是诚实的，因为它在导航里确实是个子项，而页脚里那个层级
+   没有事情可做。 */
+/* 版权段。细线只拉满内容宽（和 .foot-grid 同一组 max-width/padding），
+   不去碰整幅视口 —— 参考站那条线也是收在版心里的，通栏的线会把页脚
+   和正文切成两块不同的宽度。 */
+.foot-legal{
+  max-width:var(--max); margin:0 auto; padding:22px var(--gut) 40px;
+  border-top:1px solid var(--line); text-align:center;
+}
+.foot-note{
+  max-width:80ch; margin:0 auto;
+  font-size:12px; color:var(--ink-3); line-height:1.7;
+}
+.foot-copy{margin-top:8px; font-size:12px; color:var(--ink-3)}
+
+/* ── 物种页 / 形态页 ─────────────────────────────────────────
+   同一套版式服务两级页面：物种页放跨形态共享的东西（数值、进化线），
+   形态页放这个形态独有的东西（属性、栖息地、进化门槛）。
+   左边缘那道色脊沿用表格行的 --row-c 语汇，让「这是同一族的第几个」
+   在一眼之内可读。--sp-c 由 build.js 从 ANIIMO_TYPES 注入。 */
+.sp{padding:clamp(28px,4vw,44px) 0 0}
+.sp-wrap{max-width:var(--max); margin:0 auto; padding:0 var(--gut)}
+
+.crumb{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:baseline;
+  font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.crumb a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid transparent; transition:color .15s, border-bottom-color .15s}
+.crumb a:hover{color:var(--ink); border-bottom-color:var(--line-2)}
+.crumb-sep{color:var(--line-2)}
+
+.sp-head{margin-top:20px; border-top:1px solid var(--ink); padding-top:20px}
+/* 头像与标题并排。标题左侧那道元素色脊（.sp-title 的 inset box-shadow）必须
+   留在自己的列里 —— 头像要是和标题同处一个 flex 行，色脊会从头像左缘开始画，
+   整页的色系就错位了。所以头像是行里的一个兄弟节点，标题在 .sp-head-text 里。
+   .sp-badges 也搬进这一列，这样它和标题的 padding-left 是同一个起点。 */
+.sp-head-row{display:flex; align-items:center; gap:clamp(14px,2.4vw,24px)}
+/* min-width:0 是必需的：没有它，一个长名字会把这个 flex 子项撑得比容器还宽，
+   而 flex 子项默认不收缩，标题就会溢出页面。 */
+.sp-head-text{min-width:0}
+.sp-head-avatar{flex:none}
+.sp-no{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; color:var(--ink-3)}
+.sp-title{
+  font-family:var(--display); font-weight:800; letter-spacing:-.035em;
+  font-size:clamp(34px,6vw,56px); line-height:1.04; margin-top:8px;
+  padding-left:14px; box-shadow:inset 3px 0 0 var(--sp-c,var(--line-2));
+}
+.sp-badges{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:16px; padding-left:14px}
+.sp-lede{margin-top:20px; font-size:15.5px; color:var(--ink-2); max-width:66ch; line-height:1.65}
+
+.sp-block{margin-top:clamp(32px,5vw,48px); border-top:1px solid var(--line); padding-top:22px}
+.sp-h2{
+  font-family:var(--display); font-size:clamp(19px,2.6vw,25px); font-weight:800;
+  letter-spacing:-.025em; margin-bottom:10px;
+}
+/* .sp-block 里的第三级标题。和 .map-side-h 同一套处理 —— 小号等宽、
+   大写、灰。它标的是「这一段讲什么」，不是往标题层级上再加一格音量，
+   所以不走 --display。目前只有 progression 用：整个「通关之后」是一个
+   h2，底下的「会重复的」是它的一部分，而「按周期刷新的」自己独立成段
+   ——那一段要能被单独链接过去，所以它是 h2 的兄弟而不是这个 h3。 */
+.sp-h3{
+  font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); margin:20px 0 0;
+}
+.sp-note{font-size:14px; color:var(--ink-2); max-width:66ch; line-height:1.65}
+.sp-note a{color:var(--ink-2)}
+/* 正文色比周围深一档、字重 600 —— 和 .quick-body / .faq-a / .open-list 等处
+   的 strong 规则同一套写法。少了这条，<strong> 会退回浏览器默认的 700 并
+   保持 .sp-note 的灰，加粗反而比周围淡。 */
+.sp-note strong{color:var(--ink); font-weight:600}
+.sp-clean{font-family:var(--mono); font-size:12px; color:var(--ink-3)}
+
+/* 骨架页「先看这些」的链接。顶部的 a{color:inherit} 意味着 .sp-note 里
+   一个裸 <a> 和正文长得一模一样 —— 在这段文字里等于没有链接。
+   选择器写成 .sp-note a.sp-link 而不是单个 .sp-link：上面那条
+   .sp-note a 的优先级是 0,1,1，单个类名压不过它。 */
+.sp-note a.sp-link{
+  color:var(--ink); text-decoration:none;
+  border-bottom:1px solid var(--line-2);
+  transition:border-bottom-color .15s;
+}
+.sp-note a.sp-link:hover{border-bottom-color:var(--ink)}
+.muted{color:var(--ink-3)}
+
+/* 只给读屏用的内容。六边形是 aria-hidden 的图，六个数字的可读版本只剩
+   statRadar() 里那个 <dl class="sr-only">，删掉它读屏用户就一条数值都拿不到。
+   所以这个类不能省，也不能改成 display:none —— 那样辅助技术同样看不到。
+
+   stats 类本身（原先那块可见的「基础数值」网格）已随板块一起删，2026-09-28。 */
+.sr-only{
+  position:absolute; width:1px; height:1px;
+  margin:-1px; padding:0; border:0; overflow:hidden;
+  clip:rect(0 0 0 0); clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+/* ── 详情层：简介 / 速览卡 / 技能卡 / 形态卡 ────────────────────
+   三块卡片共用一套语汇：网格缝隙 1px、底色铺 --line，缝就成了发丝
+   分隔线（首页 .sys-grid 那一套），卡片本身是不透明的 --surface。
+   不投阴影 —— 纸面本来就是平的，浮起来的卡片会和整站的层级语汇打架，
+   而这一页已经有一个真正需要抢眼的东西了，见下。 */
+.glance-grid, .skill-grid, .form-cards{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1px; background:var(--line); border:1px solid var(--line); margin-top:16px;
+}
+/* 技能卡里要放一整段描述，两列时会窄到每行只剩五六个词；给它们更高的
+   最小宽度，宁可早一点折成一列。 */
+.skill-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.form-cards{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+
+.glance-card{background:var(--surface); padding:18px 18px 20px}
+.glance-v{font-family:var(--display); font-size:19px; font-weight:600; letter-spacing:-.015em; margin-top:6px}
+.glance-d{margin-top:8px; font-size:13.5px; color:var(--ink-2); line-height:1.65}
+
+/* 那行小标签：速览卡的字段名、技能卡的类型/耗能/威力、形态卡的地点与
+   进化去向。四处是同一个东西，所以只有这一条规则。 */
+.card-k{
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+}
+
+/* --c 是这一招自己的元素色，由 view-species.js 从 ANIIMO_TYPES 注入。
+   和表格行的色脊、页标题的色脊是同一套语汇。这是本页唯一一处第二种
+   颜色，因为它说的是「这一招不是火」—— 一件从名字上看不出来、又必须
+   一眼看到的事。 */
+.skill-card{
+  background:var(--surface); padding:18px 18px 20px;
+  box-shadow:inset 3px 0 0 var(--c,var(--line-2));
+}
+.skill-top{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px}
+.skill-name{font-family:var(--display); font-size:17px; font-weight:600; letter-spacing:-.015em; margin:0}
+/* 类型 / 耗能 / 威力横向排开，就是官方卡上那三个值。只有威力加粗 ——
+   三个都加粗就等于都没加粗，而这三个里唯一会被比较的是它。 */
+.skill-meta{display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:12px}
+.skill-meta dd{margin-top:3px; font-size:14px; color:var(--ink-2)}
+.skill-meta > div:last-child dd{font-family:var(--mono); font-weight:600; color:var(--ink)}
+.skill-desc{
+  margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);
+  font-size:13.5px; color:var(--ink-2); line-height:1.65;
+}
+.skill-desc strong, .glance-d strong, .form-card-rows strong{color:var(--ink); font-weight:600}
+
+/* 形态卡。基础形态没有独立页面，所以它那张卡里的名字不套链接 ——
+   链接只画在有去处的那两个上。 */
+.form-card{
+  background:var(--surface); padding:18px 18px 20px;
+  box-shadow:inset 3px 0 0 var(--c,var(--line-2));
+}
+.form-card-no{font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; color:var(--ink-3)}
+.form-card-name{font-family:var(--display); font-size:18px; font-weight:600; letter-spacing:-.015em; margin:6px 0 9px}
+.form-card-rows{margin-top:14px; display:grid; gap:10px}
+.form-card-rows dd{margin-top:3px; font-size:13.5px; color:var(--ink-2); line-height:1.55}
+.form-card-evo{font-family:var(--mono); font-size:13px; color:var(--ink)}
+
+/* ── 页头 + 数值雷达图 ────────────────────────────────────────
+   物种页的抬头（头像 + 标题 + lede）左边一列，雷达图右边一列。右侧
+   本来就是空的 —— lede 最宽 66ch，在 1180px 的版心里只用到一半。
+
+   那道 ink 顶线必须从 .sp-head 挪到 .sp-top 上：留在 .sp-head 上的话，
+   它只会横跨左边一列，在图表那一列断掉。形态页仍然单独用 .sp-head，
+   所以覆盖写成 .sp-top .sp-head 带上下文，不去动裸的 .sp-head。 */
+/* 右栏从 282 放宽到 340：图表跟着大一档，右下角那块空白也压下去了。
+   左栏文字被 .prose/.sp-lede 的 66ch 卡住，收窄栏宽不会让它变高，所以放宽
+   右栏是白拿的。
+   clamp 只在中等宽度起作用：1180 内容宽下 32% = 377 撞到上限 340，和固定
+   340 没区别；到 900px 视口才收到 273，到 680px 断点前最低 240 —— 免得刚
+   好在断点上方时左栏被挤成 250px 宽（一行不到 30 字，没法读）。
+   ⚠️ 图表整体的字号（.radar-k/.radar-v）是按 SVG 用户单位写的，栏一宽就
+   等比放大 —— 改这两个数之前先把 viewBox 换算一遍，别让数值字大过正文。 */
+.sp-top{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,clamp(240px,32%,340px));
+  gap:clamp(20px,3.2vw,44px);
+  align-items:start;
+  margin-top:20px; border-top:1px solid var(--ink); padding-top:20px;
+}
+.sp-top .sp-head{border-top:0; margin-top:0; padding-top:0}
+/* 简介整段搬进左栏，和标题、导语同处一列 —— 版面就成了「左文字 / 右六边形」，
+   左下角原来那块空白没有了。
+   它在左栏里必须丢掉自己那条 border-top：.sp-block 的规则线是全宽的，放进
+   只有一栏宽的容器里会横到图表那一列就断掉（和上面 .sp-head 同一条理由）。
+   margin-top 也收窄 —— 上面是导语不是另一个 section，不需要段间距。 */
+.sp-top-main .sp-block{border-top:0; margin-top:28px; padding-top:0}
+.sp-top-main .sp-block .sp-h2{font-size:clamp(17px,2.1vw,20px)}
+.sp-top-main{min-width:0}
+.sp-radar{min-width:0}
+
+.radar{display:block; width:100%; height:auto}
+/* 网格与辐条用最淡的那条线，数据多边形用页面的元素色 —— 和标题左侧那道
+   色脊、下面数值表的左色脊同一个 --sp-c，读者不用重新学一套颜色。
+   --c 由 statRadar() 写进 <svg style>，不是这里定的。 */
+/* 网格线用 --line-2 而不是 --line：--line 是给表格分隔线那种一眼扫过就够用的
+   地方配的，在 #FCFDFC 上 1px 几乎看不见，雷达图会只剩一个悬空的多边形。 */
+.radar-grid polygon{fill:none; stroke:var(--line-2); stroke-width:1}
+.radar-spokes line{stroke:var(--line-2); stroke-width:1}
+.radar-shape{
+  fill:var(--c,var(--line-2)); fill-opacity:.16;
+  stroke:var(--c,var(--line-2)); stroke-width:1.5; stroke-linejoin:round;
+}
+.radar-dots circle{fill:var(--c,var(--line-2))}
+/* 注意单位：这两条是 SVG 用户单位，不是屏幕像素。viewBox 宽 252 铺进 340px
+   的栏里，实际要乘约 1.35，所以写 9.5/12.5 落在屏幕上大约 12.8/16.9px —— 直接
+   按屏幕像素写，渲染出来会小一号。
+   ⚠️ 改 .radar-v 之前先看 src/view-species.js 里 RADAR_LABEL_R 上面那段：
+   数值字号和外圈到标签的间距是绑在一起的。 */
+.radar-k{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.07em; fill:var(--ink-3);
+}
+.radar-v{font-family:var(--mono); font-size:12.5px; font-weight:600; fill:var(--ink)}
+
+/* SVG 里的 .t-en/.t-zh 必须打回普通盒。全局那条 .t-en,.t-zh{display:contents}
+   是给 HTML 用的，display:contents 在 SVG 文本上没有定义良好的行为 ——
+   与其赌浏览器怎么处理，不如在这里明确写死。见 src/i18n.js 的文件头。 */
+.radar text.t-en,.radar text.t-zh{display:inline}
+[data-lang="zh"] .radar text.t-en{display:none}
+html:not([data-lang="zh"]) .radar text.t-zh{display:none}
+
+.radar-note{
+  font-family:var(--mono); font-size:10.5px; line-height:1.55;
+  color:var(--ink-3); margin-top:10px; max-width:36ch;
+}
+
+/* 简介正文。排印和 .sp-note 同一套，区别只在它一定是多段 —— 段间距由
+   p+p 给，段落是真 <p>，不靠 <br>。 */
+.prose{max-width:66ch; margin-top:14px; font-size:14.5px; color:var(--ink-2); line-height:1.7}
+.prose p + p{margin-top:12px}
+.prose strong{color:var(--ink); font-weight:600}
+
+/* 表格。桌面端 1180px 内放得下，窄屏靠下面的断点改成卡片，不用横向滚动 ——
+   这两张表里的内容（栖息地、别人的说法）正是最不该逼人横滑的那部分。 */
+.form-table, .conf-table{width:100%; border-collapse:collapse; font-size:14px; margin-top:16px}
+.form-table th, .conf-table th{
+  font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3); text-align:left;
+  padding:0 14px 10px 0; border-bottom:1px solid var(--ink); vertical-align:bottom;
+}
+.form-table td, .conf-table td{
+  padding:13px 14px 13px 0; border-bottom:1px solid var(--line);
+  vertical-align:top; color:var(--ink-2);
+}
+.f-no{font-family:var(--mono); font-size:12.5px; color:var(--ink-3); width:56px}
+/* 210px 这个宽度现在被第二张表用着：boss.html 的 Alpha / Omega 两张表的
+   第一格也挂 .f-name，那一格里除了名字还有一个 34px 的官方头像（.dex-head），
+   所以名字实际拿到的约 168px —— Scorchhowl 这一类长名字正好卡在换行线上，
+   窄一点就会折成两行、头像只跟第一行对齐。改小之前先回去看一眼那两张表。 */
+.f-name{width:210px; color:var(--ink)}
+/* 名字上有页面才画下划线 —— 没页面的名字在表里保持纯文本。 */
+.form-link{color:var(--ink); font-weight:600; text-decoration:none; border-bottom:1px solid var(--line-2)}
+.form-link:hover{border-bottom-color:var(--ink)}
+/* 图鉴表的名字链接比形态表多一个官方头像，所以两条规则在这里分家：
+   下划线画在 .dex-name 上，不画在整条 <a> 上 —— 挂在 <a> 上的话那条线会
+   从名字一路跑到头像底下。链接本身因此不带任何盒子（行内、无内边距），
+   有页面和没页面两种行排出来完全一样，.cell-name 也就不用改 display。 */
+.dex-link{color:var(--ink); font-weight:600; text-decoration:none}
+.dex-name{border-bottom:1px solid var(--line-2); transition:border-bottom-color .15s}
+.dex-link:hover .dex-name{border-bottom-color:var(--ink)}
+.form-base{font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
+.f-hab{font-size:13px}
+.f-evo{font-family:var(--mono); font-size:12.5px}
+/* 兑换码本身。等宽 + 可整段选中：这一格里的东西是要被复制走的，
+   user-select:all 让一次点击选中整个码，省掉拖选的半个字符误差。 */
+.code-cell{font-family:var(--mono); font-size:12.5px; color:var(--ink); user-select:all}
+
+.tag-gate{
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-3); border:1px solid var(--line-2); border-radius:3px;
+  padding:1px 5px; background:var(--bg); vertical-align:middle;
+}
+
+/* 进化线 */
+.chain{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:14px 0}
+.chain-node{
+  font-family:var(--mono); font-size:13px; padding:5px 11px;
+  border:1px solid var(--line-2); border-radius:3px; background:var(--surface);
+}
+.chain-arrow{color:var(--ink-3); font-size:13px}
+/* 分叉。形态自己那一页可以一次画出多个子节点 —— 口哨鸥的海滩形态是
+   1018101 → 1018401 / 1018501 / 1018701，三个都是海滩形态，形态是沿
+   整条线传下去的。所以这一格画的不是一条链而是一棵树，斜杠表示"或者"，
+   和物种索引表里 A → B / C 的写法一致。 */
+.chain-sep{color:var(--ink-3); font-size:13px}
+/* 本形态自己那一格。形态页现在把官方那一页画的整棵树都画出来（根在前），
+   所以得标出这一页讲的是哪个节点 —— 不标的话，同一族的兄弟页链会一模一样
+   （口哨鸥的三个海滩形态画的是同一棵树）。反白用的是 .tier-S 和
+   .chip[aria-pressed="true"] 同一条「被选中 = 深底浅字」的语言，不引入新颜色。 */
+.chain-self{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+
+/* 形态页的简介段落走的是物种页同一套 .prose —— 游戏自己的那句描述用一句
+   引出语带出来，而不是排成引用块（2026-09-28 用户裁定）。这里曾经有一条
+   .sp-quote / .sp-quote-label，随那次改动一起删掉了：留着的死 CSS 会让下
+   一个改这里的人以为页面还在用引文样式。 */
+
+/* 形态页底部的兄弟形态。排成一行可以折行的链接，不是第三张表格 ——
+   这一页只需要回答「还有哪几个形态、怎么过去」，多出一列信息就是重复
+   物种页上已经有的那张形态表。 */
+.form-nav{display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px}
+
+/* 栖息地 / 进化条件 */
+.loc-list, .req-list{margin-top:14px; display:grid; gap:9px}
+.loc-list li, .req-list li{font-size:14.5px; color:var(--ink-2); padding-left:16px; position:relative}
+.loc-list li::before, .req-list li::before{
+  content:""; position:absolute; left:0; top:.62em; width:8px; height:2px;
+  background:var(--sp-c,var(--line-2));
+}
+.req-list strong{font-family:var(--mono); font-size:13.5px; color:var(--ink)}
+
+/* 来源与分歧 —— 这些页面存在的理由，不是免责声明 */
+.src-list{margin-top:14px; display:grid; gap:10px}
+.src-list li{font-size:13.5px; color:var(--ink-2); padding-left:16px; position:relative; line-height:1.65}
+.src-list li::before{content:""; position:absolute; left:0; top:.62em; width:8px; height:2px; background:var(--line-2)}
+.src-name{font-family:var(--mono); font-size:12.5px; color:var(--ink)}
+.src-list a{color:var(--ink-3); font-family:var(--mono); font-size:11.5px}
+
+.conf-table caption{
+  text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-3); padding-bottom:10px;
+}
+.conf-table th[scope="row"]{
+  font-family:var(--mono); font-size:12.5px; color:var(--ink); width:96px;
+  text-transform:none; letter-spacing:0; padding-right:14px;
+}
+.conf-ours{color:var(--ink); font-weight:600; width:150px}
+.conf-list{display:grid; gap:6px}
+.conf-list li{font-size:13.5px; line-height:1.6}
+.conf-src{font-family:var(--mono); font-size:11.5px; color:var(--ink-3)}
+.conf-val{font-family:var(--mono); font-size:13px; color:var(--ink)}
+.conf-note{display:block; color:var(--ink-3); font-size:12.5px; line-height:1.6}
+
+/* 未确认项 */
+.open-list{margin-top:14px; display:grid; gap:10px}
+.open-list li{font-size:14.5px; color:var(--ink-2); padding-left:30px; position:relative; line-height:1.65}
+.open-list li::before{
+  content:"?"; position:absolute; left:0; top:.05em;
+  font-family:var(--mono); font-size:12px; color:var(--ink-3);
+  border:1px solid var(--line-2); border-radius:3px; padding:0 5px;
+}
+.open-list strong{color:var(--ink)}
+
+/* ── 常见问题（faq.html） ─────────────────────────────────────
+   五十条问答一屏装不下，所以页面先给一张分区地图，再按分区摊开。
+   条目左侧的色脊保持中性：这个站上颜色是「属性」的意思，拿它给分组
+   做装饰会把话说乱。
+
+   编号跨分区连续（01…50）。它是页面那句「五十条」唯一可见的形式 ——
+   读者不用数就知道自己走到哪儿了。 */
+.faq-jump{
+  margin-top:26px; display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:1px; background:var(--line);
+}
+.faq-jump a{
+  display:flex; align-items:baseline; gap:11px;
+  background:var(--surface); padding:13px 15px;
+  text-decoration:none; font-size:14px; color:var(--ink-2);
+}
+.faq-jump a:hover{color:var(--ink)}
+.faq-jump-n{font-family:var(--mono); font-size:11px; color:var(--ink-3)}
+
+.faq-list{margin-top:16px}
+.faq-item{
+  padding:18px 0 18px 13px;
+  border-top:1px solid var(--line);
+  border-left:3px solid var(--line-2);
+  scroll-margin-top:24px;
+}
+.faq-item:last-child{border-bottom:1px solid var(--line)}
+/* 每一条都有自己的 id（#q-16），所以单条问答可以被单独链出去。目录跳到的是
+   分区，这条规则管的是有人直接落在某一条上时，他看得见自己落在哪。 */
+.faq-item:target{border-left-color:var(--ink); background:var(--surface)}
+.faq-q{
+  display:flex; gap:12px; align-items:baseline;
+  font-family:var(--display); font-size:17.5px; font-weight:600;
+  letter-spacing:-.012em; line-height:1.45;
+}
+.faq-no{flex:none; font-family:var(--mono); font-size:11.5px; font-weight:400; color:var(--ink-3)}
+/* 26px = 编号列（两位 mono 11.5px）加 12px 间距，答案与问题文字对齐。 */
+.faq-a{margin-top:9px; padding-left:26px; font-size:14.5px; color:var(--ink-2); max-width:66ch; line-height:1.72}
+.faq-a strong{color:var(--ink); font-weight:600}
+
+/* ── 互动地图（map.html） ────────────────────────────────────
+   底图是游戏里的世界地图原画，一张整图。Leaflet 用 CRS.Simple 把它铺在一个
+   以图像像素为单位的坐标系上 —— 见 assets/map.js 与 src/map-pins.js。
+
+   十六枚区域钉是「照着地形估的」。页面自己说了三次：地图上方一段、侧栏
+   钉子列表下面一段、每枚钉子打开的浮窗里还有一段。诚实不是这一页的加分项，
+   是它存在的前提 —— 一张看起来像测绘过的图，比一张没有钉的图更糟。
+
+   舞台用深色底：海洋的蓝比纸白更接近它本来的样子，图四周的留白也不会
+   把地图切出一块方的来。 */
+.map-frame{
+  margin-top:18px; display:grid;
+  grid-template-columns:minmax(0,1fr) 232px;
+  gap:1px; background:var(--line);
+  border:1px solid var(--line);
+}
+.map-stage{
+  position:relative; overflow:hidden;
+  background:#0C1E32;
+  height:clamp(320px,54vh,560px);
+  cursor:grab;
+  /* touch-action 默认放行纵向滚动，而不是 none。这块地图在手机上占掉半屏，
+     若在这里吞掉纵向手势，读者手指停在地图上就翻不动页了 —— 这正是
+     assets/map.js 里方向键只在放大后才接管的原因，两边是同一条规则。
+     Leaflet 自己的样式表会给容器上 touch-action:none，所以真正生效的覆盖
+     写在下面 .map-canvas 的那两条上：本文件在它之后加载（见 build.js 的
+     PAGE_HEAD），同权重时后加载的赢。 */
+  touch-action:pan-y;
+  /* 键盘平移靠 tabindex 聚焦，浏览器默认焦点圈在这块深色上几乎看不见，
+     所以焦点环由 CSS 补一条浅色。 */
+  outline:none;
+}
+.map-stage:focus-visible{box-shadow:inset 0 0 0 2px rgba(252,253,252,.55)}
+/* Leaflet 的容器自己也吃焦点（它内部按需要给容器 tabindex），所以焦点环
+   得两边都画，否则键盘读者落在地图上时看不见自己在哪里。深色上浏览器默认
+   的轮廓几乎看不见，照舞台那条自绘一条浅色的；用 :focus-visible 而不是
+   :focus-within —— 后者在鼠标点一下地图之后也会亮，那圈白线就永远挂着了。 */
+.map-canvas.leaflet-container:focus{outline:none}
+.map-canvas.leaflet-container:focus-visible{
+  outline:2px solid rgba(252,253,252,.55); outline-offset:-2px;
+}
+
+/* z-index:0 是必需的，不是随手写的：Leaflet 的面板自带 400–700 的层级，
+   而 position 加 z-index 才会建立层叠上下文。没有它，控件和浮窗会跟地图
+   面板挤在同一个上下文里，按钮就被压在下面了。 */
+.map-canvas{position:absolute; inset:0; z-index:0}
+
+/* Leaflet 给容器上了自己的字体、底色和链接色。底色要透出去露出海水；字体
+   要落回本站的字栈，否则浮窗里的中英文会掉进它的 Arial。 */
+.map-canvas.leaflet-container{
+  background:transparent;
+  font-family:var(--cjk); font-size:14px; line-height:1.7;
+}
+.map-canvas.leaflet-container a{color:inherit}
+
+/* 触屏手势归谁，全站只有这两条说得清：
+   未放大时放行纵向滚动（读者要能翻页），放大之后整块交给地图。
+   两条都比 Leaflet 的同名规则更具体，且后者在前者之后。 */
+.map-stage .map-canvas.leaflet-touch-drag,
+.map-stage .map-canvas.leaflet-touch-drag.leaflet-touch-zoom{touch-action:pan-y}
+.map-stage.is-zoomed .map-canvas.leaflet-touch-drag,
+.map-stage.is-zoomed .map-canvas.leaflet-touch-drag.leaflet-touch-zoom{touch-action:none}
+
+.map-ctl{
+  position:absolute; left:12px; bottom:12px; z-index:2;
+  display:flex; flex-direction:column; gap:1px;
+  background:rgba(12,30,50,.55);
+}
+.map-btn{
+  width:34px; height:34px; border:0; cursor:pointer;
+  background:rgba(252,253,252,.92); color:var(--ink);
+  font-family:var(--mono); font-size:15px; line-height:1;
+}
+.map-btn:hover{background:#fff}
+.map-btn:focus-visible{outline:2px solid var(--ink); outline-offset:-2px}
+
+/* 倍率。地图上唯一一个会自己变的数，摆在控件正上方的同一列里，
+   读者按 + 的时候眼睛不用离开这一角。 */
+.map-scale{
+  position:absolute; left:12px; bottom:120px; z-index:2;
+  margin:0; padding:3px 7px; border-radius:3px;
+  background:rgba(12,30,50,.55); color:#F2F4F3;
+  font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+  pointer-events:none;
+}
+
+/* ── 钉子 ──
+   外壳是 Leaflet 的 divIcon，里面那个 span 是 assets/map.js 画的：
+   墨色圆点加一圈纸白描边 —— 针尖落在哪一格，得让读者看得见。 */
+.map-pin-tip{border:0; background:none}
+.map-pin{
+  display:block; width:14px; height:14px; margin:2px; border-radius:50%;
+  background:var(--ink);
+  box-shadow:0 0 0 2.5px var(--surface), 0 0 0 3.5px rgba(21,24,27,.42);
+  transition:transform .12s;
+}
+.map-pin-tip:hover .map-pin,
+.map-pin-tip.is-on .map-pin{transform:scale(1.34)}
+
+/* 悬停时钉子自己报名字。内容是区域卡里那个 <h3> 的一串克隆，
+   所以中英文跟着页面走，这里一个字都不用再配一遍。 */
+.map-tip-box{
+  background:var(--ink); color:var(--surface);
+  border:0; border-radius:2px; padding:3px 7px; box-shadow:none;
+  font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+}
+.map-tip-box::before{display:none}
+
+/* ── 浮窗 ──
+   Leaflet 自带的是圆角白卡片加投影，和本站的方角细线不是一套。连它那个
+   小尖角一起去掉，改成一块纸白面板压在图上；角上的 ✕ 换成 mono 字号。 */
+.map-pop-wrap .leaflet-popup-content-wrapper{
+  background:var(--surface); color:var(--ink);
+  border:1px solid var(--line-2); border-radius:3px; box-shadow:none;
+}
+.map-pop-wrap .leaflet-popup-content{margin:12px 14px 13px; line-height:1.7}
+.map-pop-wrap .leaflet-popup-tip{display:none}
+.map-pop-wrap .leaflet-popup-close-button{
+  width:26px; height:26px; padding:0;
+  color:var(--ink-3); font-family:var(--mono); font-size:14px; line-height:26px;
+}
+.map-pop-wrap .leaflet-popup-close-button:hover{color:var(--ink)}
+
+/* 浮窗内容的根。它同时是页面里那个隐藏模板 —— 模板上的类名和克隆进浮窗里的
+   类名是同一套，所以样式只写一遍，两处都算数。这里定的是文字颜色本身：
+   内容一旦进了 Leaflet 的壳，就得自带颜色，不能让壳的脸色说了算。 */
+.map-pop{color:var(--ink)}
+.map-pop-title{
+  font-family:var(--display); font-size:16px; font-weight:800;
+  letter-spacing:-.015em; line-height:1.3;
+}
+.map-pop-title .area-count{margin-left:7px}
+/* 浮窗里也要说一遍位置是估的。钉子看起来越像测绘过的，这句越不能省。 */
+.map-pop-approx{
+  margin-top:5px; padding-bottom:9px; border-bottom:1px solid var(--line);
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.03em;
+  color:var(--ink-3); line-height:1.6;
+}
+.map-pop-list{margin-top:9px; max-height:188px; overflow:auto}
+.map-pop-row + .map-pop-row{margin-top:4px}
+.map-pop-list .form-name{color:var(--ink); font-weight:600}
+.map-pop-list a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--line-2)}
+.map-pop-list a:hover{color:var(--ink); border-bottom-color:var(--ink)}
+
+/* ── 侧栏 ── */
+.map-side{background:var(--surface); padding:15px 15px 17px; overflow:auto; max-height:560px}
+.map-side-h{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:500;
+}
+.map-side-note + .map-side-h{margin-top:18px}
+.map-list{margin-top:11px}
+.map-list li + li{border-top:1px solid var(--line)}
+.map-pick{
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+  padding:7px 0 7px 9px; margin-left:-9px;
+  border-left:2px solid transparent;
+  font-size:13.5px; color:var(--ink-2); text-decoration:none;
+}
+.map-pick:hover{color:var(--ink); border-left-color:var(--line-2)}
+.map-pick.is-on{color:var(--ink); border-left-color:var(--ink); font-weight:600}
+.ma-count{font-family:var(--mono); font-size:11px; color:var(--ink-3)}
+.map-side-note{
+  margin-top:11px; padding-top:10px; border-top:1px solid var(--line);
+  font-family:var(--cjk); font-size:11.5px; color:var(--ink-3); line-height:1.68;
+}
+.map-side-note strong{color:var(--ink-2); font-weight:600}
+
+/* ── 搜索 ──
+   结果是绝对定位的下拉，悬在地图旁边，而不是把下面的东西推走 ——
+   每敲一个字就重排整栏，读者的手会被从输入框上顶开。 */
+.map-search{position:relative}
+.map-search-label{
+  display:block; margin-bottom:6px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:500;
+}
+.map-search-box{position:relative}
+.map-search-input{
+  width:100%; padding:8px 32px 8px 10px;
+  font-family:var(--cjk); font-size:13.5px; line-height:1.5; color:var(--ink);
+  background:var(--paper); border:1px solid var(--line-2); border-radius:3px;
+}
+.map-search-input:focus{outline:none; border-color:var(--ink); box-shadow:0 0 0 3px rgba(21,24,27,.08)}
+.map-search-input::placeholder{color:var(--ink-3)}
+/* 清空按钮的显隐由 [hidden] 管，所以 display:flex 只能写在 :not([hidden]) 上 ——
+   作者样式里任何一条 display 都会压过浏览器默认的 [hidden]{display:none}，
+   直接写 flex 等于这个按钮永远在场。全站踩过同一个坑，见 .lang-on 那段。 */
+.map-search-x{
+  position:absolute; right:1px; top:1px; bottom:1px; width:28px;
+  padding:0; border:0; background:none; cursor:pointer;
+  color:var(--ink-3); font-family:var(--mono); font-size:12px;
+}
+.map-search-x:not([hidden]){display:flex; align-items:center; justify-content:center}
+.map-search-x:hover{color:var(--ink)}
+.map-results{
+  position:absolute; left:0; right:0; top:100%; z-index:30; margin-top:5px;
+  max-height:236px; overflow:auto;
+  background:var(--surface); border:1px solid var(--line-2); border-radius:3px;
+}
+.map-result{
+  display:block; padding:7px 10px;
+  font-size:13px; color:var(--ink-2); text-decoration:none;
+  border-bottom:1px solid var(--line);
+}
+.map-result:last-child{border-bottom:0}
+.map-result:hover,.map-result:focus-visible{background:var(--paper); color:var(--ink)}
+.map-result-main{display:block}
+.map-result-main .form-name{color:var(--ink); font-weight:600}
+.map-result-where{
+  display:block; margin-top:1px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; color:var(--ink-3);
+}
+.map-result-none{padding:9px 10px; font-size:13px; color:var(--ink-3)}
+
+/* ── 读者自己的标记 ──
+   加标记的表单压在地图左下角，而不是把地图推开：它是一次性的，
+   读者点完就消失在原地。 */
+.map-fav{
+  position:absolute; left:12px; bottom:56px; z-index:3;
+  width:212px; padding:11px 12px 12px;
+  background:var(--surface); border:1px solid var(--line-2); border-radius:3px;
+}
+.map-fav-label{
+  display:block; margin-bottom:7px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.map-fav-grid{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:1px;
+  background:var(--line); border:1px solid var(--line);
+}
+.map-fav-emoji{
+  padding:4px 0; border:0; cursor:pointer;
+  background:var(--surface); font-size:14px; line-height:1.4;
+}
+.map-fav-emoji:hover{background:var(--paper)}
+/* 选中态走 aria-pressed，和全站 .chip 一个写法：状态在语义里，不在类名里。 */
+.map-fav-emoji[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
+.map-fav-input{
+  width:100%; margin-top:9px; padding:6px 8px;
+  font-family:var(--cjk); font-size:13px; color:var(--ink);
+  background:var(--paper); border:1px solid var(--line-2); border-radius:3px;
+}
+.map-fav-input:focus{outline:none; border-color:var(--ink); box-shadow:0 0 0 3px rgba(21,24,27,.08)}
+.map-fav-row{display:flex; gap:6px; margin-top:9px}
+.map-fav-btn{
+  flex:1; padding:6px 0; cursor:pointer; border-radius:3px;
+  font-family:var(--cjk); font-size:12.5px;
+  background:var(--surface); color:var(--ink-2); border:1px solid var(--line-2);
+}
+.map-fav-btn:hover{color:var(--ink); border-color:var(--ink)}
+.map-fav-save{background:var(--ink); color:var(--surface); border-color:var(--ink)}
+
+.map-fav-tip{border:0; background:none}
+.map-fav-pin{
+  display:block; width:22px; height:22px; border-radius:50%;
+  font-size:13px; line-height:20px; text-align:center;
+  background:var(--surface); border:1px solid var(--line-2);
+}
+.map-fav-pop{min-width:148px}
+.map-fav-del{
+  margin-top:9px; padding:0 0 1px; cursor:pointer;
+  background:none; border:0; border-bottom:1px solid var(--line-2);
+  font-family:var(--cjk); font-size:11.5px; color:var(--ink-3);
+}
+.map-fav-del:hover{color:var(--ink); border-bottom-color:var(--ink)}
+/* 这两条不跟 .map-list 走：下面 @media 里 .map-list 会变成多列网格，
+   而那对「读者自己的几枚标记」是错的 —— 一份私人清单读起来是一列，
+   不是一片瓷砖。 */
+.map-fav-list{margin-top:11px}
+.map-fav-list li + li{border-top:1px solid var(--line)}
+.map-fav-item{
+  display:flex; align-items:baseline; gap:8px; width:100%;
+  padding:7px 0; border:0; background:none; cursor:pointer; text-align:left;
+  font-family:var(--cjk); font-size:13.5px; color:var(--ink-2);
+}
+.map-fav-item:hover{color:var(--ink)}
+.map-fav-item-dot{flex:none; font-size:12px; line-height:1.25}
+.map-fav-item-name{flex:1 1 auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+
+.map-hint{
+  margin-top:11px; font-family:var(--mono); font-size:11px;
+  letter-spacing:.04em; color:var(--ink-3);
+}
+
+@media (max-width:680px){
+  /* 窄屏上表单不再是浮在角上的小卡片，它占满整条下沿 —— 十几个 emoji 加
+     一个输入框挤在 212px 里，点哪个都会点错。 */
+  .map-fav{left:8px; right:8px; bottom:8px; width:auto}
+  .map-scale{bottom:124px}
+}
+
+/* 区域卡片：一格一片地方，格内按形态列住在那儿的 Aniimo。
+   key 是维基的栖息地名，不是我们的译名 —— 译名对不上时页面会退成英文，
+   但分组不会错。
+
+   这套卡片现在不渲染：地图页把它们收进 #areaData[hidden]，当数据用
+   （钉子的浮窗、搜索框、侧栏的锚点都读它们）。原来那个 .area-grid 栅格
+   连同它的 @media 一起删了，因为 `display:grid` 会压过浏览器默认的
+   `[hidden]{display:none}`，把这个类加回 #areaData 就等于整块重新上屏。
+   下面的 .area-card 及其子类必须留着：类名仍在（隐藏的）标记里，
+   build 会检查每个用到的类都有规则。 */
+.area-card{background:var(--surface); padding:15px 16px 17px; scroll-margin-top:20px}
+.area-h{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+.area-name{
+  font-family:var(--display); font-size:16.5px; font-weight:800;
+  letter-spacing:-.015em; line-height:1.3;
+}
+.area-count{flex:none; font-family:var(--mono); font-size:11px; color:var(--ink-3)}
+.area-forms{margin-top:10px; font-size:13.5px; color:var(--ink-2); line-height:1.78}
+/* 每条一个块。这一串被读了两次：地图的搜索框拿它当搜索域，区域钉的浮窗
+   整个照搬它。之前用 <br> 分隔，那两处就没法单独取到一行。 */
+.area-entry{display:block}
+.area-forms .form-name{color:var(--ink); font-weight:600}
+.area-forms a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--line-2)}
+.area-forms a:hover{color:var(--ink); border-bottom-color:var(--ink)}
+/* 形态名。缩到 mono 小号，是为了让「哪只」和「哪个形态」在读的时候分得开 ——
+   这两件事在别的地图上是被合并成一条的，而它们不是一回事。 */
+.area-form{font-family:var(--mono); font-size:11.5px; color:var(--ink-3)}
+.area-note{
+  margin-top:10px; padding-top:9px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--ink-3); line-height:1.7;
+}
+
+/* 官方原文：区域名与描述是官网首页 World 一节的说法，两种语言都照抄，
+   所以这一块不能跟着全站语言开关走 —— 它本来就是双语的。 */
+/* 六格栅格。分隔线画在每个格子上，不用「gap 1px + 容器底色」那个更短的写法：
+   六格在 auto-fit 的四列里排不满两行，容器的底色会从空出来的格位透出来，
+   看着像两块没填上的内容。*/
+.region-pair{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  margin-top:16px; border-top:1px solid var(--line); border-left:1px solid var(--line);
+}
+.region-cell{
+  background:var(--surface); padding:14px 15px 16px;
+  border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.region-en{font-family:var(--display); font-size:15.5px; font-weight:600; letter-spacing:-.012em}
+.region-zh{margin-top:3px; font-size:13px; color:var(--ink-3)}
+
+/* 坐标读法：等宽，且要能一眼看出负号和前导零是有意义的。 */
+.coord-line{
+  display:block; margin:8px 0 0; padding:9px 11px;
+  background:var(--surface); border-left:2px solid var(--line-2);
+  font-family:var(--mono); font-size:13px; color:var(--ink); letter-spacing:.03em;
+}
+
+/* ── 响应式 ── */
+/* 页脚比站上别的网格多一档断点。六条轨道（品牌 + 五栏）要排到 1080px
+   才算站得开 —— 再窄下去每栏只剩一百二十来像素，「互动地图」「隐私政策」
+   这样的词开始折行。所以这里不跟 900px 那条走。
+   品牌块横跨整行，五栏按三列排（3 + 2）；比上一版好的是每栏最多五条，
+   三列不会像原来那样把唯一一条长栏挤成半屏高。 */
+@media (max-width:1080px){
+  .foot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .foot-brand{grid-column:1 / -1; max-width:48ch}
+}
+/* 两列是页脚能用的最后一档：五栏分成 2 + 2 + 1，最后一条自己占半行，
+   比挤成三栏时每栏不足一百像素要好。 */
+@media (max-width:640px){
+  .foot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width:900px){
+  .map-frame{grid-template-columns:minmax(0,1fr)}
+  .map-side{max-height:none; border-top:1px solid var(--line)}
+  .map-search{margin-bottom:16px}
+  .map-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0 16px}
+  .map-list li + li{border-top:0}
+}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .readout{order:-1}
+  /* 标本墙减到 8 列。24 能被 8 整除，所以还是整行收尾。 */
+  .specimen-wall{grid-template-columns:repeat(8,minmax(0,1fr))}
+  .readout-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); gap:0 16px}
+  .readout-list > div{flex-direction:column; align-items:flex-start; gap:0; border-bottom:0}
+  .readout-list dd{font-size:17px}
+  .step{grid-template-columns:52px minmax(0,1fr)}
+  .step-no{font-size:17px}
+  .nav-links{gap:16px}
+  /* 系统卡叠成一列。首页那四张系统卡不用这一条了 —— 首页从 2026-09-30 起
+     本来就是单列（见 .home 那一段），剩下的这个 .sys-grid 是 team.html 的。 */
+  .sys-grid{grid-template-columns:minmax(0,1fr)}
+  /* 「本站是什么」那三张卡在 900px 以下也叠成一列 —— 卡内宽掉到 220px 左右
+     时，一行的字只剩不到三十个，读起来是一列竖条。这里回到整幅宽，正文的
+     86ch 上限正好接着管。 */
+  .home .about-list{grid-template-columns:minmax(0,1fr)}
+  /* 地图那条的左图右文也叠回上下。卡内宽到这一档只剩六百多，0.85fr 那一栏
+     不足三百，图缩到看不清地形的程度 —— 那时它就不是地图，是个花纹了。
+     叠成上下之后图回到整幅宽，和删卡片以前一样。 */
+  .hub-card .hub-media{grid-template-columns:minmax(0,1fr)}
+  /* 家园那两张半表也叠回上下。这里要另给 row-gap —— 并排时行距是 0（两张表
+     各行本来就靠自己那条行线分开），叠起来之后没有行距两张表会连成一张，
+     而表头只该出现在它自己那半的头上。 */
+  .hub-card .hub-split{grid-template-columns:minmax(0,1fr); row-gap:28px}
+}
+
+@media (max-width:680px){
+  /* 导航从 5 项长到 11 项后，原来的 24px 间距在窄屏会把它折成三行，
+     并且比品牌行还抢眼。收紧行内间距和字号，让它停在两行 —— 换行本身
+     仍然允许，不做汉堡菜单（那要多一份 JS，现在还不值）。
+     下拉菜单在窄屏跟着缩一号字，否则它比触发它的按钮还大。 */
+  .nav-links{gap:9px 15px}
+  .nav-links a{font-size:13px}
+  .nav-links .nav-menu a{font-size:12.5px}
+
+  /* 标本墙再减到 6 列（24 ÷ 6 = 4 行整）。到这一档格子只有 40 多像素，
+     头像仍然认得出是「一只」，这正是它在这儿的作用 —— 它是这一页的封面，
+     不是给人认名字的地方，名字在下面那张表里。 */
+  .specimen-wall{grid-template-columns:repeat(6,minmax(0,1fr))}
+
+  /* 页面墙在这里不用动：它从 2026-09-30 起就是单列卡片，标签、名字、数字
+     本来各占一行。原来这一段里那两条（把 .hub-card 收成一栏、把 .hub-stat
+     改成左对齐不换行）是给旧的两栏版收尾的，一并删掉。 */
+
+  .dex-table{min-width:0}
+  .dex-table thead{display:none}
+  .dex-table tbody tr{
+    display:block; padding:14px 0 14px 12px;
+    border-bottom:1px solid var(--line);
+    border-left:3px solid var(--row-c,var(--line-2));
+  }
+  .dex-table tbody tr:hover{background:transparent}
+  /* width:auto 是必需的：桌面端的 .c-no/.c-role/.c-tier 等列宽会漏进来，
+     把 .c-role 压成 96px，导致「辅助」折成两行。 */
+  .dex-table td{
+    display:grid; grid-template-columns:74px minmax(0,1fr); gap:10px;
+    width:auto; padding:3px 0; border-bottom:0; align-items:baseline;
+  }
+  /* 列名由 CSS 画出来，所以属性可切换 —— 不需要 JS 参与。
+     两个属性名来自 src/i18n.js 的 tCol()。 */
+  .dex-table td::before{
+    content:attr(data-col-en);
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3);
+  }
+  html[data-lang="zh"] .dex-table td::before{content:attr(data-col-zh)}
+  .cell-no{border-left:0; padding-left:0}
+  .cell-no::before{content:none}
+  .dex-table td.cell-no{display:block}
+  .cell-name{font-size:17px}
+  /* 窄屏头像收小。width/height 属性给的是 2x 尺寸，这里按 CSS 覆盖 ——
+     图是正方形，同时改宽高不会变形。 */
+  .dex-head{width:28px; height:28px; margin-right:7px}
+  .item-icon-box{width:26px; height:26px; margin-right:6px}
+  .step{grid-template-columns:minmax(0,1fr); gap:8px}
+
+  /* 物种页 / 形态页：标题的色脊收窄，两张表改成卡片。
+     data-col 里的列名来自 view-species.js —— 改表头文案时那里也要改。 */
+  /* 雷达图在窄屏落到标题下面，并且限宽 —— 铺满整行的话它会比标题还
+     高，一屏之内看不到任何数值。 */
+  .sp-top{grid-template-columns:minmax(0,1fr); gap:22px}
+  .sp-radar{max-width:250px}
+
+  .sp-title{padding-left:11px; box-shadow:inset 2px 0 0 var(--sp-c,var(--line-2))}
+  .sp-badges{padding-left:11px}
+  .sp-head-row{gap:12px}
+  .sp-head-avatar{width:64px; height:64px}
+  .faq-jump{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .faq-item{padding:16px 0 16px 11px; border-left-width:2px}
+  .faq-q{font-size:16.5px}
+
+  .form-table, .conf-table{display:block; margin-top:12px}
+  .form-table thead, .conf-table thead{display:none}
+  .form-table tbody, .form-table tr, .conf-table tbody, .conf-table tr{display:block}
+  .form-table tr, .conf-table tr{
+    padding:14px 0; border-bottom:1px solid var(--line);
+    border-left:3px solid var(--sp-c,var(--line-2)); padding-left:12px;
+  }
+  .form-table td, .conf-table td, .conf-table th[scope="row"]{
+    display:block; width:auto; padding:0 0 8px; border-bottom:0;
+  }
+  .form-table td:last-child, .conf-table td:last-child{padding-bottom:0}
+  .form-table td::before, .conf-table td::before{
+    content:attr(data-col-en); display:block;
+    font-family:var(--mono); font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); margin-bottom:4px;
+  }
+  html[data-lang="zh"] .form-table td::before,
+  html[data-lang="zh"] .conf-table td::before{content:attr(data-col-zh)}
+  /* 冲突表的行标题已经是自己的标签，不需要再顶一个 data-col */
+  .conf-table th[scope="row"]{padding-bottom:8px}
+  .conf-table caption{padding-bottom:6px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important; transition-duration:.001ms !important}
+}

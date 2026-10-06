@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en" data-title-en="Interactive Map — AniimoData" data-title-zh="互动地图 — AniimoData">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Map — AniimoData</title>
+<meta name="description" content="The world you can drag and zoom, and beside it every Aniimo the official wiki places in each area — listed by form, because a Budclaw&#39;s Bay Form and its basic form do not live on the same coast.">
+<meta name="keywords" content="Interactive Map Aniimo, Aniimo Interactive Map">
+<link rel="canonical" href="https://aniimodata.com/map.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Interactive Map — AniimoData">
+<meta property="og:description" content="The world you can drag and zoom, and beside it every Aniimo the official wiki places in each area — listed by form, because a Budclaw&#39;s Bay Form and its basic form do not live on the same coast.">
+<meta property="og:image" content="https://aniimodata.com/assets/brand/og-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/brand/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/brand/icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/icon-192.png">
+<link rel="icon" type="image/svg+xml" sizes="any" href="assets/brand/mark.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="assets/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "headline": "Interactive Map — AniimoData",
+  "inLanguage": "en",
+  "about": {
+    "@type": "VideoGame",
+    "name": "Aniimo"
+  }
+}
+</script>
+<style>
+/* Generated from ANIIMO_TYPES by build.js — one ordered gradient, blurred.
+   See styles.css for why it cannot be built from overlapping colour blobs. */
+:root{--lf:linear-gradient(90deg,rgba(228,87,46,0.9) 15.278%,rgba(45,125,210,0.9) 23.958%,rgba(76,154,42,0.9) 32.639%,rgba(56,178,163,0.9) 41.319%,rgba(240,180,41,0.9) 50.000%,rgba(95,184,223,0.9) 58.681%,rgba(140,98,57,0.9) 67.361%,rgba(216,195,107,0.9) 76.042%,rgba(79,74,107,0.9) 84.722%)}
+</style>
+</head>
+<body>
+
+<!-- Lightfall: the spectrum strip throwing its colours onto the paper. -->
+<div class="lightfall" aria-hidden="true"></div>
+
+<!-- Element spectrum. The site's colour baseline — emitted from ANIIMO_TYPES. -->
+<div class="spectrum" aria-hidden="true">
+  <i style="--c:#E4572E"></i>
+  <i style="--c:#2D7DD2"></i>
+  <i style="--c:#4C9A2A"></i>
+  <i style="--c:#38B2A3"></i>
+  <i style="--c:#F0B429"></i>
+  <i style="--c:#5FB8DF"></i>
+  <i style="--c:#8C6239"></i>
+  <i style="--c:#D8C36B"></i>
+  <i style="--c:#4F4A6B"></i>
+</div>
+
+<header class="nav">
+  <a class="nav-brand" href="index.html">
+    <span class="nav-mark"><svg width="30" height="30" viewBox="0 0 30 30" fill="currentColor" aria-hidden="true"><rect x="13.25" y="2.25" width="3.5" height="3.5"/><rect x="7.75" y="7.75" width="3.5" height="3.5"/><rect x="18.75" y="7.75" width="3.5" height="3.5"/><rect x="2.25" y="13.25" width="3.5" height="3.5"/><rect x="7.75" y="13.25" width="3.5" height="3.5"/><rect x="13.25" y="13.25" width="3.5" height="3.5"/><rect x="18.75" y="13.25" width="3.5" height="3.5"/><rect x="24.25" y="13.25" width="3.5" height="3.5"/><rect x="2.25" y="18.75" width="3.5" height="3.5"/><rect x="24.25" y="18.75" width="3.5" height="3.5"/><rect x="2.25" y="24.25" width="3.5" height="3.5"/><rect x="24.25" y="24.25" width="3.5" height="3.5"/></svg></span>
+    <span class="nav-name">AniimoData</span>
+  </a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="index.html"><span class="t-en">Home</span><span class="t-zh">首页</span></a>
+    <a href="guides.html"><span class="t-en">Guides</span><span class="t-zh">攻略</span></a>
+    <a href="beginner.html"><span class="t-en">Beginner</span><span class="t-zh">新手入门</span></a>
+    <a href="progression.html"><span class="t-en">Progression</span><span class="t-zh">进阶流程</span></a>
+    <div class="nav-item">
+      <a href="all-aniimo.html" aria-haspopup="true" aria-expanded="false" aria-controls="nav-menu-4"><span class="t-en">Database</span><span class="t-zh">数据库</span><span class="nav-caret" aria-hidden="true"></span></a>
+      <ul class="nav-menu" id="nav-menu-4">
+        <li><a href="all-aniimo.html"><span class="t-en">All Aniimo</span><span class="t-zh">全部 Aniimo</span></a></li>
+        <li><a href="items.html"><span class="t-en">Items</span><span class="t-zh">物品</span></a></li>
+        <li><a href="boss.html"><span class="t-en">Bosses</span><span class="t-zh">BOSS</span></a></li>
+      </ul>
+    </div>
+    <a href="map.html" aria-current="page"><span class="t-en">Interactive Map</span><span class="t-zh">互动地图</span></a>
+    <a href="homeland.html"><span class="t-en">Homeland</span><span class="t-zh">家园</span></a>
+    <a href="team.html"><span class="t-en">Team Building</span><span class="t-zh">队伍搭配</span></a>
+    <a href="quests.html"><span class="t-en">Quests</span><span class="t-zh">任务</span></a>
+    <a href="codes.html"><span class="t-en">Codes</span><span class="t-zh">兑换码</span></a>
+    <a href="faq.html"><span class="t-en">FAQ</span><span class="t-zh">常见问题</span></a>
+  </nav>
+  <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to Chinese" data-en="Switch to Chinese" data-zh="切换到英文"><span class="t-en">中文</span><span class="t-zh">EN</span></button>
+</header>
+
+<main>
+  <article class="sp">
+    <div class="sp-wrap">
+      <p class="crumb"><a href="index.html"><span class="t-en">Home</span><span class="t-zh">首页</span></a> <span class="crumb-sep">/</span> <span aria-current="page"><span class="t-en">Interactive Map</span><span class="t-zh">互动地图</span></span></p>
+      <header class="sp-head">
+        <p class="sp-no"><span class="t-en">Where things are</span><span class="t-zh">东西在哪</span></p>
+        <h1 class="sp-title"><span class="t-en">Interactive Map</span><span class="t-zh">互动地图</span></h1>
+      </header>
+
+      <p class="sp-lede"><span class="t-en">The world you can drag and zoom, and beside it every Aniimo the official wiki places in each area — listed by form, because a Budclaw&#39;s Bay Form and its basic form do not live on the same coast.</span><span class="t-zh">一张能拖能缩的世界地图，旁边配上官方维基给每个区域标出的 Aniimo —— 而且是按形态列的，因为花芽蟹的海湾形态和基础形态不住在同一片海岸上。</span></p>
+
+      <section class="sp-block" id="map">
+        <h2 class="sp-h2"><span class="t-en">The world, at whatever size you want it</span><span class="t-zh">世界，随你想看多大</span></h2>
+        <p class="sp-note"><span class="t-en">This is the game&#39;s own world map, and all sixteen areas have a pin on it. <strong>The pins are placed by eye, and the page says so wherever one opens.</strong> The publisher names the areas and says which species live in each one, but it has never published where any of them sits on this image — no outlines, no corner coordinates, no anchor — and neither has anyone else. So we read the terrain against what the names mean and marked our guess. What is not a guess is what a pin holds: which species live in that area, in which form, read off the official wiki.</span><span class="t-zh">这是游戏自己的世界地图，十六个区域现在各有一枚钉子。<strong>钉子的位置是估的，每一枚打开时都会写明这一点。</strong> 官方把区域名字给了出来，也说清了每种 Aniimo 住在哪片地方，但从来没公布过它们落在这张图的什么位置 —— 没有边界线，没有角点坐标，没有锚点。别人也没有。于是我们照着地貌去对名字的意思，把估的位置标了上去。不是估的那部分，是钉子底下装的东西：那片地方住着哪些物种、各是哪个形态，出自官方维基。</span></p>
+        <div class="map-frame">
+          <div class="map-stage" id="mapStage" tabindex="0" role="group"
+               aria-label="The Aniimo world map. Drag to pan. Once zoomed in, scroll or pinch to zoom further. Sixteen areas are marked, and every one of them is listed in the panel beside the map." data-en="The Aniimo world map. Drag to pan. Once zoomed in, scroll or pinch to zoom further. Sixteen areas are marked, and every one of them is listed in the panel beside the map." data-zh="Aniimo 世界地图。拖动平移；放大之后可以继续用滚轮或双指缩放。地图上标了十六个区域，旁边的面板里逐条列出。">
+            <div class="map-canvas" id="mapCanvas"></div>
+            <img id="mapImg" src="assets/map/world-map.jpg"
+                 width="1110" height="874" alt="" hidden>
+            <div class="map-ctl">
+              <button class="map-btn" id="mapIn" type="button" aria-label="Zoom in" data-en="Zoom in" data-zh="放大">+</button>
+              <button class="map-btn" id="mapOut" type="button" aria-label="Zoom out" data-en="Zoom out" data-zh="缩小">−</button>
+              <button class="map-btn" id="mapReset" type="button" aria-label="Reset view" data-en="Reset view" data-zh="重置视图">⟲</button>
+            </div>
+            <p class="map-scale" id="mapScale">1×</p>
+            <div class="map-fav" id="mapFav" hidden>
+              <label class="map-fav-label" for="mapFavInput"><span class="t-en">Name this spot</span><span class="t-zh">给这个点起个名</span></label>
+              <div class="map-fav-grid" id="mapFavGrid"></div>
+              <input class="map-fav-input" id="mapFavInput" type="text" maxlength="40" autocomplete="off"
+                     placeholder="Name this spot" data-en="Name this spot" data-zh="给这个点起个名">
+              <div class="map-fav-row">
+                <button class="map-fav-btn" id="mapFavCancel" type="button"><span class="t-en">Cancel</span><span class="t-zh">取消</span></button>
+                <button class="map-fav-btn map-fav-save" id="mapFavSave" type="button"><span class="t-en">Save</span><span class="t-zh">保存</span></button>
+              </div>
+            </div>
+          </div>
+          <aside class="map-side">
+            <div class="map-search">
+              <label class="map-search-label" for="mapQ"><span class="t-en">Find a species, a form or an area</span><span class="t-zh">找物种、形态或区域</span></label>
+              <div class="map-search-box">
+                <input class="map-search-input" id="mapQ" type="search" autocomplete="off"
+                       placeholder="Emberpup · 小炭犬 · Highland Form · Blitzwood" data-en="Emberpup · 小炭犬 · Highland Form · Blitzwood" data-zh="小炭犬 · Emberpup · 高地形态 · 闪电之森">
+                <button class="map-search-x" id="mapQX" type="button" hidden
+                        aria-label="Clear the search" data-en="Clear the search" data-zh="清空搜索">✕</button>
+              </div>
+              <ul class="map-results" id="mapResults" hidden>
+                <li class="map-result-none" id="mapEmpty" hidden><span class="t-en">Nothing here matches that.</span><span class="t-zh">没有匹配的东西。</span></li>
+              </ul>
+            </div>
+            <h3 class="map-side-h"><span class="t-en">Jump to an area</span><span class="t-zh">跳到某个区域</span></h3>
+            <ul class="map-list" id="mapList">
+            <li><a class="map-pick" href="#area-beast-fang-ridge" data-area="beast-fang-ridge" data-x="925" data-y="400"><span class="t-en">Beast Fang Ridge</span><span class="t-zh">狼牙岭</span><span class="ma-count">18</span></a></li>
+            <li><a class="map-pick" href="#area-berylline-causeway" data-area="berylline-causeway" data-x="608" data-y="292"><span class="t-en">Berylline Causeway</span><span class="t-zh">青石台</span><span class="ma-count">16</span></a></li>
+            <li><a class="map-pick" href="#area-blitzwood" data-area="blitzwood" data-x="622" data-y="390"><span class="t-en">Blitzwood</span><span class="t-zh">闪电之森</span><span class="ma-count">16</span></a></li>
+            <li><a class="map-pick" href="#area-driftwise-meadow" data-area="driftwise-meadow" data-x="788" data-y="468"><span class="t-en">Driftwise Meadow</span><span class="t-zh">雪麓草甸</span><span class="ma-count">15</span></a></li>
+            <li><a class="map-pick" href="#area-echoback-landing" data-area="echoback-landing" data-x="712" data-y="748"><span class="t-en">Echoback Landing</span><span class="t-zh">鲸落浅滩</span><span class="ma-count">16</span></a></li>
+            <li><a class="map-pick" href="#area-forest-of-falling-stars" data-area="forest-of-falling-stars" data-x="912" data-y="498"><span class="t-en">Forest of Falling Stars</span><span class="t-zh">星落林</span><span class="ma-count">15</span></a></li>
+            <li><a class="map-pick" href="#area-nimbus-fields" data-area="nimbus-fields" data-x="555" data-y="155"><span class="t-en">Nimbus Fields</span><span class="t-zh">云上草原</span><span class="ma-count">17</span></a></li>
+            <li><a class="map-pick" href="#area-rosetower-woods" data-area="rosetower-woods" data-x="834" data-y="161"><span class="t-en">Rosetower Woods</span><span class="t-zh">玫瑰塔林</span><span class="ma-count">14</span></a></li>
+            <li><a class="map-pick" href="#area-russet-highlands" data-area="russet-highlands" data-x="872" data-y="85"><span class="t-en">Russet Highlands</span><span class="t-zh">丹岩高地</span><span class="ma-count">22</span></a></li>
+            <li><a class="map-pick" href="#area-sea-of-flowers" data-area="sea-of-flowers" data-x="740" data-y="610"><span class="t-en">Sea of Flowers</span><span class="t-zh">鸢尾花海</span><span class="ma-count">17</span></a></li>
+            <li><a class="map-pick" href="#area-the-argent-strait" data-area="the-argent-strait" data-x="858" data-y="212"><span class="t-en">The Argent Strait</span><span class="t-zh">鸥鸣湾</span><span class="ma-count">13</span></a></li>
+            <li><a class="map-pick" href="#area-the-mistwoods" data-area="the-mistwoods" data-x="355" data-y="225"><span class="t-en">The Mistwoods</span><span class="t-zh">迷雾森林</span><span class="ma-count">13</span></a></li>
+            <li><a class="map-pick" href="#area-tideblossom-coast" data-area="tideblossom-coast" data-x="168" data-y="438"><span class="t-en">Tideblossom Coast</span><span class="t-zh">潮花岸</span><span class="ma-count">10</span></a></li>
+            <li><a class="map-pick" href="#area-zephyrus-landbridge" data-area="zephyrus-landbridge" data-x="140" data-y="625"><span class="t-en">Zephyrus Landbridge</span><span class="t-zh">海角丘谷</span><span class="ma-count">16</span></a></li>
+            <li><a class="map-pick" href="#area-夕阳海原" data-area="夕阳海原" data-x="475" data-y="610">夕阳海原<span class="ma-count">1</span></a></li>
+            <li><a class="map-pick" href="#area-新月海湾" data-area="新月海湾" data-x="215" data-y="512">新月海湾<span class="ma-count">1</span></a></li>
+            </ul>
+            <p class="map-side-note"><span class="t-en"><strong>The pins are placed by eye.</strong> The species under each one are the publisher&#39;s, read off the official wiki. The position is ours, and it is a guess.</span><span class="t-zh"><strong>钉子的位置是估的。</strong> 钉子下面列出的物种出自官方维基，是官方的；位置是我们放的，而且是估的。</span></p>
+            <h3 class="map-side-h"><span class="t-en">Your own markers</span><span class="t-zh">你自己的标记</span></h3>
+            <p class="map-side-note"><span class="t-en">Right-click the map — or hold it on a phone — to mark a spot. They are kept in this browser and never leave it.</span><span class="t-zh">右键地图（手机上长按）就能标一个点。标记只存在这个浏览器里，不会发出去。</span></p>
+            <ul class="map-fav-list" id="mapFavList"></ul>
+          </aside>
+        </div>
+        <div class="map-pop" id="mapPop" hidden>
+          <p class="map-pop-title" id="mapPopTitle"></p>
+          <p class="map-pop-approx"><span class="t-en">Position estimated · species list from the official wiki</span><span class="t-zh">位置为估测 · 物种清单出自官方维基</span></p>
+          <ul class="map-pop-list" id="mapPopList"></ul>
+        </div>
+        <span id="mapFavDelLabel" hidden><span class="t-en">Delete this marker</span><span class="t-zh">删掉这个标记</span></span>
+        <span id="mapFavDefaultLabel" hidden><span class="t-en">Unnamed marker</span><span class="t-zh">未命名标记</span></span>
+        <p class="map-hint"><span class="t-en">Drag to pan · click the map, then scroll or pinch to zoom · search beside the map, or right-click it to drop a marker of your own</span><span class="t-zh">拖动平移 · 点一下地图，再用滚轮或双指缩放 · 在地图旁边搜索，或右键地图插一枚自己的标</span></p>
+      </section>
+
+      <!-- The area cards are the map's data, not the page's prose: a pin's
+           popup is these rows cloned, the search box indexes these rows, and
+           every pin's counterpart in the sidebar addresses one of them by id.
+           So they stay in the markup and come off the screen.
+
+           NOT area-grid, and nothing else with a display of its own: an
+           author display outranks the UA's [hidden]{display:none}, and the
+           grid would come straight back. Bare hidden on a bare element is
+           the one form of this that works — the same trap the language
+           toggle and the search box's clear button both document. -->
+      <div id="areaData" hidden>
+        <article class="area-card" id="area-beast-fang-ridge">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Beast Fang Ridge</span><span class="t-zh">狼牙岭</span></h3>
+            <span class="area-count">18</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flameruff/index.html"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flameruff/index.html"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/scorchhowl/index.html"><span class="t-en">Scorchhowl</span><span class="t-zh">狼斗士</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/scorchhowl/index.html"><span class="t-en">Scorchhowl</span><span class="t-zh">狼斗士</span></a> <span class="area-form">· <span class="t-en">Thunderstorm Form</span><span class="t-zh">雷雨形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/scorchhowl/index.html"><span class="t-en">Scorchhowl</span><span class="t-zh">狼斗士</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budclaw/index.html"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flamerion/index.html"><span class="t-en">Flamerion</span><span class="t-zh">幻焰灵</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/gracewing/index.html"><span class="t-en">Gracewing</span><span class="t-zh">幻翼蝶</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomegg/index.html"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bonesky/index.html"><span class="t-en">Bonesky</span><span class="t-zh">冰骨崽</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/fenrier/index.html"><span class="t-en">Fenrier</span><span class="t-zh">冰刃狼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/glynsera/index.html"><span class="t-en">Glynsera</span><span class="t-zh">霜锋狼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-berylline-causeway">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Berylline Causeway</span><span class="t-zh">青石台</span></h3>
+            <span class="area-count">16</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/irisal/index.html"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/hummin/index.html"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></a> <span class="area-form">· <span class="t-en">Mountain Form</span><span class="t-zh">山地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/witchin/index.html"><span class="t-en">Witchin</span><span class="t-zh">巫帽草</span></a> <span class="area-form">· <span class="t-en">Mountain Form</span><span class="t-zh">山地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budclaw/index.html"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/shrubclaw/index.html"><span class="t-en">Shrubclaw</span><span class="t-zh">蟹葱葱</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flamerion/index.html"><span class="t-en">Flamerion</span><span class="t-zh">幻焰灵</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flamerion/index.html"><span class="t-en">Flamerion</span><span class="t-zh">幻焰灵</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/wisptis/index.html"><span class="t-en">Wisptis</span><span class="t-zh">幽爪镰</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/ignitis/index.html"><span class="t-en">Ignitis</span><span class="t-zh">淬刃螳螂</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/ignitis/index.html"><span class="t-en">Ignitis</span><span class="t-zh">淬刃螳螂</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/baleetle/index.html"><span class="t-en">Baleetle</span><span class="t-zh">滚滚郎</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/waleetle/index.html"><span class="t-en">Waleetle</span><span class="t-zh">摩托郎</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bouldus/index.html"><span class="t-en">Bouldus</span><span class="t-zh">岩球郎</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-blitzwood">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Blitzwood</span><span class="t-zh">闪电之森</span></h3>
+            <span class="area-count">16</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Grassland Form</span><span class="t-zh">草原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/irisal/index.html"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></a> <span class="area-form">· <span class="t-en">Grassland Form</span><span class="t-zh">草原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/hummin/index.html"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/gracewing/index.html"><span class="t-en">Gracewing</span><span class="t-zh">幻翼蝶</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/wisptis/index.html"><span class="t-en">Wisptis</span><span class="t-zh">幽爪镰</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/ignitis/index.html"><span class="t-en">Ignitis</span><span class="t-zh">淬刃螳螂</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bolty/index.html"><span class="t-en">Bolty</span><span class="t-zh">闪电貂</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bolty/index.html"><span class="t-en">Bolty</span><span class="t-zh">闪电貂</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/blazen/index.html"><span class="t-en">Blazen</span><span class="t-zh">雷光貂</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/blazen/index.html"><span class="t-en">Blazen</span><span class="t-zh">雷光貂</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/squarrel/index.html"><span class="t-en">Squarrel</span><span class="t-zh">击拳尾</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/squashel/index.html"><span class="t-en">Squashel</span><span class="t-zh">烈拳尾</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-driftwise-meadow">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Driftwise Meadow</span><span class="t-zh">雪麓草甸</span></h3>
+            <span class="area-count">15</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Plateau Form</span><span class="t-zh">高原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/irisal/index.html"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></a> <span class="area-form">· <span class="t-en">Plateau Form</span><span class="t-zh">高原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/skippy/index.html"><span class="t-en">Skippy</span><span class="t-zh">莲顶鱼</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pranky/index.html"><span class="t-en">Pranky</span><span class="t-zh">顽皮鱼</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/glacy/index.html"><span class="t-en">Glacy</span><span class="t-zh">莹冰龙</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/glacy/index.html"><span class="t-en">Glacy</span><span class="t-zh">莹冰龙</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/nimbi/index.html"><span class="t-en">Nimbi</span><span class="t-zh">云朵羊</span></a> <span class="area-form">· <span class="t-en">Plateau Form</span><span class="t-zh">高原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/turbo/index.html"><span class="t-en">Turbo</span><span class="t-zh">蓬蓬羊</span></a> <span class="area-form">· <span class="t-en">Plateau Form</span><span class="t-zh">高原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flamerion/index.html"><span class="t-en">Flamerion</span><span class="t-zh">幻焰灵</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomegg/index.html"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bonesky/index.html"><span class="t-en">Bonesky</span><span class="t-zh">冰骨崽</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/fenrier/index.html"><span class="t-en">Fenrier</span><span class="t-zh">冰刃狼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/fentuft/index.html"><span class="t-en">Fentuft</span><span class="t-zh">天使耶</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/fenmane/index.html"><span class="t-en">Fenmane</span><span class="t-zh">疾雷耶</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-echoback-landing">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Echoback Landing</span><span class="t-zh">鲸落浅滩</span></h3>
+            <span class="area-count">16</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flameruff/index.html"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/celestis/index.html"><span class="t-en">Celestis</span><span class="t-zh">星乐蒂</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/cornet/index.html"><span class="t-en">Cornet</span><span class="t-zh">小号鸥</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/tubster/index.html"><span class="t-en">Tubster</span><span class="t-zh">大号鸥</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budclaw/index.html"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/shrubclaw/index.html"><span class="t-en">Shrubclaw</span><span class="t-zh">蟹葱葱</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/susuta/index.html"><span class="t-en">Susuta</span><span class="t-zh">羞羞獭</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/susuta/index.html"><span class="t-en">Susuta</span><span class="t-zh">羞羞獭</span></a> <span class="area-form">· <span class="t-en">Nighttime Form</span><span class="t-zh">夜晚形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/popota/index.html"><span class="t-en">Popota</span><span class="t-zh">泡泡獭</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/panpanta/index.html"><span class="t-en">Panpanta</span><span class="t-zh">胖胖獭</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/panpanta/index.html"><span class="t-en">Panpanta</span><span class="t-zh">胖胖獭</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/shelly/index.html"><span class="t-en">Shelly</span><span class="t-zh">贝壳星</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sheldon/index.html"><span class="t-en">Sheldon</span><span class="t-zh">智多星</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sherro/index.html"><span class="t-en">Sherro</span><span class="t-zh">星骑士</span></a> <span class="area-form">· <span class="t-en">Thunderstorm Form</span><span class="t-zh">雷雨形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-forest-of-falling-stars">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Forest of Falling Stars</span><span class="t-zh">星落林</span></h3>
+            <span class="area-count">15</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/celestis/index.html"><span class="t-en">Celestis</span><span class="t-zh">星乐蒂</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/stellarys/index.html"><span class="t-en">Stellarys</span><span class="t-zh">星魔师</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/stellarys/index.html"><span class="t-en">Stellarys</span><span class="t-zh">星魔师</span></a> <span class="area-form">· <span class="t-en">Rainstorm Form</span><span class="t-zh">雨天形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/stellarys/index.html"><span class="t-en">Stellarys</span><span class="t-zh">星魔师</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/tromber/index.html"><span class="t-en">Tromber</span><span class="t-zh">长号鸥</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/cornet/index.html"><span class="t-en">Cornet</span><span class="t-zh">小号鸥</span></a> <span class="area-form">· <span class="t-en">Beach Form</span><span class="t-zh">沙滩形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/irisal/index.html"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/skippy/index.html"><span class="t-en">Skippy</span><span class="t-zh">莲顶鱼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pranky/index.html"><span class="t-en">Pranky</span><span class="t-zh">顽皮鱼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/hummin/index.html"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/eko/index.html"><span class="t-en">Eko</span><span class="t-zh">大耳蝠</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/eklue/index.html"><span class="t-en">Eklue</span><span class="t-zh">侦探蝠</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomegg/index.html"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></a> <span class="area-form">· <span class="t-en">Sea of Flowers Form</span><span class="t-zh">花海形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-nimbus-fields">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Nimbus Fields</span><span class="t-zh">云上草原</span></h3>
+            <span class="area-count">17</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flameruff/index.html"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/celestis/index.html"><span class="t-en">Celestis</span><span class="t-zh">星乐蒂</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Grassland Form</span><span class="t-zh">草原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/skippy/index.html"><span class="t-en">Skippy</span><span class="t-zh">莲顶鱼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pranky/index.html"><span class="t-en">Pranky</span><span class="t-zh">顽皮鱼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/nimbi/index.html"><span class="t-en">Nimbi</span><span class="t-zh">云朵羊</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/nimbi/index.html"><span class="t-en">Nimbi</span><span class="t-zh">云朵羊</span></a> <span class="area-form">· <span class="t-en">Rainstorm Form</span><span class="t-zh">雨天形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/nimbi/index.html"><span class="t-en">Nimbi</span><span class="t-zh">云朵羊</span></a> <span class="area-form">· <span class="t-en">Cloudmist Form</span><span class="t-zh">云海形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/turbo/index.html"><span class="t-en">Turbo</span><span class="t-zh">蓬蓬羊</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/turbo/index.html"><span class="t-en">Turbo</span><span class="t-zh">蓬蓬羊</span></a> <span class="area-form">· <span class="t-en">Rainstorm Form</span><span class="t-zh">雨天形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/turbo/index.html"><span class="t-en">Turbo</span><span class="t-zh">蓬蓬羊</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/hummin/index.html"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budclaw/index.html"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-rosetower-woods">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Rosetower Woods</span><span class="t-zh">玫瑰塔林</span></h3>
+            <span class="area-count">14</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/budsquire/index.html"><span class="t-en">Budsquire</span><span class="t-zh">小哭苞</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budsquire/index.html"><span class="t-en">Budsquire</span><span class="t-zh">小哭苞</span></a> <span class="area-form">· <span class="t-en">Towerwood Form</span><span class="t-zh">塔林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/thornblade/index.html"><span class="t-en">Thornblade</span><span class="t-zh">刺剑玫</span></a> <span class="area-form">· <span class="t-en">Towerwood Form</span><span class="t-zh">塔林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/melloblum/index.html"><span class="t-en">Melloblum</span><span class="t-zh">魅乐薇</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomegg/index.html"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomegg/index.html"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomawk/index.html"><span class="t-en">Pomawk</span><span class="t-zh">吼尾蜥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/dewy/index.html"><span class="t-en">Dewy</span><span class="t-zh">采蜜鸟</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bonesky/index.html"><span class="t-en">Bonesky</span><span class="t-zh">冰骨崽</span></a> <span class="area-form">· <span class="t-en">Nighttime Form</span><span class="t-zh">夜晚形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/fenrier/index.html"><span class="t-en">Fenrier</span><span class="t-zh">冰刃狼</span></a> <span class="area-form">· <span class="t-en">Nighttime Form</span><span class="t-zh">夜晚形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/glynsera/index.html"><span class="t-en">Glynsera</span><span class="t-zh">霜锋狼</span></a> <span class="area-form">· <span class="t-en">Nighttime Form</span><span class="t-zh">夜晚形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/cubbo/index.html"><span class="t-en">Cubbo</span><span class="t-zh">迷梦崽</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/grizbo/index.html"><span class="t-en">Grizbo</span><span class="t-zh">暴睡熊</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/grizbo/index.html"><span class="t-en">Grizbo</span><span class="t-zh">暴睡熊</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-russet-highlands">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Russet Highlands</span><span class="t-zh">丹岩高地</span></h3>
+            <span class="area-count">22</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flameruff/index.html"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/tubster/index.html"><span class="t-en">Tubster</span><span class="t-zh">大号鸥</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/irisal/index.html"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/baleetle/index.html"><span class="t-en">Baleetle</span><span class="t-zh">滚滚郎</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/waleetle/index.html"><span class="t-en">Waleetle</span><span class="t-zh">摩托郎</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/helmut/index.html"><span class="t-en">Helmut</span><span class="t-zh">大眼盔</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/helmut/index.html"><span class="t-en">Helmut</span><span class="t-zh">大眼盔</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/helmut/index.html"><span class="t-en">Helmut</span><span class="t-zh">大眼盔</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pawney/index.html"><span class="t-en">Pawney</span><span class="t-zh">盔勇士</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/rookey/index.html"><span class="t-en">Rookey</span><span class="t-zh">盔卫士</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/rookey/index.html"><span class="t-en">Rookey</span><span class="t-zh">盔卫士</span></a> <span class="area-form">· <span class="t-en">Snowfield Form</span><span class="t-zh">雪地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/rookey/index.html"><span class="t-en">Rookey</span><span class="t-zh">盔卫士</span></a> <span class="area-form">· <span class="t-en">Mountain Woods Form</span><span class="t-zh">山林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/jawling/index.html"><span class="t-en">Jawling</span><span class="t-zh">钢颚仔</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/jawling/index.html"><span class="t-en">Jawling</span><span class="t-zh">钢颚仔</span></a> <span class="area-form">· <span class="t-en">Mountain Form</span><span class="t-zh">山地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/helmwhelp/index.html"><span class="t-en">Helmwhelp</span><span class="t-zh">盔面龙</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/helmwhelp/index.html"><span class="t-en">Helmwhelp</span><span class="t-zh">盔面龙</span></a> <span class="area-form">· <span class="t-en">Mountain Form</span><span class="t-zh">山地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/helgon/index.html"><span class="t-en">Helgon</span><span class="t-zh">银盔龙</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/helgon/index.html"><span class="t-en">Helgon</span><span class="t-zh">银盔龙</span></a> <span class="area-form">· <span class="t-en">Mountain Form</span><span class="t-zh">山地形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-sea-of-flowers">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Sea of Flowers</span><span class="t-zh">鸢尾花海</span></h3>
+            <span class="area-count">17</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/irisal/index.html"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/skippy/index.html"><span class="t-en">Skippy</span><span class="t-zh">莲顶鱼</span></a> <span class="area-form">· <span class="t-en">Sea of Flowers Form</span><span class="t-zh">花海形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pranky/index.html"><span class="t-en">Pranky</span><span class="t-zh">顽皮鱼</span></a> <span class="area-form">· <span class="t-en">Sea of Flowers Form</span><span class="t-zh">花海形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/glacy/index.html"><span class="t-en">Glacy</span><span class="t-zh">莹冰龙</span></a> <span class="area-form">· <span class="t-en">Sea of Flowers Form</span><span class="t-zh">花海形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/hummin/index.html"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></a> <span class="area-form">· <span class="t-en">Mountain Form</span><span class="t-zh">山地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/witchin/index.html"><span class="t-en">Witchin</span><span class="t-zh">巫帽草</span></a> <span class="area-form">· <span class="t-en">Mountain Form</span><span class="t-zh">山地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Sea of Flowers Form</span><span class="t-zh">花海形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Sea of Flowers Form</span><span class="t-zh">花海形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Nighttime Form</span><span class="t-zh">夜晚形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budsquire/index.html"><span class="t-en">Budsquire</span><span class="t-zh">小哭苞</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/thornblade/index.html"><span class="t-en">Thornblade</span><span class="t-zh">刺剑玫</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/thornblade/index.html"><span class="t-en">Thornblade</span><span class="t-zh">刺剑玫</span></a> <span class="area-form">· <span class="t-en">Thunderstorm Form</span><span class="t-zh">雷雨形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/thornblade/index.html"><span class="t-en">Thornblade</span><span class="t-zh">刺剑玫</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/dewy/index.html"><span class="t-en">Dewy</span><span class="t-zh">采蜜鸟</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/fragrancier/index.html"><span class="t-en">Fragrancier</span><span class="t-zh">香氛鸟</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-the-argent-strait">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">The Argent Strait</span><span class="t-zh">鸥鸣湾</span></h3>
+            <span class="area-count">13</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flameruff/index.html"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/celestis/index.html"><span class="t-en">Celestis</span><span class="t-zh">星乐蒂</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/tromber/index.html"><span class="t-en">Tromber</span><span class="t-zh">长号鸥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/cornet/index.html"><span class="t-en">Cornet</span><span class="t-zh">小号鸥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/cornet/index.html"><span class="t-en">Cornet</span><span class="t-zh">小号鸥</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/tubster/index.html"><span class="t-en">Tubster</span><span class="t-zh">大号鸥</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Grassland Form</span><span class="t-zh">草原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/nimbi/index.html"><span class="t-en">Nimbi</span><span class="t-zh">云朵羊</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/hummin/index.html"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budclaw/index.html"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></a> <span class="area-form">· <span class="t-en">Bay Form</span><span class="t-zh">海湾形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/shrubclaw/index.html"><span class="t-en">Shrubclaw</span><span class="t-zh">蟹葱葱</span></a> <span class="area-form">· <span class="t-en">Bay Form</span><span class="t-zh">海湾形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-the-mistwoods">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">The Mistwoods</span><span class="t-zh">迷雾森林</span></h3>
+            <span class="area-count">13</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/iris/index.html"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></a> <span class="area-form">· <span class="t-en">Grassland Form</span><span class="t-zh">草原形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/skippy/index.html"><span class="t-en">Skippy</span><span class="t-zh">莲顶鱼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pranky/index.html"><span class="t-en">Pranky</span><span class="t-zh">顽皮鱼</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/leafy/index.html"><span class="t-en">Leafy</span><span class="t-zh">莲冠龙</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/hummin/index.html"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/witchin/index.html"><span class="t-en">Witchin</span><span class="t-zh">巫帽草</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/witchin/index.html"><span class="t-en">Witchin</span><span class="t-zh">巫帽草</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/sparki/index.html"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flamerion/index.html"><span class="t-en">Flamerion</span><span class="t-zh">幻焰灵</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flutternym/index.html"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/wisptis/index.html"><span class="t-en">Wisptis</span><span class="t-zh">幽爪镰</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/ignitis/index.html"><span class="t-en">Ignitis</span><span class="t-zh">淬刃螳螂</span></a> <span class="area-form">· <span class="t-en">Forest Form</span><span class="t-zh">森林形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-tideblossom-coast">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Tideblossom Coast</span><span class="t-zh">潮花岸</span></h3>
+            <span class="area-count">10</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/budclaw/index.html"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></a> <span class="area-form">· <span class="t-en">Mudflat Form</span><span class="t-zh">滩涂形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/shrubclaw/index.html"><span class="t-en">Shrubclaw</span><span class="t-zh">蟹葱葱</span></a> <span class="area-form">· <span class="t-en">Mudflat Form</span><span class="t-zh">滩涂形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomegg/index.html"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></a> <span class="area-form">· <span class="t-en">Sea of Flowers Form</span><span class="t-zh">花海形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bulbly/index.html"><span class="t-en">Bulbly</span><span class="t-zh">灯泡水母</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/veilfloat/index.html"><span class="t-en">Veilfloat</span><span class="t-zh">灯纱水母</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/luminelle/index.html"><span class="t-en">Luminelle</span><span class="t-zh">吊灯水母</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/luminelle/index.html"><span class="t-en">Luminelle</span><span class="t-zh">吊灯水母</span></a> <span class="area-form">· <span class="t-en">Rainstorm Form</span><span class="t-zh">雨天形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/luminelle/index.html"><span class="t-en">Luminelle</span><span class="t-zh">吊灯水母</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/fahloo/index.html"><span class="t-en">Fahloo</span><span class="t-zh">浴球鸟</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/erlath/index.html"><span class="t-en">Erlath</span><span class="t-zh">沐羽鸟</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-zephyrus-landbridge">
+          <header class="area-h">
+            <h3 class="area-name"><span class="t-en">Zephyrus Landbridge</span><span class="t-zh">海角丘谷</span></h3>
+            <span class="area-count">16</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/emberpup/index.html"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/flameruff/index.html"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/chirpi/index.html"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/tromber/index.html"><span class="t-en">Tromber</span><span class="t-zh">长号鸥</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/cornet/index.html"><span class="t-en">Cornet</span><span class="t-zh">小号鸥</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/tubster/index.html"><span class="t-en">Tubster</span><span class="t-zh">大号鸥</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/budclaw/index.html"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pomegg/index.html"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/wisptis/index.html"><span class="t-en">Wisptis</span><span class="t-zh">幽爪镰</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/ignitis/index.html"><span class="t-en">Ignitis</span><span class="t-zh">淬刃螳螂</span></a> <span class="area-form">· <span class="t-en">Highland Form</span><span class="t-zh">高地形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/pebbling/index.html"><span class="t-en">Pebbling</span><span class="t-zh">碎岩仔</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/lavazar/index.html"><span class="t-en">Lavazar</span><span class="t-zh">炽岩龙</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/magmarex/index.html"><span class="t-en">Magmarex</span><span class="t-zh">熔岩暴龙</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/magmarex/index.html"><span class="t-en">Magmarex</span><span class="t-zh">熔岩暴龙</span></a> <span class="area-form">· <span class="t-en">Prismana Form</span><span class="t-zh">虹光形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/cozite/index.html"><span class="t-en">Cozite</span><span class="t-zh">烟囱蚁</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+<span class="area-entry"><a href="all-aniimo/bailite/index.html"><span class="t-en">Bailite</span><span class="t-zh">土堡蚁</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-夕阳海原">
+          <header class="area-h">
+            <h3 class="area-name">夕阳海原</h3>
+            <span class="area-count">1</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/shelly/index.html"><span class="t-en">Shelly</span><span class="t-zh">贝壳星</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+        <article class="area-card" id="area-新月海湾">
+          <header class="area-h">
+            <h3 class="area-name">新月海湾</h3>
+            <span class="area-count">1</span>
+          </header>
+          <p class="area-forms">
+<span class="area-entry"><a href="all-aniimo/shelly/index.html"><span class="t-en">Shelly</span><span class="t-zh">贝壳星</span></a> <span class="area-form">· <span class="t-en">Basic Form</span><span class="t-zh">基础形态</span></span></span>
+          </p>
+        </article>
+      </div>
+
+      <section class="sp-block" id="find">
+        <h2 class="sp-h2"><span class="t-en">How to get the actual spawn points</span><span class="t-zh">真正的刷新点怎么拿</span></h2>
+        <p class="sp-note"><span class="t-en">Better than ours would have been, and it is built into the game. Once you have caught one, the game will mark every spawn point it knows for you:</span><span class="t-zh">比我们自己画要好，而且游戏里就有。只要你抓到了一只，游戏就会把该物种已知的刷新点全给你标出来：</span></p>
+        <ul class="req-list">
+          <li><strong><span class="t-en">Open a species you have caught</span><span class="t-zh">打开一只你已经抓到的 Aniimo</span></strong> — <span class="t-en">Any Aniimo in your collection, not one you have only seen.</span><span class="t-zh">是你图鉴里抓到的，不是只见过一面的。</span></li>
+          <li><strong><span class="t-en">Choose Habitats</span><span class="t-zh">选「栖息地」</span></strong> — <span class="t-en">The map then marks each known spawn point for that species with a <strong>yellow square</strong>. It is the game&#39;s own data on the game&#39;s own map, and it is per form — so it shows the Bay Form&#39;s shallows separately from the basic form&#39;s ridge.</span><span class="t-zh">地图上会用<strong>黄色方块</strong>标出该物种每一个已知刷新点。这是游戏自己的数据画在游戏自己的图上，而且是按形态分的 —— 海湾形态的浅滩和基础形态的山脊会分开显示。</span></li>
+          <li><strong><span class="t-en">Read your own coordinates</span><span class="t-zh">读你自己的坐标</span></strong> — <span class="t-en">Your position is shown as coordinates on the map screen as you move, so you can check a spot against any guide&#39;s numbers without another tool.</span><span class="t-zh">你在移动时，地图界面会实时显示所在坐标，所以不用额外工具就能拿它去对任何攻略上的数字。</span></li>
+          <li><strong><span class="t-en">Drop a pin and ride over</span><span class="t-zh">插个标，飞过去</span></strong> — <span class="t-en">Coordinates in guides are the same numbers your map screen shows. Open the map, drop a pin on them, and travel to it.</span><span class="t-zh">攻略里写的坐标和你地图界面上的数字是同一套。打开地图，把标插上去，然后过去。</span></li>
+        </ul>
+        <p class="sp-note"><span class="t-en">A coordinate is two four-digit numbers. The first carries a sign, so points west of the origin are negative; the second is zero-padded, so it keeps its leading zeros rather than shrinking to three digits. A spot on the Argent Strait coast reads like this:</span><span class="t-zh">一个坐标是两个四位数。前一个带符号，所以原点以西是负数；后一个补零，不会因为只有三位就缩掉前面的零。鸥鸣湾海边的一个点长这样：</span></p>
+        <code class="coord-line">-1241, 0566</code>
+        <p class="sp-note"><span class="t-en">That last step is the honest version of what a pin map does. We could draw you a marker; the game will draw you a better one, and it will be right.</span><span class="t-zh">最后一步才是「钉点地图」本来该做的事。我们能给你画一个标记；游戏会给你画一个更好的，而且它是对的。</span></p>
+      </section>
+
+      <section class="sp-block" id="regions">
+        <h2 class="sp-h2"><span class="t-en">The six named regions</span><span class="t-zh">六个有名字的地区</span></h2>
+        <p class="sp-note"><span class="t-en">The official site&#39;s front page presents six regions by name, in both languages. They are the publisher&#39;s own words, printed here as published:</span><span class="t-zh">官网首页分别用两种语言列出了六个地区。这里是官方自己的说法，照原样抄下：</span></p>
+        <div class="region-pair">
+          <div class="region-cell">
+            <p class="region-en">Nimbus Fields</p>
+            <p class="region-zh">云上草原</p>
+          </div>
+          <div class="region-cell">
+            <p class="region-en">The Mistwoods</p>
+            <p class="region-zh">迷雾森林</p>
+          </div>
+          <div class="region-cell">
+            <p class="region-en">Echoback Landing</p>
+            <p class="region-zh">鲸落浅滩</p>
+          </div>
+          <div class="region-cell">
+            <p class="region-en">Sea of Flowers</p>
+            <p class="region-zh">鸢尾花海</p>
+          </div>
+          <div class="region-cell">
+            <p class="region-en">Blitzwood</p>
+            <p class="region-zh">闪电之森</p>
+          </div>
+          <div class="region-cell">
+            <p class="region-en">Forest of Falling Stars</p>
+            <p class="region-zh">星落林</p>
+          </div>
+        </div>
+        <p class="sp-note"><span class="t-en"><strong>These six are not the sixteen areas above.</strong> The front page names regions; the wiki tags habitats, and its list is longer and finer. The two lists overlap — Nimbus Fields, the Mistwoods, Echoback Landing, Sea of Flowers, Blitzwood and Forest of Falling Stars appear on both — but nothing published reconciles them, so this page does not either. They are two publisher-endorsed axes, and only one of them is attached to species.</span><span class="t-zh"><strong>这六个和上面十六个区域不是一回事。</strong> 首页给的是「地区」，维基标的是「栖息地」，后者的清单更长也更细。两份名单有重合 —— 云上草原、迷雾森林、鲸落浅滩、鸢尾花海、闪电之森、星落林两边都有 —— 但没有任何公开资料把两者对齐过，所以这一页也不去对齐。它们是官方认可的两条轴，而只有一条和物种挂上了钩。</span></p>
+      </section>
+    </div>
+  </article>
+  <script src="vendor/leaflet/leaflet.js" defer></script>
+  <script src="assets/map.js" defer></script>
+</main>
+
+<footer class="foot">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <p class="foot-name"><a href="index.html">AniimoData</a></p>
+      <p class="foot-blurb"><span class="t-en">A player-built guide to Aniimo — beginner route, the full dex, an interactive map, codes and FAQ.</span><span class="t-zh">Aniimo 玩家自建攻略站 —— 新手指南、全图鉴数据库、互动地图、兑换码与常见问题。</span></p>
+    </div>
+    <div class="foot-col">
+      <h3 class="foot-title"><span class="t-en">On this site</span><span class="t-zh">站内</span></h3>
+      <ul>
+        <li><a href="guides.html"><span class="t-en">Guides</span><span class="t-zh">攻略</span></a></li>
+        <li><a href="homeland.html"><span class="t-en">Homeland</span><span class="t-zh">家园</span></a></li>
+        <li><a href="codes.html"><span class="t-en">Codes</span><span class="t-zh">兑换码</span></a></li>
+        <li><a href="faq.html"><span class="t-en">FAQ</span><span class="t-zh">常见问题</span></a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3 class="foot-title"><span class="t-en">Database</span><span class="t-zh">数据库</span></h3>
+      <ul>
+        <li><a href="all-aniimo.html"><span class="t-en">All Aniimo</span><span class="t-zh">全部 Aniimo</span></a></li>
+        <li><a href="items.html"><span class="t-en">Items</span><span class="t-zh">物品</span></a></li>
+        <li><a href="boss.html"><span class="t-en">Bosses</span><span class="t-zh">BOSS</span></a></li>
+        <li><a href="map.html"><span class="t-en">Interactive Map</span><span class="t-zh">互动地图</span></a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3 class="foot-title"><span class="t-en">Progression</span><span class="t-zh">流程</span></h3>
+      <ul>
+        <li><a href="beginner.html"><span class="t-en">Beginner</span><span class="t-zh">新手入门</span></a></li>
+        <li><a href="progression.html"><span class="t-en">Progression</span><span class="t-zh">进阶流程</span></a></li>
+        <li><a href="team.html"><span class="t-en">Team Building</span><span class="t-zh">队伍搭配</span></a></li>
+        <li><a href="quests.html"><span class="t-en">Quests</span><span class="t-zh">任务</span></a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3 class="foot-title"><span class="t-en">About</span><span class="t-zh">关于</span></h3>
+      <ul>
+        <li><a href="about.html"><span class="t-en">About Us</span><span class="t-zh">关于我们</span></a></li>
+        <li><a href="contact.html"><span class="t-en">Contact</span><span class="t-zh">联系我们</span></a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3 class="foot-title"><span class="t-en">Legal</span><span class="t-zh">法律</span></h3>
+      <ul>
+        <li><a href="privacy.html"><span class="t-en">Privacy Policy</span><span class="t-zh">隐私政策</span></a></li>
+        <li><a href="terms.html"><span class="t-en">Terms of Service</span><span class="t-zh">服务条款</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <p class="foot-note"><span class="t-en">AniimoData is an unofficial fan site, not affiliated with Pawprint Studio. Aniimo and all related names are trademarks of their respective owners.</span><span class="t-zh">AniimoData 是非官方粉丝站，与 Pawprint Studio 无关联。Aniimo 及相关名称的一切权利归其各自所有者。</span></p>
+    <p class="foot-copy"><span class="t-en">© 2026 AniimoData · Player-compiled · For personal reference only</span><span class="t-zh">© 2026 AniimoData · 玩家自发整理 · 仅供交流学习使用</span></p>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -125,6 +125,29 @@
       <p class="eyebrow"><span class="t-en">Pawprint Studio · Out Sep 16, 2026 · Free to play · PC / PS5 / Xbox Series / Mobile</span><span class="t-zh">Pawprint Studio · 2026 年 9 月 16 日上线 · 免费游玩 · PC / PS5 / Xbox Series / Mobile</span></p>
       <h1 class="hero-title"><span class="t-en">Know before<br>you catch.</span><span class="t-zh">出手之前<br>先看清楚。</span><em><span class="t-en">Type, role, evolution line, habitat and tier — the whole roster, one table.</span><span class="t-zh">属性、定位、进化线、栖息地、强度 —— 整个图鉴，一张表看完。</span></em></h1>
       <p class="hero-lede"><span class="t-en">Aniimo is a free-to-play creature collector: you catch them in an open world, raise them, evolve them down branching lines, and station the ones you are not fighting beside on a base you build. This index is what we have checked — the roster, the systems, and the routes through both.</span><span class="t-zh">Aniimo 是一款免费游玩的抓宠游戏：在开放世界里抓、养，顺着分叉的进化线把它练上去；不带出门的那几只，可以派驻到家园里干活。这份索引写的是我们核对过的东西 —— 图鉴、系统，以及两者的路线。</span></p>
+    <div class="search hero-search">
+      <label class="search-label" for="siteSearch"><span class="t-en">Search the site</span><span class="t-zh">搜索全站</span></label>
+      <div class="search-field">
+        <input id="siteSearch" class="search-input" type="search" autocomplete="off"
+               aria-label="Search the site" data-en="Search the site" data-zh="搜索全站"
+               placeholder="Emberpup, Blaze Stone, Geoclaw, crossplay…" data-en="Emberpup, Blaze Stone, Geoclaw, crossplay…" data-zh="伊莫、火焰石、晶壳蟹、联机……">
+        <kbd class="search-kbd">/</kbd>
+        <!-- 两行状态在面板里面，不在面板下面：面板是绝对定位的浮层，谁排在
+             它后面谁就被它盖住 —— 计数行那句「显示 8 / 214」写在面板外面
+             等于永远看不见，而它恰恰只在结果被截断、也就是面板打开时有用。
+             结果列表单独一个滚动区，计数行因此留在面板顶上不动。 -->
+        <div class="search-panel" id="searchResults" hidden>
+          <p class="search-count" role="status" data-all="Showing {n} of {total}" data-all-zh="显示 {n} / {total} 条" hidden></p>
+          <p class="search-empty" role="status" hidden><span class="t-en">No matches.</span><span class="t-zh">没有找到。</span></p>
+          <div class="search-list" id="searchList"></div>
+        </div>
+      </div>
+      <!-- 这行从 2026-10-08 起是静态的，没有任何东西开关它（用户「搜索框下面的
+           一行字把它改为一直都存在，而不是点击搜索框才出现」）。它原来带 hidden，
+           由 search.js 在框空着时才揭开 —— 于是那句「这个框能搜什么」只有已经点
+           进框里的读者读得到，而它恰恰是读者决定要不要用这个框之前最该看到的。 -->
+      <p class="search-scope"><span class="t-en">Searches 86 species, 103 items, 20 bosses and 50 answers.</span><span class="t-zh">可搜索 86 个物种、103 件物品、20 个 BOSS、50 条问答。</span></p>
+    </div>
     </div>
 
     <aside class="readout" aria-label="At a glance" data-en="At a glance" data-zh="一览">
@@ -143,7 +166,7 @@
 
     <div class="specimen">
       <p class="specimen-label"><span class="t-en">The roster</span><span class="t-zh">图鉴</span></p>
-      <div class="specimen-wall"><img class="specimen-img" src="assets/aniimo/001.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/002.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/003.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/004.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/005.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/006.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/007.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/008.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/009.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/010.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/011.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/012.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/013.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/014.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/015.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/016.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/017.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/018.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/019.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/020.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/021.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/022.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/023.webp" alt="" width="128" height="128" loading="lazy" decoding="async"><img class="specimen-img" src="assets/aniimo/024.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></div>
+      <div class="specimen-wall"><a class="specimen-tile" href="all-aniimo/emberpup/index.html" aria-label="Emberpup" data-en="Emberpup" data-zh="小炭犬"><img class="specimen-img" src="assets/aniimo/001.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/flameruff/index.html" aria-label="Flameruff" data-en="Flameruff" data-zh="焚火狼"><img class="specimen-img" src="assets/aniimo/002.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/scorchhowl/index.html" aria-label="Scorchhowl" data-en="Scorchhowl" data-zh="狼斗士"><img class="specimen-img" src="assets/aniimo/003.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/inferlupa/index.html" aria-label="Inferlupa" data-en="Inferlupa" data-zh="狱魂狼"><img class="specimen-img" src="assets/aniimo/004.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/celestis/index.html" aria-label="Celestis" data-en="Celestis" data-zh="星乐蒂"><img class="specimen-img" src="assets/aniimo/005.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/stellarys/index.html" aria-label="Stellarys" data-en="Stellarys" data-zh="星魔师"><img class="specimen-img" src="assets/aniimo/006.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/chirpi/index.html" aria-label="Chirpi" data-en="Chirpi" data-zh="口哨鸥"><img class="specimen-img" src="assets/aniimo/007.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/tromber/index.html" aria-label="Tromber" data-en="Tromber" data-zh="长号鸥"><img class="specimen-img" src="assets/aniimo/008.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/cornet/index.html" aria-label="Cornet" data-en="Cornet" data-zh="小号鸥"><img class="specimen-img" src="assets/aniimo/009.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/tubster/index.html" aria-label="Tubster" data-en="Tubster" data-zh="大号鸥"><img class="specimen-img" src="assets/aniimo/010.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/iris/index.html" aria-label="Iris" data-en="Iris" data-zh="飘飘花"><img class="specimen-img" src="assets/aniimo/011.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/irisal/index.html" aria-label="Irisal" data-en="Irisal" data-zh="花舞兰"><img class="specimen-img" src="assets/aniimo/012.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/skippy/index.html" aria-label="Skippy" data-en="Skippy" data-zh="莲顶鱼"><img class="specimen-img" src="assets/aniimo/013.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/pranky/index.html" aria-label="Pranky" data-en="Pranky" data-zh="顽皮鱼"><img class="specimen-img" src="assets/aniimo/014.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/glacy/index.html" aria-label="Glacy" data-en="Glacy" data-zh="莹冰龙"><img class="specimen-img" src="assets/aniimo/015.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/leafy/index.html" aria-label="Leafy" data-en="Leafy" data-zh="莲冠龙"><img class="specimen-img" src="assets/aniimo/016.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/nimbi/index.html" aria-label="Nimbi" data-en="Nimbi" data-zh="云朵羊"><img class="specimen-img" src="assets/aniimo/017.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/turbo/index.html" aria-label="Turbo" data-en="Turbo" data-zh="蓬蓬羊"><img class="specimen-img" src="assets/aniimo/018.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/dreaple/index.html" aria-label="Dreaple" data-en="Dreaple" data-zh="眠眠羊"><img class="specimen-img" src="assets/aniimo/019.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/hummin/index.html" aria-label="Hummin" data-en="Hummin" data-zh="走调草"><img class="specimen-img" src="assets/aniimo/020.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/witchin/index.html" aria-label="Witchin" data-en="Witchin" data-zh="巫帽草"><img class="specimen-img" src="assets/aniimo/021.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/tuckin/index.html" aria-label="Tuckin" data-en="Tuckin" data-zh="埋埋"><img class="specimen-img" src="assets/aniimo/022.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/budclaw/index.html" aria-label="Budclaw" data-en="Budclaw" data-zh="花芽蟹"><img class="specimen-img" src="assets/aniimo/023.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a><a class="specimen-tile" href="all-aniimo/shrubclaw/index.html" aria-label="Shrubclaw" data-en="Shrubclaw" data-zh="蟹葱葱"><img class="specimen-img" src="assets/aniimo/024.webp" alt="" width="128" height="128" loading="lazy" decoding="async"></a></div>
       <p class="specimen-note"><span class="t-en">The first 24 of 86 species, in index order — every one has a page of its own.</span><span class="t-zh">按图鉴顺序排的前 24 个，共 86 个物种 —— 每一个都有自己的页面。</span> <a href="all-aniimo.html"><span class="t-en">All 86 species →</span><span class="t-zh">全部 86 个物种 →</span></a></p>
     </div>
   </section>
@@ -214,9 +237,49 @@
       <header class="hub-head">
         <p class="hub-tag"><span class="t-en">Reading</span><span class="t-zh">阅读</span></p>
         <h3 class="hub-title"><a class="hub-link" href="guides.html"><span class="t-en">Guides</span><span class="t-zh">攻略</span></a></h3>
-        <p class="hub-stat"><span class="t-en">Not written yet</span><span class="t-zh">还没写</span></p>
+        <p class="hub-stat"><span class="t-en">6 written, with a date on each</span><span class="t-zh">已写 6 篇，每篇都带日期</span></p>
         <p class="hub-body"><span class="t-en">Where the written guides go — how a system works and what to do about it, kept apart from the tables you look a name up in.</span><span class="t-zh">写出来的攻略会放在这里 —— 讲一个系统怎么运作、该怎么做，和查名字用的表格分开放。</span></p>
       </header>
+      <div class="hub-content sp-block">
+        <div class="guide-home">
+          <div class="guide-home-item">
+            <img class="guide-home-thumb" src="assets/guides/homeland-workers/layout.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <div class="guide-home-body">
+              <h3 class="guide-home-q"><a href="guides/homeland-workers/index.html"><span class="t-en">The Homeland Production Line: 400,000 a Night Out of a Level 6 Base</span><span class="t-zh">家园流水线：六级家园一夜进账四十万，就看你怎么派这几只打工伊莫</span></a></h3>
+              <p class="guide-home-a"><span class="t-en">How the Homeland actually makes money: the two things that decide how fast a worker is, which Aniimo to station and where each one is caught, and why the warehouse ends up in the middle of the fields.</span><span class="t-zh">家园到底靠什么赚钱：决定打工伊莫快慢的只有两样东西、每只该去哪儿抓，以及仓库为什么最后要放在田中间。</span></p>
+            </div>
+          </div>
+          <div class="guide-home-item">
+            <img class="guide-home-thumb" src="assets/guides/rare-variants/sparkling.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <div class="guide-home-body">
+              <h3 class="guide-home-q"><a href="guides/rare-variants/index.html"><span class="t-en">Prismana, Sparkling, Umbral and the Shiny Star: Aniimo&#39;s Four Rare Terms, Explained</span><span class="t-zh">《伊莫》四个词条：虹光、闪耀、幽黯、闪亮之星都是什么意思</span></a></h3>
+              <p class="guide-home-a"><span class="t-en">The two appearances and the one rating that decide whether an Aniimo counts as finished: which of them is limited, which is luck, which is nearly free, and the threshold that actually stops people.</span><span class="t-zh">想让一只伊莫算得上毕业，标准是「双外观加一个闪亮之星」。这四个词条各管一段：哪个限量、哪个靠运气、哪个几乎白送，以及真正卡住大多数人的那道门槛。</span></p>
+            </div>
+          </div>
+          <div class="guide-home-item">
+            <img class="guide-home-thumb" src="assets/guides/day-one/catching.webp" alt="" width="1600" height="1200" loading="lazy" decoding="async">
+            <div class="guide-home-body">
+              <h3 class="guide-home-q"><a href="guides/day-one/index.html"><span class="t-en">The First Day of Aniimo: Pick a Starter, Fill the Travel Team, and Do Not Sit on the Three-Day Quest</span><span class="t-zh">新手第一天怎么玩：初始宠二选一，跑图队先配齐，限时任务别拖过三天</span></a></h3>
+              <p class="guide-home-a"><span class="t-en">What to do with the first day of Aniimo: which starter to take, how catching and the break gauge actually work, which four Aniimo to build first, and why the day is in that order.</span><span class="t-zh">开服第一天该按什么顺序走：初始宠怎么选、捕捉和击破条怎么用、开荒和跑图各配哪几只，以及这一天里每一步为什么排在那个位置。</span></p>
+            </div>
+          </div>
+          <div class="guide-home-item">
+            <img class="guide-home-thumb" src="assets/guides/electric-team/blazen.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <div class="guide-home-body">
+              <h3 class="guide-home-q"><a href="guides/electric-team/index.html"><span class="t-en">Aniimo&#39;s Strongest Electric Team: Three of the Four Are There to Set Up Fulmintis</span><span class="t-zh">《伊莫》最强电系阵容，四只里三只都在给电刺螳螂铺路</span></a></h3>
+              <p class="guide-home-a"><span class="t-en">A four-Aniimo Electric party built around one damage dealer: what each of the other three does before Fulmintis comes in, and the order to switch them in.</span><span class="t-zh">一套四只的电系阵容，全部围绕一个输出位搭：电刺螳螂进场之前，另外三只各自负责什么，以及换人的顺序。</span></p>
+            </div>
+          </div>
+          <div class="guide-home-item">
+            <img class="guide-home-thumb" src="assets/guides/tier-list/sherro.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <div class="guide-home-body">
+              <h3 class="guide-home-q"><a href="guides/tier-list/index.html"><span class="t-en">Aniimo Tier List: The 19 Creatures to Build First</span><span class="t-zh">《伊莫》强度巅峰榜：几百小时之后，新手先练这 19 只</span></a></h3>
+              <p class="guide-home-a"><span class="t-en">A personal tier list of 19 Aniimo, grouped by the job each one does — damage, break, healing and support, energy regen — with every element and role checked against the official wiki and the ranking left as my own.</span><span class="t-zh">一份个人向的强度榜单，按输出、击破、治疗辅助、回能分成四组。每只都逐一对过官方维基的属性与定位，哪一段是能查的、哪一段是我自己的判断，文中分开写。</span></p>
+            </div>
+          </div>
+        </div>
+        <p class="sp-note"><span class="t-en">Showing the first 5 of 6.</span><span class="t-zh">这里只放了前 5 条，共 6 条。</span></p>
+      </div>
       <p class="hub-more"><a href="guides.html"><span class="t-en">See the full page →</span><span class="t-zh">看整页 →</span></a></p>
     </article>
     <article class="hub-card" id="start">
@@ -1001,6 +1064,1510 @@
       </article>
     </div>
   </section>
+
+  <!-- ═══ THE SEARCH INDEX ═══
+       What the hero's search box reads. Never rendered; see searchIndexHTML()
+       above for why it is markup in a <template> rather than JSON. -->
+  <template id="search-index">
+      <span class="search-kind" data-kind="aniimo"><span class="t-en">Aniimo</span><span class="t-zh">伊莫</span></span>
+      <span class="search-kind" data-kind="item"><span class="t-en">Item</span><span class="t-zh">物品</span></span>
+      <span class="search-kind" data-kind="boss"><span class="t-en">Boss</span><span class="t-zh">BOSS</span></span>
+      <span class="search-kind" data-kind="faq"><span class="t-en">FAQ</span><span class="t-zh">常见问题</span></span>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/emberpup/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Emberpup</span><span class="t-zh">小炭犬</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · DPS</span><span class="t-zh">火 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/flameruff/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Flameruff</span><span class="t-zh">焚火狼</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · DPS</span><span class="t-zh">火 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/scorchhowl/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Scorchhowl</span><span class="t-zh">狼斗士</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · DPS</span><span class="t-zh">火 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/inferlupa/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Inferlupa</span><span class="t-zh">狱魂狼</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire / Dark · Break</span><span class="t-zh">火 / 暗 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/celestis/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Celestis</span><span class="t-zh">星乐蒂</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · DPS</span><span class="t-zh">暗 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/stellarys/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Stellarys</span><span class="t-zh">星魔师</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · DPS</span><span class="t-zh">暗 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/chirpi/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Chirpi</span><span class="t-zh">口哨鸥</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Support</span><span class="t-zh">风 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/tromber/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Tromber</span><span class="t-zh">长号鸥</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Support</span><span class="t-zh">风 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/cornet/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Cornet</span><span class="t-zh">小号鸥</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · DPS</span><span class="t-zh">风 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/tubster/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Tubster</span><span class="t-zh">大号鸥</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Break</span><span class="t-zh">风 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/iris/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Iris</span><span class="t-zh">飘飘花</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · DPS</span><span class="t-zh">草 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/irisal/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · DPS</span><span class="t-zh">草 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/skippy/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Skippy</span><span class="t-zh">莲顶鱼</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Heal</span><span class="t-zh">水 · 治疗</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/pranky/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Pranky</span><span class="t-zh">顽皮鱼</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Heal</span><span class="t-zh">水 · 治疗</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/glacy/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Glacy</span><span class="t-zh">莹冰龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water / Ice · Heal</span><span class="t-zh">水 / 冰 · 治疗</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/leafy/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Leafy</span><span class="t-zh">莲冠龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass / Water · Regen</span><span class="t-zh">草 / 水 · 回能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/nimbi/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Nimbi</span><span class="t-zh">云朵羊</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Support</span><span class="t-zh">风 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/turbo/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Turbo</span><span class="t-zh">蓬蓬羊</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Support</span><span class="t-zh">风 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/dreaple/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Dreaple</span><span class="t-zh">眠眠羊</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · Support</span><span class="t-zh">暗 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/hummin/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Hummin</span><span class="t-zh">走调草</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · Break</span><span class="t-zh">草 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/witchin/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Witchin</span><span class="t-zh">巫帽草</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark / Grass · Regen</span><span class="t-zh">暗 / 草 · 回能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/tuckin/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Tuckin</span><span class="t-zh">埋埋</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · Break</span><span class="t-zh">草 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/budclaw/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Budclaw</span><span class="t-zh">花芽蟹</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock / Grass · Break</span><span class="t-zh">土 / 草 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/shrubclaw/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Shrubclaw</span><span class="t-zh">蟹葱葱</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock / Grass · Break</span><span class="t-zh">土 / 草 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/geoclaw/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Geoclaw</span><span class="t-zh">晶壳蟹</span></span>
+        <span class="search-hit-meta"><span class="t-en">Ice · Break</span><span class="t-zh">冰 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/sparki/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Sparki</span><span class="t-zh">幽幽焰</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · Regen</span><span class="t-zh">火 · 回能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/flamerion/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Flamerion</span><span class="t-zh">幻焰灵</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · Regen</span><span class="t-zh">火 · 回能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/flutternym/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Flutternym</span><span class="t-zh">荧粉蝶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Heal</span><span class="t-zh">风 · 治疗</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/gracewing/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Gracewing</span><span class="t-zh">幻翼蝶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Heal</span><span class="t-zh">风 · 治疗</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/eko/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Eko</span><span class="t-zh">大耳蝠</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Support</span><span class="t-zh">风 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/eklue/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Eklue</span><span class="t-zh">侦探蝠</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Support</span><span class="t-zh">风 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/budsquire/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Budsquire</span><span class="t-zh">小哭苞</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · DPS</span><span class="t-zh">草 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/thornblade/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Thornblade</span><span class="t-zh">刺剑玫</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · DPS</span><span class="t-zh">草 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/melloblum/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Melloblum</span><span class="t-zh">魅乐薇</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · Support</span><span class="t-zh">草 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/pomegg/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Pomegg</span><span class="t-zh">拉拉蛋</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · Break</span><span class="t-zh">草 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/pomawk/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Pomawk</span><span class="t-zh">吼尾蜥</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass · Break</span><span class="t-zh">草 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/dewy/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Dewy</span><span class="t-zh">采蜜鸟</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · Support</span><span class="t-zh">暗 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/fragrancier/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fragrancier</span><span class="t-zh">香氛鸟</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · Support</span><span class="t-zh">暗 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/wisptis/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Wisptis</span><span class="t-zh">幽爪镰</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · DPS</span><span class="t-zh">暗 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/ignitis/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Ignitis</span><span class="t-zh">淬刃螳螂</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · DPS</span><span class="t-zh">暗 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/bonesky/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Bonesky</span><span class="t-zh">冰骨崽</span></span>
+        <span class="search-hit-meta"><span class="t-en">Ice · DPS</span><span class="t-zh">冰 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/fenrier/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fenrier</span><span class="t-zh">冰刃狼</span></span>
+        <span class="search-hit-meta"><span class="t-en">Ice · DPS</span><span class="t-zh">冰 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/glynsera/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Glynsera</span><span class="t-zh">霜锋狼</span></span>
+        <span class="search-hit-meta"><span class="t-en">Ice · DPS</span><span class="t-zh">冰 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/bolty/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Bolty</span><span class="t-zh">闪电貂</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · Break</span><span class="t-zh">电 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/blazen/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Blazen</span><span class="t-zh">雷光貂</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · Break</span><span class="t-zh">电 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/squarrel/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Squarrel</span><span class="t-zh">击拳尾</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · Break</span><span class="t-zh">火 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/squashel/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Squashel</span><span class="t-zh">烈拳尾</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · Break</span><span class="t-zh">火 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/susuta/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Susuta</span><span class="t-zh">羞羞獭</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Break</span><span class="t-zh">水 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/popota/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Popota</span><span class="t-zh">泡泡獭</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Break</span><span class="t-zh">水 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/piopiota/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Piopiota</span><span class="t-zh">漂漂獭</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Support</span><span class="t-zh">水 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/panpanta/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Panpanta</span><span class="t-zh">胖胖獭</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Break</span><span class="t-zh">水 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/shelly/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Shelly</span><span class="t-zh">贝壳星</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · DPS</span><span class="t-zh">水 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/sheldon/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Sheldon</span><span class="t-zh">智多星</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · DPS</span><span class="t-zh">水 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/sherro/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Sherro</span><span class="t-zh">星骑士</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · DPS</span><span class="t-zh">水 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/baleetle/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Baleetle</span><span class="t-zh">滚滚郎</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · DPS</span><span class="t-zh">土 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/waleetle/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Waleetle</span><span class="t-zh">摩托郎</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · DPS</span><span class="t-zh">土 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/bouldus/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Bouldus</span><span class="t-zh">岩球郎</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · Support</span><span class="t-zh">土 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/fentuft/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fentuft</span><span class="t-zh">天使耶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · DPS</span><span class="t-zh">电 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/fenmane/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fenmane</span><span class="t-zh">疾雷耶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · DPS</span><span class="t-zh">电 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/helmut/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Helmut</span><span class="t-zh">大眼盔</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · Break</span><span class="t-zh">暗 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/pawney/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Pawney</span><span class="t-zh">盔勇士</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · DPS</span><span class="t-zh">暗 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/rookey/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Rookey</span><span class="t-zh">盔卫士</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark · Break</span><span class="t-zh">暗 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/jawling/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Jawling</span><span class="t-zh">钢颚仔</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Break</span><span class="t-zh">风 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/helmwhelp/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Helmwhelp</span><span class="t-zh">盔面龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Break</span><span class="t-zh">风 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/helgon/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Helgon</span><span class="t-zh">银盔龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind · Break</span><span class="t-zh">风 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/infergon/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Infergon</span><span class="t-zh">炎铠龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · DPS</span><span class="t-zh">火 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/cubbo/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Cubbo</span><span class="t-zh">迷梦崽</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · DPS</span><span class="t-zh">土 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/grizbo/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Grizbo</span><span class="t-zh">暴睡熊</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · DPS</span><span class="t-zh">土 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/pebbling/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Pebbling</span><span class="t-zh">碎岩仔</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · Break</span><span class="t-zh">土 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/lavazar/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Lavazar</span><span class="t-zh">炽岩龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire / Rock · Break</span><span class="t-zh">火 / 土 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/magmarex/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Magmarex</span><span class="t-zh">熔岩暴龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire / Rock · Break</span><span class="t-zh">火 / 土 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/geodeback/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Geodeback</span><span class="t-zh">晶背龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · Break</span><span class="t-zh">土 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/minespine/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Minespine</span><span class="t-zh">簇晶脊龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · Break</span><span class="t-zh">土 · 击破</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/cozite/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Cozite</span><span class="t-zh">烟囱蚁</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · Support</span><span class="t-zh">土 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/bailite/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Bailite</span><span class="t-zh">土堡蚁</span></span>
+        <span class="search-hit-meta"><span class="t-en">Rock · Support</span><span class="t-zh">土 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/bulbly/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Bulbly</span><span class="t-zh">灯泡水母</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · Support</span><span class="t-zh">电 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/veilfloat/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Veilfloat</span><span class="t-zh">灯纱水母</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · Support</span><span class="t-zh">电 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/luminelle/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Luminelle</span><span class="t-zh">吊灯水母</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · Support</span><span class="t-zh">电 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/fahloo/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fahloo</span><span class="t-zh">浴球鸟</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Regen</span><span class="t-zh">水 · 回能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/erlath/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Erlath</span><span class="t-zh">沐羽鸟</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water · Regen</span><span class="t-zh">水 · 回能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/besauce/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Besauce</span><span class="t-zh">贝瑟斯</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · Regen</span><span class="t-zh">电 · 回能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/dazmand/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Dazmand</span><span class="t-zh">霹雳蜥</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · Support</span><span class="t-zh">电 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/fulmintis/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fulmintis</span><span class="t-zh">电刺螳螂</span></span>
+        <span class="search-hit-meta"><span class="t-en">Electric · DPS</span><span class="t-zh">电 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/little-fire-spirit/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Little Fire Spirit</span><span class="t-zh">小火人</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire · Support</span><span class="t-zh">火 · 辅助</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/lunara/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Lunara</span><span class="t-zh">月辉狐</span></span>
+        <span class="search-hit-meta"><span class="t-en">Holy · DPS</span><span class="t-zh">光 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="aniimo" href="all-aniimo/helion/">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Helion</span><span class="t-zh">日耀狮</span></span>
+        <span class="search-hit-meta"><span class="t-en">Holy · DPS</span><span class="t-zh">光 · 输出</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod</span><span class="t-zh">谜立方</span></span>
+        <span class="search-hit-meta">1×</span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod for Teaching</span><span class="t-zh">教学用谜立方</span></span>
+        <span class="search-hit-meta">1×</span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod Pro</span><span class="t-zh">超级立方</span></span>
+        <span class="search-hit-meta">1.5×</span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod Mega</span><span class="t-zh">究极立方</span></span>
+        <span class="search-hit-meta">2×</span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod Hyper</span><span class="t-zh">极速立方</span></span>
+        <span class="search-hit-meta">2×</span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod Trace</span><span class="t-zh">追踪立方</span></span>
+        <span class="search-hit-meta">2×</span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Tumbler</span><span class="t-zh">大白球</span></span>
+        <span class="search-hit-meta"><span class="t-en">2× — 6× at a Bloom</span><span class="t-zh">2× —— 地脉花处 6×</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Legendary Aniipod</span><span class="t-zh">传说立方</span></span>
+        <span class="search-hit-meta"><span class="t-en">Vein Rifts only</span><span class="t-zh">仅限地脉裂隙</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Nicole&#39;s Aniipod</span><span class="t-zh">妮可的谜立方</span></span>
+        <span class="search-hit-meta">—</span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod Ultra</span><span class="t-zh">冠军立方</span></span>
+        <span class="search-hit-meta"><span class="t-en">Guaranteed</span><span class="t-zh">必定成功</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Sparkling Cube</span><span class="t-zh">闪耀立方</span></span>
+        <span class="search-hit-meta"><span class="t-en">Guaranteed</span><span class="t-zh">必定成功</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Legendary Aniipod: Windchase Departure</span><span class="t-zh">传说立方·逐风启程</span></span>
+        <span class="search-hit-meta"><span class="t-en">Guaranteed</span><span class="t-zh">必定成功</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#aniipod">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Legendary Aniipod: Departure with the Wind (Irisalis)</span><span class="t-zh">传说立方·逐风启程鸢尾专用</span></span>
+        <span class="search-hit-meta"><span class="t-en">Guaranteed</span><span class="t-zh">必定成功</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Star Stone</span><span class="t-zh">星之石</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Starcryst Essence</span><span class="t-zh">星之晶粹</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Flux Crystal</span><span class="t-zh">无定型晶体</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Flux Shard</span><span class="t-zh">无定型碎晶</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Lumin Amber</span><span class="t-zh">辉耀琥珀</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Prismana Crystal</span><span class="t-zh">虹彩水晶</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Vein Essence</span><span class="t-zh">地脉精华</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Veinlit Fruit</span><span class="t-zh">脉光秘果</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Rift Beacon</span><span class="t-zh">裂隙信标</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Awakening Honey</span><span class="t-zh">觉醒之蜜</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Unbroken Flameruff Spirit</span><span class="t-zh">不灭狼魂</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Soul of Electric Shock</span><span class="t-zh">电刺之魂</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Soul of Falling Stars</span><span class="t-zh">星落之魂</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Thunder Soul</span><span class="t-zh">霹雳之魂</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Stamen of Cubbo&#39;s Rose</span><span class="t-zh">迷梦花蕊</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Magical Music Score</span><span class="t-zh">魔法乐谱</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Stellarite</span><span class="t-zh">星辉晶</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#key">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Ether Heart</span><span class="t-zh">灵之心</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Capafruit</span><span class="t-zh">潜能果实</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Capaseed</span><span class="t-zh">潜能种子</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Phenomena Crystal</span><span class="t-zh">万象源晶</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Prismatic Stone</span><span class="t-zh">琉璃秘石</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Prismatic Stone — Celestial</span><span class="t-zh">琉璃秘石·日月</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Prismatic Stone — Fenmane</span><span class="t-zh">琉璃秘石·疾雷耶</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Prismatic Stone — Fulmintis</span><span class="t-zh">琉璃秘石·电刺螳螂</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Prismatic Stone Fragment</span><span class="t-zh">琉璃秘石碎片</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Psyche Fruit</span><span class="t-zh">性格果实</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Star Shard</span><span class="t-zh">星之碎片</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Star Stone</span><span class="t-zh">星之石</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Starcryst Essence</span><span class="t-zh">星之晶粹</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Max Stamina</span><span class="t-zh">体力上限</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Star Sand</span><span class="t-zh">星之砂</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#train">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Star Dust</span><span class="t-zh">星之尘</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Credits</span><span class="t-zh">信用币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Trade Currency</span><span class="t-zh">交易货币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Glimmer</span><span class="t-zh">辉石</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Lumin Crystals</span><span class="t-zh">辉晶</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Primegy</span><span class="t-zh">源能</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Voxel Coin</span><span class="t-zh">体素币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Aniipod Ultra Voucher</span><span class="t-zh">冠军立方兑换券</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Sparkling Crystal</span><span class="t-zh">闪耀晶体</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Irisalis Petal</span><span class="t-zh">虹鸢之瓣</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Radiant Dreamshadow</span><span class="t-zh">流光梦影</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Glimmering Driftshadow</span><span class="t-zh">微光浮影</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Chaos Ticket</span><span class="t-zh">混沌船票</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Arena Ticket</span><span class="t-zh">竞技船票</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Eggshell Coin</span><span class="t-zh">蛋壳币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Paw Coin</span><span class="t-zh">爪爪硬币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Achievement Points</span><span class="t-zh">成就点</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Coilstrike Coupon</span><span class="t-zh">拳簧礼券</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fashion Voucher</span><span class="t-zh">服饰兑换券</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Quick Training Pass</span><span class="t-zh">速训凭证</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Starwish Coin</span><span class="t-zh">星愿币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Windborn Stamps</span><span class="t-zh">风启奖章</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Windchaser Stamp</span><span class="t-zh">逐风奖章</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fire Bolt</span><span class="t-zh">火花</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Ancient Idyll Coin</span><span class="t-zh">艾德尔古币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Home Coin</span><span class="t-zh">家园币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Bud Ticket</span><span class="t-zh">祈愿星</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Waxing Moondew</span><span class="t-zh">盈盈月露</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Training Coin</span><span class="t-zh">训练币</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Training Points</span><span class="t-zh">训练积分</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Training EXP</span><span class="t-zh">训练经验</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Level 30 Training Certificate</span><span class="t-zh">30级训练证明</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Level 40 Training Certificate</span><span class="t-zh">40级训练证明</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#money">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Level 50 Training Certificate</span><span class="t-zh">50级训练证明</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Blaze Stone</span><span class="t-zh">火焰石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire</span><span class="t-zh">火</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Fire Shard</span><span class="t-zh">火焰碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Fire</span><span class="t-zh">火</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Wave Stone</span><span class="t-zh">流水石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water</span><span class="t-zh">水</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Water Shard</span><span class="t-zh">流水碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Water</span><span class="t-zh">水</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Gust Stone</span><span class="t-zh">疾风石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind</span><span class="t-zh">风</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Wind Shard</span><span class="t-zh">疾风碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Wind</span><span class="t-zh">风</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Freeze Stone</span><span class="t-zh">寒冰石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Ice</span><span class="t-zh">冰</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Ice Shard</span><span class="t-zh">寒冰碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Ice</span><span class="t-zh">冰</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Roar Stone</span><span class="t-zh">雷电石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Lightning</span><span class="t-zh">电</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Lightning Shard</span><span class="t-zh">雷电碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Lightning</span><span class="t-zh">电</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Loam Stone</span><span class="t-zh">土灵石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Earth</span><span class="t-zh">土</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Earth Shard</span><span class="t-zh">土灵碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Earth</span><span class="t-zh">土</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Sprout Stone</span><span class="t-zh">翠草石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass</span><span class="t-zh">草</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Grass Shard</span><span class="t-zh">翠草碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Grass</span><span class="t-zh">草</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Light Stone</span><span class="t-zh">耀光石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Light</span><span class="t-zh">光</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Light Shard</span><span class="t-zh">耀光碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Light</span><span class="t-zh">光</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Night Stone</span><span class="t-zh">暗夜石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark</span><span class="t-zh">暗</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Dark Shard</span><span class="t-zh">暗夜碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Dark</span><span class="t-zh">暗</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Forge Stone</span><span class="t-zh">锻钢石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Metal</span><span class="t-zh">金属</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Metal Shard</span><span class="t-zh">锻钢碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Metal</span><span class="t-zh">金属</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Psyche Stone</span><span class="t-zh">灵感石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Psychic</span><span class="t-zh">精神</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Psychic Shard</span><span class="t-zh">灵感碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Psychic</span><span class="t-zh">精神</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Mortal Stone</span><span class="t-zh">平凡石</span></span>
+        <span class="search-hit-meta"><span class="t-en">Common</span><span class="t-zh">普通</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="item" href="items.html#element">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Common Shard</span><span class="t-zh">平凡碎晶</span></span>
+        <span class="search-hit-meta"><span class="t-en">Common</span><span class="t-zh">普通</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Geoclaw</span><span class="t-zh">晶壳蟹</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 4–5</span><span class="t-zh">头目 · 4–5 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Turbo</span><span class="t-zh">蓬蓬羊</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 6–9</span><span class="t-zh">头目 · 6–9 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Leafy</span><span class="t-zh">莲冠龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 12–14</span><span class="t-zh">头目 · 12–14 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Stellarys</span><span class="t-zh">星魔师</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 21–22</span><span class="t-zh">头目 · 21–22 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Irisal</span><span class="t-zh">花舞兰</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 21–24</span><span class="t-zh">头目 · 21–24 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Glynsera</span><span class="t-zh">霜锋狼</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 29–32</span><span class="t-zh">头目 · 29–32 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Minespine</span><span class="t-zh">簇晶脊龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 29–32</span><span class="t-zh">头目 · 29–32 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Scorchhowl</span><span class="t-zh">狼斗士</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 29–32</span><span class="t-zh">头目 · 29–32 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Panpanta</span><span class="t-zh">胖胖獭</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 36–37</span><span class="t-zh">头目 · 36–37 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Bouldus</span><span class="t-zh">岩球郎</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 39–41</span><span class="t-zh">头目 · 39–41 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Blazen</span><span class="t-zh">雷光貂</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 42–44</span><span class="t-zh">头目 · 42–44 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Grizbo</span><span class="t-zh">暴睡熊</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 43–50</span><span class="t-zh">头目 · 43–50 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Ignitis</span><span class="t-zh">淬刃螳螂</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 44–46</span><span class="t-zh">头目 · 44–46 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Rookey</span><span class="t-zh">盔卫士</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 45–50</span><span class="t-zh">头目 · 45–50 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Magmarex</span><span class="t-zh">熔岩暴龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 46–51</span><span class="t-zh">头目 · 46–51 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Luminelle</span><span class="t-zh">吊灯水母</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv 53–60</span><span class="t-zh">头目 · 53–60 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#alpha">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Tubster</span><span class="t-zh">大号鸥</span></span>
+        <span class="search-hit-meta"><span class="t-en">Alpha · Lv Not recorded</span><span class="t-zh">头目 · 未记录 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#omega">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Tuckin</span><span class="t-zh">埋埋</span></span>
+        <span class="search-hit-meta"><span class="t-en">Omega · Lv 35–36</span><span class="t-zh">首领 · 35–36 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#omega">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Sherro</span><span class="t-zh">星骑士</span></span>
+        <span class="search-hit-meta"><span class="t-en">Omega · Lv 38–39</span><span class="t-zh">首领 · 38–39 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="boss" href="boss.html#omega">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Infergon</span><span class="t-zh">炎铠龙</span></span>
+        <span class="search-hit-meta"><span class="t-en">Omega · Lv 48–49</span><span class="t-zh">首领 · 48–49 级</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-01">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Is Aniimo free to play?</span><span class="t-zh">Aniimo 免费吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Yes. It is free to download and free to play on every platform it ships on, and there is no subscription. What it sells is cosmetics, convenience and a handbook, and the two specific things money does gate are named in the “What it costs” section.</span><span class="t-zh">免费。每一个上线的平台都能免费下载、免费游玩，没有订阅制。它卖的是外观、便利道具和一本手册 —— 钱能卡住的那两件事，在「它花多少钱」一节里点名。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-02">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What platforms is Aniimo on?</span><span class="t-zh">Aniimo 有哪些平台？</span></span>
+        <span class="search-hit-sub"><span class="t-en">PC, through Steam, the Epic Games Store and Pawprint&#39;s own launcher. PlayStation 5. Xbox Series X|S, including Xbox Play Anywhere and Xbox Cloud Gaming. And iOS and Android.</span><span class="t-zh">PC（Steam、Epic 游戏商城，以及 Pawprint 自家的启动器）、PlayStation 5、Xbox Series X|S（含 Xbox Play Anywhere 与 Xbox 云游戏），以及 iOS 和 Android。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-03">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">When did Aniimo come out?</span><span class="t-zh">Aniimo 什么时候上线的？</span></span>
+        <span class="search-hit-sub"><span class="t-en">PC and consoles on 16 September 2026, mobile on 23 September 2026. Steam shows 15 September in some regions — that is the same moment in a different timezone, not a second release.</span><span class="t-zh">PC 和主机是 2026 年 9 月 16 日，手机端是 9 月 23 日。Steam 在部分地区显示 9 月 15 日 —— 那是同一时刻落在不同时区，不是第二个发售日。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-04">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Is Aniimo coming to Nintendo Switch?</span><span class="t-zh">Aniimo 会上 Switch 吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Not as far as anyone has said. No Switch version has been announced and Pawprint has never mentioned one — Switch is not among the platforms the company has confirmed.</span><span class="t-zh">没有这个说法。官方从未宣布过 Switch 版本，也从未提过 —— 它不在官方确认过的平台名单里。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-05">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Is Aniimo on Mac?</span><span class="t-zh">Aniimo 有 Mac 版吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Not yet. The Steam build is Windows-only, and Pawprint has said a Mac version is planned for later with no date attached. Nothing has been said about Linux at all.</span><span class="t-zh">还没有。Steam 版本只支持 Windows，官方说过 Mac 版计划「稍后推出」，但没给日期。Linux 则一个字都没提过。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-06">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Do I have to be online to play?</span><span class="t-zh">玩 Aniimo 必须联网吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Yes. There is no offline mode — the PlayStation listing states online play is required, and Steam lists a broadband connection under both the minimum and the recommended specifications.</span><span class="t-zh">必须。没有离线模式 —— PlayStation 商店页面写明需要联网游玩，Steam 在最低配置和推荐配置两栏里都列了宽带连接。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-07">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Can I play Aniimo on Steam Deck?</span><span class="t-zh">Aniimo 在 Steam Deck 上能玩吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">It runs, though Valve has not rated it. Steam&#39;s own badge reads Unknown; ProtonDB, where players report their own results, has it at Platinum across 113 reports, and it wants Proton 10 or newer. Pawprint has said official support is planned for November.</span><span class="t-zh">能跑，但 Valve 没给它评级。Steam 自己的标识是 Unknown；ProtonDB 上玩家自报的结果是 Platinum（113 份报告），需要 Proton 10 或更新版本。官方说过完整支持计划在 11 月。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-08">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Does Aniimo have crossplay and cross-save?</span><span class="t-zh">Aniimo 支持跨平台联机和跨平台存档吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Crossplay, yes. Steam lists cross-platform multiplayer, and the Xbox listing advertises online co-op for two to four players with cross-platform play. Cross-save, not confirmed — we found no statement from Pawprint that progress carries between platforms, so do not assume it does before you buy a second copy.</span><span class="t-zh">跨平台联机：支持。 Steam 列了 cross-platform multiplayer，Xbox 页面写明 2 到 4 人在线合作并支持跨平台。跨平台存档：没有官方确认 —— 我们没找到官方说过进度能在平台之间带过去，所以在买第二份之前别当成已经支持。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-09">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What can you buy in Aniimo?</span><span class="t-zh">Aniimo 里能买什么？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Four things: Lumin Crystals, the paid currency, sold from $0.99 to $99.99; the Monthly Pass at $4.99; the Advanced Companion Handbook at $9.99; and cosmetics. The crystals also buy catch-rate items and the rotating shop stock, which is where most of the spending ends up.</span><span class="t-zh">四样：Lumin Crystals（付费货币，0.99 到 99.99 美元）、Monthly Pass（4.99 美元）、Advanced Companion Handbook（9.99 美元），还有外观。结晶还能买捕捉率道具和轮换商店的货，大部分钱最后花在这里。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-10">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Does Aniimo have gacha or loot boxes?</span><span class="t-zh">Aniimo 有抽卡或开箱吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">No creature gacha. The executive producer, Jovi Zhang, has said the game was designed without one, so you catch what you want rather than rolling for it. Steam does link a Probability Details page — it looks like gacha odds and is not: it is the catch-rate and Sparkling maths, and Pawprint publishes the whole thing at aniimo.com/formula-multipliers.</span><span class="t-zh">没有精灵抽卡。执行制作人 Jovi Zhang 说过这游戏在设计上就不做抽卡 —— 想要哪只自己去抓，而不是靠抽。Steam 上确实挂了一个 Probability Details 页面，看着像抽卡概率，其实不是：那是捕捉率和 Sparkling 的算式，官方把整份数据都公开在 aniimo.com/formula-multipliers。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-11">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Is Aniimo pay to win?</span><span class="t-zh">Aniimo 是氪金变强吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Broadly no, with two exceptions worth knowing. We found nothing on sale that simply makes a fight easier, but at least one branching evolution material ships inside the paid Advanced Companion Handbook, and Prismana Fulmintis sits behind the paid Season 1 track. So: power is not sold, but a couple of specific evolutions are gated.</span><span class="t-zh">大体上不是，但有两个例外值得知道。我们没找到任何直接让战斗变简单的付费品，但至少有一种分支进化材料只随付费的 Advanced Companion Handbook 发放，而 Prismana 形态的 Fulmintis（电刺螳螂）锁在付费的第一赛季通行证里。所以：强度不卖，但个别进化路线是收费门槛。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-12">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Is there a monthly pass or a battle pass?</span><span class="t-zh">有月卡或战斗通行证吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Both, and they are nearly the same thing under two names. The Monthly Pass is $4.99 and works the way passes usually do — daily and weekly tasks for currency and items across a season. The Season 1 Companion Handbook has a free track everyone gets and an Advanced track, which is the $9.99 purchase.</span><span class="t-zh">两个都有，基本是同一个东西的两个名字。Monthly Pass 4.99 美元，形态和常见的通行证一样 —— 一个赛季内用每日和每周任务换货币和道具。第一赛季的 Companion Handbook 有一条所有人都有免费线，以及需要 9.99 美元购买的 Advanced 线。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-13">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Is any Aniimo locked behind a paywall?</span><span class="t-zh">有 Aniimo 被锁在付费墙后面吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">One we can confirm: Prismana Fulmintis needs a material that only comes from the paid Season 1 handbook. The Advanced Companion Handbook carries a branching-evolution material as well. Everything else we checked is reachable by playing, and we would rather name these two than claim the game is entirely clean.</span><span class="t-zh">能确认的只有一只：Prismana 形态的 Fulmintis 需要一份只从付费的第一赛季手册里出的材料。Advanced Companion Handbook 里还带一份分支进化材料。其余我们查过的都能靠玩拿到 —— 与其说这游戏一尘不染，我们更愿意把这两条点出来。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-14">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">How do you catch an Aniimo?</span><span class="t-zh">怎么抓 Aniimo？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Weaken it and throw an Aniipod, or skip the fight entirely by approaching from behind — that works outside combat and is the fastest way to fill a collection. The throw is rolled against a formula the studio publishes: the area&#39;s base chance, multiplied by your pod, the level gap and whatever status the target is under.</span><span class="t-zh">先打弱，再扔 Aniipod；或者干脆绕到背后偷袭，跳过整场战斗 —— 这招在战斗外有效，也是集图鉴最快的路子。命中与否按官方公开的算式结算：地区基础概率，乘上你用的球、等级差，以及目标身上的状态。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-15">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Which Aniipod should I use?</span><span class="t-zh">该用哪种 Aniipod？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Match the pod to the job. Aniipod is the baseline at ×1, Pro is ×1.5, Mega is ×2, and Track and Hyper are ×2 with extras — homing, or a faster throw. Tumbler is ×2 normally but ×6 on Wild Surge targets, and it catches more than one at a time, which is what it exists for. Aniipod Ultra and the Sparkling Cube are guaranteed catches, so save them for something you cannot afford to miss.</span><span class="t-zh">按用途选。Aniipod 是基准 ×1，Pro ×1.5，Mega ×2，Track 和 Hyper 是 ×2 附带额外功能 —— 追踪，或者投掷更快。Tumbler 平时 ×2，但在 Wild Surge 目标上是 ×6，而且能一次抓多只，它存在的意义就是这个。Aniipod Ultra 和 Sparkling Cube 是必中，留给输不起的那只。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-16">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Does a back attack improve the catch rate?</span><span class="t-zh">背袭能提高捕捉率吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Yes — ×1.5, only outside combat, and only with a standard Aniipod. Tumblers do not get it. Guides that describe this as a 150% bonus are reading the same number wrong: it is half again as likely, not two and a half times.</span><span class="t-zh">能，×1.5，只在战斗外有效，而且只对普通 Aniipod 生效 —— Tumbler 吃不到这个加成。有些攻略把这写成「提升 150%」，是把同一个数字读错了：是变成一点五倍，不是变成两点五倍。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-17">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Why does catching keep failing?</span><span class="t-zh">为什么老是抓不住？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Four things decide it. Level: up to ten levels above you costs nothing, then it falls off a cliff — fifteen or more above you is ×0.1, and being overlevelled earns no bonus at all. HP, in combat: full health is ×0.8 and the curve only really bites below 10%, so chipping a bar down is worth less than it looks. Status: sleep, stun, lure and eating are ×2, deep sleep is ×100, and Break is ×1.5. Stacking: statuses do not stack — if any active one is below ×1 the game uses the lowest, so a sleeping Aniimo that has noticed you is worth ×0.9, not ×2.</span><span class="t-zh">四件事决定结果。等级：高出你 10 级以内没有惩罚，之后就断崖式下跌 —— 高出 15 级以上是 ×0.1，而且等级压过对方没有任何加成。血量（战斗中）：满血是 ×0.8，曲线要到 10% 以下才真正起作用，所以磨掉一点血比看上去更不值。状态：睡眠、眩晕、诱导、进食是 ×2，深度睡眠是 ×100，Break 是 ×1.5。叠加：状态不叠乘 —— 只要身上有一个倍率低于 ×1，取的就是最低那个，所以一只已经注意到你的睡眠目标算 ×0.9，不是 ×2。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-18">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Can you catch Alpha and Omega Aniimo?</span><span class="t-zh">Alpha 和 Omega 能抓吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Not while they are standing. Alpha Aniimo have a 0% catch rate until they are defeated, and 6% afterwards. Omega Aniimo cannot be caught at any point — you fight them for the materials, not for the creature.</span><span class="t-zh">站着的时候不能。Alpha 在被打倒前捕捉率是 0%，打倒之后 6%。Omega 任何阶段都抓不了 —— 打它是为了材料，不是为了那只精灵。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-19">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Do Aniipods get used up when a catch fails?</span><span class="t-zh">抓失败了球会没吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">A throw that misses comes back to you — the pod only leaves your bag if it lands. Whether a pod that lands but fails to catch is consumed is something we could not confirm anywhere, so plan as though it might be.</span><span class="t-zh">扔空了的球会飞回你手里 —— 只有命中了才从背包里扣。命中但没抓住算不算消耗，我们哪儿都没查到确证，所以按会消耗来准备。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-20">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What is a Wild Surge?</span><span class="t-zh">Wild Surge 是什么？</span></span>
+        <span class="search-hit-sub"><span class="t-en">The timed swarm that starts when you Nurture at a Bloom — around twenty native Aniimo at once. It is what the Tumbler is built for, at ×6. It is also the only route to a Prismana, so read that section before spending your three daily Nurtures on anything else.</span><span class="t-zh">在 Bloom 培育之后启动的那波限时精灵潮 —— 一次涌出二十只上下的本地 Aniimo。Tumbler 就是为它准备的，在那里是 ×6。它也是通向 Prismana 的唯一路径，所以每天三次免费培育怎么花，先看完 Prismana 那一节再说。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-21">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">How do you evolve an Aniimo?</span><span class="t-zh">怎么进化 Aniimo？</span></span>
+        <span class="search-hit-sub"><span class="t-en">By hand, from a menu. Pause, open Aniimo Management, pick the Aniimo, and use the circular evolve icon beside Level Up and Training. It lists the criteria, charges the material and does it. Golden double arrows mean it is ready; grey means the criteria are only partly met; no icon means that is the final stage.</span><span class="t-zh">手动，而且藏在菜单里：暂停 → Aniimo Management → 选中那只 → 点 Level Up and Training 旁边的圆形进化图标。它会列出条件、扣掉材料，然后执行。金色双向箭头代表条件已满足，灰色代表只满足了一部分，没有图标说明已经是最终形态。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-22">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What are the evolution stages called?</span><span class="t-zh">进化阶段叫什么？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Lumin, then Gamma, then Nova — and not every line uses all three. Lunara and Helion each have a single stage, and they are not weaker for it.</span><span class="t-zh">Lumin、Gamma、Nova。不是每条线都会走完三段 —— 比如 Lunara 和 Helion 各自只有一段，而且并不因此更弱。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-23">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Where do evolution materials come from?</span><span class="t-zh">进化材料从哪来？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Mostly from Alpha world bosses: each claim costs 30 Primegy, and how much you get scales with your Character Rank and Badge level. The game will tell you which boss drops what — pause, then Institute Guide, Aniimo Challenge, Alpha Challenge Evolution Material.</span><span class="t-zh">主要来自 Alpha 世界 BOSS：每领一次要花 30 Primegy，拿到的数量随你的角色等级和徽章等级提高。游戏自己会告诉你哪只 BOSS 掉什么 —— 暂停 → Institute Guide → Aniimo Challenge → Alpha Challenge Evolution Material。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-24">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">How do branching evolutions work?</span><span class="t-zh">分支进化怎么运作？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Some Aniimo have two valid forms at the same stage, with a different list of criteria behind each, so you choose by meeting one list or the other. Budsquire is the clearest example: one branch wants you to defeat a Thornblade using Budsquire alone, the other wants a finished side quest and a particular personality trait. The two lists have nothing in common.</span><span class="t-zh">有些 Aniimo 在同一阶段有两个合法形态，各自对应一份完全不同的条件表，满足哪一份就走哪一条。Budsquire 是最清楚的例子：一条分支要求你只用 Budsquire 打倒一只 Thornblade，另一条要求完成一段支线，并且性格里带某个特定词条。两份条件毫无交集。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-25">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Can you undo an evolution, or re-pick a branch?</span><span class="t-zh">进化能撤销吗？分支能重选吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">No. Evolution stage is on the game&#39;s short list of permanent things, alongside a caught Aniimo&#39;s gender, its Innate Potential and its Resonance Star Rank. We found no item or service that reverses a branch, so treat the choice as final.</span><span class="t-zh">不能。进化阶段在游戏的「不可逆」清单上，和已捕捉 Aniimo 的性别、Innate Potential、Resonance Star Rank 并列。我们没找到任何能撤销分支的道具或服务，所以当作最终选择来对待。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-26">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Can you change an Aniimo&#39;s form after catching it?</span><span class="t-zh">抓到之后还能改形态吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Only regional forms, and only with a Morph Orb — 300 Glimmer each, ten a week from the Glimmer Shop, and only into a form you have already caught. Prismana is deliberately excluded from that, so a Prismana still has to be earned at a Bloom.</span><span class="t-zh">只能改地区形态，而且只能用 Morph Orb —— 300 Glimmer 一个，Glimmer 商店每周限购十个，而且只能变成你已经抓到过的形态。Prismana 被明确排除在外，想要还是得去 Bloom 挣。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-27">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Do different forms of the same Aniimo have different stats?</span><span class="t-zh">同一只 Aniimo 的不同形态，数值会不一样吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">No, and this catches people out. Compare the official pages and the stat block is identical across forms — what changes is the element, the habitat, and sometimes one skill. Highland Emberpup is Fire and Rock where the base form is Fire alone, with exactly the same numbers. So you collect forms for typing and coverage, not for a stronger copy of a creature you already have.</span><span class="t-zh">不会，这一点最容易让人误会。把官方页面并排看，各形态的六项数值是完全一致的 —— 变的是属性、栖息地，有时还有某一个技能。高地 Emberpup 是火加岩，基础形态只有火，数字一模一样。所以收形态是为了打击面和属性覆盖，不是为了拿到一只更强的同款。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-28">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What is a Prismana Aniimo?</span><span class="t-zh">什么是 Prismana？</span></span>
+        <span class="search-hit-sub"><span class="t-en">A rare alternate form that around twenty-five species have, plus two that exist as nothing else. You will not find one wandering the map — a Prismana has to be triggered. They arrive with a holographic skin, a second element and one extra skill.</span><span class="t-zh">约二十五种 Aniimo 各自拥有的一种稀有特殊形态，另有两只是「只有 Prismana、没有别的形态」。它不会在地图上闲逛 —— Prismana 必须被触发。出现时带全息外观、第二属性，以及额外一个技能。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-29">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">How do you get a Prismana?</span><span class="t-zh">怎么拿到 Prismana？</span></span>
+        <span class="search-hit-sub"><span class="t-en">The long way round. Earn the region&#39;s Bronze Badge, then Nurture at a regional Bloom to start a Wild Surge, then catch what appears — catching, not defeating, is what fills the region&#39;s Prismatic Energy. Drive that to Full and the Prismana spawn is guaranteed. You get three free Nurtures a day, and the spawn is one-time: miss it and you start again.</span><span class="t-zh">最笨也最稳的办法：先拿到该地区的铜徽章，然后在地区 Bloom 培育触发 Wild Surge，再把出现的东西抓掉 —— 是抓，不是打倒，抓才涨该地区的 Prismatic Energy。把它推到 Full，Prismana 的出现就是必定。每天三次免费培育，而且那次刷新只出一次：错过就重来。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-30">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">How many Prismana are there?</span><span class="t-zh">Prismana 一共多少只？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Twenty-five, counted off the publisher&#39;s own index: twenty-five of its 86 entries list a Prismana Form, and every one of those also has a regular form. You will see twenty-seven quoted, and that count comes with two names — Somniwing and Irisalis — said to be Prismana and nothing else. Neither name is on the publisher&#39;s index under any spelling we tried, so we cannot confirm either the number or the two creatures, and we print the count we can check.</span><span class="t-zh">二十五只，按发行方自己的索引数的：索引里的 86 条中有 25 条列了 Prismana 形态，而这 25 只每一只都有常规形态。你会看到有人引用二十七这个数，还带着两个名字 —— Somniwing 和 Irisalis —— 说它们只有 Prismana 形态、没有别的。这两个名字我们用各种拼法都没能在发行方的索引里找到，所以那个数字和那两只生物我们都无法确认，这里只印我们查得了的那个数。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-31">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What are the odds of triggering a Prismana?</span><span class="t-zh">触发 Prismana 的概率是多少？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Pawprint publishes them, which is rarer than it should be. From a Vein Essence Nurture, the chance of triggering a Prismana Flow outright is 3%; each Nurture also adds 480 Prismatic Energy, and 10,500 is the pity threshold that forces a Flow. Against those numbers the guaranteed routes — the Prismana Pact, or a Prismana Crystal at a Branch — are usually the better deal.</span><span class="t-zh">官方公开了，这比它本该有的待遇要少见。用 Vein Essence 培育时，直接触发 Prismana Flow 的概率是 3%；每次培育另加 480 点 Prismatic Energy，10,500 是强制触发一次的保底线。对着这几个数看，保底路线 —— Prismana Pact，或者 Branch 上的 Prismana Crystal —— 通常比赌那 3% 划算。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-32">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Are Prismana stronger than the normal form?</span><span class="t-zh">Prismana 比普通形态强吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Not on paper. We compared four species&#39; official pages and the stat blocks are identical; what changes is the element and the movepool. Guides that call them stronger are describing the second typing and the extra skill, which genuinely can be better — but it is a different creature rather than a bigger one.</span><span class="t-zh">数值上不强。我们并排比了四只的官方页面，数值块完全一致，变的是属性和技能池。说它「更强」的攻略，描述的其实是第二属性和那个额外技能 —— 那确实可能更好用，但那是另一只精灵，不是同一只的加强版。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-33">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What other rare variants are there?</span><span class="t-zh">还有哪些稀有变体？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Four more. Sparkling is cosmetic particle effects in three styles — Common, Dazzling and Shadow — and the published odds on a Sparkling Cube are 99%, 1% and 0%, with the 1% moving from Dazzling to Shadow on eggs from Operation: Egg Heist. Umbral always rolls with Perfect Potential, but its dark tint is stripped when you evolve it. Alpha Aniimo are simply bigger. Blessed ones have swallowed a Lumin Amber and look no different at all once caught.</span><span class="t-zh">另外四种。Sparkling 只是粒子外观，分 Common、Dazzling、Shadow 三款，Sparkling Cube 的官方概率是 99%、1%、0%，其中那 1% 在 Operation: Egg Heist 的蛋上会从 Dazzling 挪到 Shadow。Umbral 必定带 Perfect Potential，但进化时暗色外观会被洗掉。Alpha 单纯是体型更大。Blessed 是吞过 Lumin Amber 的，抓到之后外观和普通的一模一样。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-34">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What are the nine elements, and what beats what?</span><span class="t-zh">九个属性是什么，谁克谁？</span></span>
+        <span class="search-hit-sub"><span class="t-en">The nine are Fire, Water, Grass, Electric, Ice, Wind, Rock, Dark and Holy — some guides say Light for Holy and Earth for Rock. In short: Ice beats Water and Electric; Water beats Fire and Rock; Electric beats Water and Wind; Fire beats Ice and Grass; Grass beats Water and Rock; Rock beats Ice and Fire; Wind beats Grass and Dark; Dark beats Electric, Grass and Holy; Holy beats Wind and Dark. In game, a golden thumb on a squad portrait means you have the advantage and a white one means you do not. The damage multipliers are missing on purpose: 1.6× and 0.625× are quoted everywhere, we could not verify either against a page we trust, and one source says 0.375×.</span><span class="t-zh">九属性是火、水、草、电、冰、风、岩、暗、圣 —— 也有攻略把圣叫光、把岩叫土。简版：冰克水、电；水克火、岩；电克水、风；火克冰、草；草克水、岩；岩克冰、火；风克草、暗；暗克电、草、圣；圣克风、暗。游戏里队伍头像上的金色拇指代表你占优，白色代表你吃亏。伤害倍率这里故意没写：1.6 倍和 0.625 倍到处被引用，但我们没法在我们信得过的页面上核实，还有一份来源写的是 0.375 倍。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-35">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What are spatial counters?</span><span class="t-zh">空间克制是什么？</span></span>
+        <span class="search-hit-sub"><span class="t-en">A second rock-paper-scissors that runs alongside the elements, and the game barely explains it. Four attack types: Ranged, Flying, Tunnel and Pound. Ranged counters Flying but struggles against Tunnel; Pound counters Tunnel but struggles against Flying. Two pairs rather than one triangle. It matters most in Twine mode, where dodging a ranged attack by digging is the actual mechanic.</span><span class="t-zh">和属性并行的一套石头剪刀布，游戏几乎没解释过。四种攻击类型：远程、飞行、钻地、重击。远程克飞行，但打不中钻地；重击克钻地，但打不中飞行。是两组对克，不是一个三角。它在 Twine 模式下最要紧 —— 那里用钻地躲远程就是核心操作。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-36">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What is a good team composition?</span><span class="t-zh">队伍怎么配比较好？</span></span>
+        <span class="search-hit-sub"><span class="t-en">One of each role rather than five damage dealers: DPS, Break, Support and Regen, with a dedicated Heal if your Support cannot keep the party up. Stacking DPS is the common mistake — it starves you of Energy and costs you more damage than it added.</span><span class="t-zh">每个定位各一个，而不是五个输出：DPS、Break、Support、Regen，如果你的 Support 撑不住全队，再加一个专职 Heal。堆输出是最常见的错 —— 能量会被抽干，亏掉的伤害比堆出来的多。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-37">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Which starter should I pick, Helion or Lunara?</span><span class="t-zh">开局选 Helion 还是 Lunara？</span></span>
+        <span class="search-hit-sub"><span class="t-en">It genuinely does not matter much. They have identical base stats and are both Light DPS; the difference is entirely in the kit, with Helion melee and Lunara ranged. If you want a tiebreak, Lunara&#39;s range is the more forgiving of the two, and both sit in the top tier of the current rankings.</span><span class="t-zh">说实话差别不大。两只基础数值完全一样，都是光属性输出；区别全在技能组 —— Helion 近战，Lunara 远程。非要一个理由的话，Lunara 的射程更宽容，而且两只在当前榜单里都在第一梯队。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-38">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Can you get the other starter later?</span><span class="t-zh">另一只开局精灵后面还能拿到吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Nobody has confirmed it either way. IGN states outright that it is unknown, and we could not find a second source to settle it — so treat it as a choice you are making, not a formality.</span><span class="t-zh">没有任何一方确认过。IGN 直接写明「不确定」，我们也找不到第二个来源来定论 —— 所以把它当成一个真正要做的选择，而不是走个形式。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-39">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What is Twine mode?</span><span class="t-zh">Twine 模式是什么？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Merging with a captured Aniimo and playing as it. It is the entire traversal system — flying, digging, climbing, swimming, sprinting and tunnelling only work while Twined, so chests and puzzles are gated behind owning the right creature. It also turns combat from issuing orders into fighting directly, and it is how you speak to wild Aniimo: Twine with one of the same family and you can hold a conversation with its kin.</span><span class="t-zh">Twine（联结）：和已捕捉的 Aniimo 联结，自己变成它。整个移动系统都在这上面 —— 飞行、钻地、攀爬、游泳、冲刺、隧道全都只在 Twine 状态下可用，所以宝箱和谜题是拿「有没有那只精灵」来卡的。它还让战斗从下达指令变成直接操作，也是和野生 Aniimo 对话的唯一方式：和同族的一只 Twine，就能和它的同类聊上。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-40">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What is the best Aniimo in the game right now?</span><span class="t-zh">现在最强的 Aniimo 是哪只？</span></span>
+        <span class="search-hit-sub"><span class="t-en">There is no single list worth trusting, so here is what the two biggest ones agree on: Fulmintis for DPS, Inferlupa for Break, Gracewing for Heal and Turbo for Support. Both lists also name a Somniwing for Regen, and that name is on no official page we can find under any spelling, so it is left out rather than passed along — a recommendation a reader cannot go and act on is not a recommendation. Below those four the rankings disagree with each other, so we have not averaged them into a list that would look like a consensus and would not be one.</span><span class="t-zh">没有哪份榜单值得单独相信，所以这里是两份最大的榜单都认同的名字：输出看 Fulmintis，Break 看 Inferlupa，治疗看 Gracewing，辅助看 Turbo。两份榜单还都提了 Somniwing 这只 Regen，但这个名字我们用各种拼法都没能在任何官方页面上找到，所以这里不放它 —— 读者无法照着去做的推荐，不算推荐。这四只往下，两份榜单就开始互相打架了，我们没有把它们平均成一份看着像共识、其实不是共识的排名。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-41">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What is Primegy, and what does it block?</span><span class="t-zh">Primegy 是什么？卡住了什么？</span></span>
+        <span class="search-hit-sub"><span class="t-en">It is the energy system, and it is narrower than people fear. It regenerates one every six minutes to a cap of 300, and it is spent claiming Alpha and Omega rewards and opening Holo-Battle Sim chests, at 30 a time. It does not gate the story, catching, exploration or Operation: Egg Heist — so running dry never stops you playing, it only stops you cashing boss rewards.</span><span class="t-zh">就是那个能量系统，而且比大家担心的窄得多。每 6 分钟回 1 点，上限 300，花在领取 Alpha 和 Omega 奖励以及开 Holo-Battle Sim 宝箱上，每次 30 点。它不卡主线、不卡捕捉、不卡探索、不卡 Operation: Egg Heist —— 所以没能量从来不会让你玩不下去，只是领不了 BOSS 奖励。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-42">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">When is the daily reset?</span><span class="t-zh">每日重置是几点？</span></span>
+        <span class="search-hit-sub"><span class="t-en">4:00 AM server time. Servers are grouped as America (UTC−5), Europe (UTC+1) and APAC (UTC+8), and dailies reset against your server&#39;s clock rather than your own.</span><span class="t-zh">服务器时间凌晨 4:00。 服务器按 America（UTC−5）、Europe（UTC+1）、APAC（UTC+8）分组，日常按你所在服务器的钟走，不是按你的。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-43">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What are badges for?</span><span class="t-zh">徽章有什么用？</span></span>
+        <span class="search-hit-sub"><span class="t-en">They are the region&#39;s gate, and two of them matter. The Bronze Badge is what unlocks Nurturing at all — no Bronze, no Prismana. The Silver Badge, which wants 70% collection in that region plus that region&#39;s Alpha defeated, is what lets you infuse Lumin Amber at a Branch to change the weather or force a Prismana Flow.</span><span class="t-zh">它是地区的门槛，其中两个很关键。铜徽章决定你能不能培育 —— 没有铜，就没有 Prismana。银徽章要求该地区图鉴 70% 加上打倒该地区 Alpha，拿到之后才能在 Branch 注入 Lumin Amber，用来改天气或强制触发 Prismana Flow。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-44">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Can you change the time of day?</span><span class="t-zh">时间能改吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Yes, freely and as often as you like, with no cooldown. Open the menu, use the sun-and-moon icon on the panel at the right, and pick Noon, Nighttime, Early Morning or Dusk. Then check the map: selecting the nearest Bloom lists what spawns there and when, which is how the time-locked forms are meant to be found.</span><span class="t-zh">能，随时改，随便改，没有冷却。打开菜单，用右侧面板上的日月图标，选正午、夜晚、清晨或黄昏。然后去看地图：选中最近的 Bloom，它会列出那里会刷什么、什么时候刷 —— 限时形态本来就是这么找的。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-45">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Can you change the weather?</span><span class="t-zh">天气能改吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Not by hand, in the current version. The Change Weather option at the Breezy Plains Branch exists and is greyed out — Snowy, Rainy and Thunderstorm cannot be selected, and the only thing the Branch will do is induce a Prismana Flow. Two routes do work: wait for the real-time cycle, which the map forecasts in local time with the weather-gated Aniimo listed underneath, or visit another player&#39;s world in co-op, where the weather is whatever theirs happens to be. Photo Mode weather is cosmetic and changes nothing.</span><span class="t-zh">当前版本不能手动改。Breezy Plains Branch 上的 Change Weather 功能确实存在，但是灰的 —— 雪天、雨天、雷暴都选不了，Branch 唯一能做的只是引导 Prismana Flow。真正可行的只有两条路：等实时天气循环（地图会按本地时间预报，并把只在该天气出现的 Aniimo 列在下面），或者联机进别人的世界，那边天气是什么就是什么。拍照模式的天气只是外观，不影响任何东西。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-46">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Why does it say Account Login Failed?</span><span class="t-zh">为什么提示 Account Login Failed？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Four causes, in the order worth checking. Mashing Start Adventure queues a second login before the first has finished — press it once and wait. Sitting on the login screen times the session out before you ever get in. A version mismatch between client and server clears itself once both are updated. And the one nobody guesses: an install path containing non-alphabetic characters can break the login on its own, so move the install somewhere plain.</span><span class="t-zh">四个成因，按值得排查的顺序：猛点 Start Adventure 会在第一次登录没走完之前排队第二次 —— 点一次然后等。停在登录界面不动会在你进去之前就把会话超时掉。客户端与服务器版本不一致，两边都更新完就自己好了。最后一个没人猜得到：安装路径里带非字母字符本身就能让登录失败，把安装位置挪到一个干净的路径下。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-47">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">What are the fixes for the other common errors?</span><span class="t-zh">其他常见报错怎么修？</span></span>
+        <span class="search-hit-sub"><span class="t-en">There is an official pinned thread covering nine, and these are the ones people actually hit. Controller misbehaving: disable Steam Input. Red glow in the eyes is a rendering artefact — turn Global Illumination down or switch to the Performance preset. NPC damage not registering: restart. Black screen: usually drivers, or DirectX 11 against 12, so try the other and turn DLSS off. Network error 107 was patched in 1.0.3551601.0, so update before anything else. On Steam Deck, use Proton 10.0.0-4. And an email already linked message on a survey usually means you already submitted it.</span><span class="t-zh">官方有一个置顶帖列了九条，这些是玩家真正会撞上的。手柄不灵：关掉 Steam Input。眼睛发红光是渲染问题 —— 把 Global Illumination 调低，或者切到 Performance 预设。NPC 伤害不结算：重启。黑屏：多半是驱动，或者 DirectX 11 和 12 打架，换另一个试并把 DLSS 关掉。网络错误 107 在 1.0.3551601.0 已经修了，所以先更新。Steam Deck 上用 Proton 10.0.0-4。还有问卷报 email already linked，通常只是你已经交过了。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-48">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">My character is gone — what happened?</span><span class="t-zh">角色不见了，怎么回事？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Check which server you are on before you file anything. Characters exist only on the server they were created on, so logging in to a different one shows you an empty account rather than an error. Switch back and it will be there.</span><span class="t-zh">先看你在哪个服务器，再考虑提工单。角色只存在于创建它的那个服务器上，登到别的服务器只会看到一个空账号，而不是报错。切回去它就在。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-49">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">How do you get unstuck?</span><span class="t-zh">卡住了怎么办？</span></span>
+        <span class="search-hit-sub"><span class="t-en">There is an Unstuck button in Settings, and that is precisely what it is for — it is the first thing to press when you are inside geometry or a quest will not advance. If it does not help, restart the game rather than fighting it; several of the known bugs are fixed by nothing more than a relaunch.</span><span class="t-zh">设置里有一个 Unstuck 按钮，它就是干这个的 —— 卡进地形里，或者任务推不动的时候，第一个该按的就是它。要是没用，重启游戏，别硬耗；已知的 bug 里有好几个靠重开就好了。</span></span>
+        </span>
+      </a>
+      <a class="search-hit" data-kind="faq" href="faq.html#q-50">
+        <span class="search-hit-body">
+          <span class="search-hit-name"><span class="t-en">Are there working Aniimo codes?</span><span class="t-zh">Aniimo 有能用的兑换码吗？</span></span>
+        <span class="search-hit-sub"><span class="t-en">Yes. Ten codes appear on all ten lists we compared, but those lists disagree about what three of them pay, and two contradict each other on whether aniimoparty is still alive. We have not redeemed one ourselves, so the codes page prints where the lists agree and names where they do not, instead of claiming a test we never ran. The box is at Settings → Account → Gift Code Redemption, and a rejection on a new account usually means the Mail is not open yet rather than a dead code.</span><span class="t-zh">有。我们比的十份清单里，十个码的名字都没有争议，但清单之间对其中三个给什么说法不一，还有两份在 aniimoparty 到底死没死上互相矛盾。我们自己一个都没兑过，所以兑换码页面印的是各家一致的部分，并把分歧标出来，而不是声称做过我们没做过的测试。入口在 设置 → 账号 → Gift Code Redemption；新账号被拒，多半是邮箱还没开，不是码死了。</span></span>
+        </span>
+      </a>
+  </template>
+
+  <!-- The search box's own script, loaded by this page rather than by the
+       shell, the way map.html loads assets/map.js. index.html is the only page
+       that carries an index or a box to read it with, and the other 223 pages
+       have no reason to download either. -->
+  <script src="assets/search.js" defer></script>
 
 </main>
 

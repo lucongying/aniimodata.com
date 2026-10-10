@@ -300,6 +300,32 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   border:1px solid var(--line);
   border-radius:10px;
   padding:clamp(3px,.45vw,6px);
+  transition:border-color .15s, box-shadow .15s;
+}
+/* 格子在 2026-10-08 从纯图变成链接。外层 <a> 只负责当那个链接，盒子的样子
+   仍然全在上面的 .specimen-img 上，所以这里除了铺满格子什么也不做 —— 换行内
+   元素会因为图片底部的基线下沉，格子就不方了（display:block 就是治这个的）。
+   焦点环不在这里补，全站那条 :focus-visible 已经管了，而且 .specimen-tile
+   与它同权重、写在后面，10px 的圆角正好让轮廓跟着格子走。
+
+   悬停三件事一起做，方向都是「从纸上把这一只拿起来」：描边压到墨色（头像本身
+   是内容，加不了下划线，这是唯一说得清「能点」的文字级信号）、整块上浮 4px、
+   补上 .home 那个 --lift 投影 —— 前两样是「动了」，投影是让「浮起来」这件事有
+   落脚点，只有位移没有影子会读成格子在自己抖。
+   位移走 <a> 而不是 <img>：格子是 grid 项，transform 不参与布局，所以浮起来
+   不会把它下面那一行推下去，也不会在 6px 间距的窄屏上和邻格叠上（4px 小于间隙）。
+   4px 是量出来的上限 —— 再大，鼠标落在格子下沿时元素会从指针底下溜走。
+   过渡只做 .18s ease，不用弹簧：这一页是纸面，回弹是另一套语言。
+   prefers-reduced-motion 不用在这里再写一条，文件末尾那条全局规则已经把
+   过渡时长压到 0，届时是直接跳到浮起的状态，而不是不响应。 */
+.specimen-tile{
+  display:block; border-radius:10px;
+  transition:transform .18s ease;
+}
+.specimen-tile:hover{transform:translateY(-4px)}
+.specimen-tile:hover .specimen-img{
+  border-color:var(--ink);
+  box-shadow:var(--lift);
 }
 .specimen-note{
   margin-top:14px;
@@ -330,6 +356,93 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   font-family:var(--mono); font-size:11px; color:var(--ink-3);
   border:1px solid var(--line-2); border-radius:3px;
   padding:2px 6px; pointer-events:none; background:var(--bg);
+}
+
+/* ── 首页 hero 左下角那个搜索框 ──
+   .hero 是两栏，左栏（眉标 + 标题 + 引文）比右栏那张「一览」卡矮一块，
+   用户点名要的就是这块空白。左栏拉成与行同高、排成列向 flex，再把框
+   margin-top:auto 推到底 —— 框的下沿因此和右栏卡的下沿齐平，而不是靠一个
+   猜出来的上边距（换字号、换译文都不会错位）。
+   .hero 是首页独有类，不需要 .home 作用域，同 .specimen 的理由。
+
+   整块在 assets/search.js 给 .hero-search 加上 search-on 之前不显示：脚本
+   没到位时 hero 就是原来的样子 —— 一个按下去什么也不发生的输入框比没有输入框
+   更糟。理由与 .lang-on 同，失败方向也一样（见 <html> 上那条注释）。
+   注意不能只靠 [hidden]：作者样式里任何一条 display 都压得过浏览器的
+   [hidden]{display:none}，所以藏起来这件事只能用 display:none 自己办。
+
+   margin-top:auto 把框推到左栏底；两栏塌成一栏时（≤900px，.readout 已排到
+   前面）auto 拿不到富余空间，等于 0，所以间距不能只靠 margin —— 32px 走
+   padding，窄屏才不会被标题贴在脸上，同时宽屏那边 padding 也一起算进
+   .hero-main 的高度，不影响下沿对齐。 */
+.hero-main{align-self:stretch; display:flex; flex-direction:column}
+.hero-search{margin-top:0; padding-top:32px; max-width:560px; display:none}
+.hero-search.search-on{display:block; margin-top:auto}
+
+/* 面板锚在输入框下沿（.search-field），不是锚在 .search 下沿 —— 锚在整块上，
+   面板的起点会被框下面那行 scope 顶下去，等于在输入框和结果之间隔着一行说明，
+   而结果的正确位置是紧贴输入框。
+   代价是面板打开时会盖住 scope 那行，这是对的：面板不透明、带投影，本来就是个
+   浮层，而它盖住的那句「这个框能搜什么」在结果已经摆在眼前时不再需要读。
+   注意 scope 从 2026-10-08 起是常驻的，所以这里原来那条理由（「scope 只在框空着
+   时出现，那会儿面板是关的，两者不会同时在场」）已经作废 —— 现在它们同场了，
+   靠的是上面这条取舍而不是状态错开。见 build.js 的 heroSearchHTML。
+   display 只能写在 :not([hidden]) 上：面板由 [hidden] 管显隐，直接写 flex
+   等于它永远在场（同一个坑见 .map-search-x 和 .lang-on 那两处）。 */
+.search-field{position:relative}
+.search-panel{
+  position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:30;
+  max-height:min(58vh,420px);
+  background:var(--surface);
+  border:1px solid var(--line-2); border-radius:4px;
+  box-shadow:var(--lift);
+}
+.search-panel:not([hidden]){display:flex; flex-direction:column}
+/* 只有列表滚，计数行钉在面板顶上不动 —— 否则「显示 8 / 214」会跟着结果一起
+   滚出视野，而它唯一有用的时刻正是结果被截断的那一刻。
+   min-height:0 是承重的：flex 子项的 min-height 默认是 auto，不给 0，
+   这个滚动区会被内容整个撑开，max-height 就管不住它了。 */
+.search-list{overflow-y:auto; overscroll-behavior:contain; min-height:0; padding:4px}
+.search-count{
+  flex:none; padding:7px 10px;
+  border-bottom:1px solid var(--line);
+  font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+}
+.search-empty{
+  padding:10px;
+  font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+}
+.search-scope{
+  margin-top:9px;
+  font-family:var(--mono); font-size:11.5px; line-height:1.5; color:var(--ink-3);
+}
+.search-hit{
+  display:flex; align-items:flex-start; gap:10px;
+  padding:8px 9px; border-radius:3px;
+  color:var(--ink); text-decoration:none;
+}
+.search-hit:hover,.search-hit.is-active{background:var(--paper)}
+/* min-width:0 是承重的：没有它，flex 子项的 min-content 宽度会把长问答的
+   截断整个顶掉，一条 FAQ 就能把面板撑出横滚。 */
+.search-hit-body{flex:1; min-width:0}
+.search-hit-name{font-weight:600; font-size:13.5px}
+.search-hit-meta{
+  margin-left:8px;
+  font-family:var(--mono); font-size:11px; letter-spacing:.02em; color:var(--ink-3);
+}
+.search-hit-sub{
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2;
+  overflow:hidden; margin-top:3px;
+  font-size:12.5px; line-height:1.5; color:var(--ink-2);
+}
+/* 徽章只有四个（模板里各一份，脚本按 data-kind 克隆），颜色一律墨色 ——
+   全站只有属性色一个颜色语义，分类不是属性的就得上灰的。 */
+.search-kind{
+  flex:none; margin-top:1px;
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-2); background:var(--paper);
+  border:1px solid var(--line); border-radius:3px;
+  padding:2px 6px; white-space:nowrap;
 }
 
 /* 属性筛选 chips */
@@ -1057,6 +1170,16 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 .form-cards{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 
 .glance-card{background:var(--surface); padding:18px 18px 20px}
+/* 攻略目录页的卡片整张是链接（guides.html），而速览卡、技能卡、形态卡画的
+   都是静态 div。**只给锚点版加这两条**，卡片自己一条规则都不动 —— 网站在
+   第 61 行只设了 a{color:inherit}，所以裸 <a> 默认带下划线，会把整张卡的
+   标题划掉。悬停换成纸色，是因为卡片本来就是白面，只能用「退回去」来表示
+   可以点，用属性色则会把颜色说成别的意思。 */
+.glance-grid a.glance-card{
+  display:block; text-decoration:none;
+  transition:background-color .15s;
+}
+.glance-grid a.glance-card:hover{background:var(--paper)}
 .glance-v{font-family:var(--display); font-size:19px; font-weight:600; letter-spacing:-.015em; margin-top:6px}
 .glance-d{margin-top:8px; font-size:13.5px; color:var(--ink-2); line-height:1.65}
 
@@ -1283,6 +1406,286 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   border:1px solid var(--line-2); border-radius:3px; padding:0 5px;
 }
 .open-list strong{color:var(--ink)}
+
+/* ── 攻略（guides.html 与 guides/<slug>/） ────────────────────
+   目录页整页复用上面那套 .glance-* 卡片格与 .glance-card，单篇正文复用
+   .sp-* 骨架和 .prose。这个区块只有三样是新的：正文里的清单、图块，以及
+   首页那一块的紧凑列表。
+
+   清单刻意不套 .open-list —— 那个类的 ::before 是一枚「?」徽标，意思
+   是「这一条还没定」。攻略里的清单是已经确定的话，套上去等于每条都画上
+   一个问号，把意思反过来。
+
+   标记用和 .src-list 一样的那道 8×2 短横（.loc-list / .req-list 的同一
+   个形状，只是那两个取的是属性色，这里是中性灰 —— 攻略的清单不讲属性）。
+   字体取 .prose 的 14.5px 而不是 .src-list 的 13.5px：那是小字来源目录，
+   这是正文的一部分。 */
+/* 单篇攻略的阅读栏。整篇 —— 面包屑、标题、导语、正文、清单、图 —— 都落在
+   这一条栏里并居中，因为一份长文的正文只有一条左边缘；此前正文被 .prose 的
+   66ch 卡在 597px，而图走的是整个 .sp-block，宽 1100px，于是图比正文宽了将近
+   一倍，一眼就看出不是一块东西。
+
+   栏宽写在 .sp-wrap 上而不是逐条给 .prose / .sp-lede / .sp-note 定宽：那三个
+   类各自带 66ch 上限，**不把它们抬掉，栏宽改了它们是不动的** —— 结果是正文仍
+   然 597px，只是标题和图缩了。所以下面那条 max-width:none 与这条是一体的，删
+   任何一条都会退回「图比文宽」的原状。
+
+   .sp-guide 是限定词，不是第二个名字：.sp-* 骨架同时服务 206 个物种页，直接
+   改裸的 .sp-wrap 会把它们一起收窄。目录页（guides.html）有意不用这个类 ——
+   那边是卡片格，格子要的是宽度。 */
+.sp-guide .sp-wrap{max-width:800px}
+.sp-guide .prose,
+.sp-guide .sp-lede,
+.sp-guide .sp-note{max-width:none}
+
+/* 栏窄了，标题就得比物种页那套小一号：56px 那个尺寸是按整幅 1100px 配的，放进
+   这条栏里会折成三行、最后一行只剩一个词。44px 时英文标题是两行，中文的 22 个
+   字也是一行半到两行。
+   行高从 1.04 提到 1.14 —— 1.04 是给单行标题配的，两行以上的大标题挤在一起，
+   行与行之间连气都透不过来。 */
+.sp-guide .sp-title{
+  font-size:clamp(30px,4.4vw,44px); line-height:1.14;
+  /* text-wrap:balance 是为了中文：断行按字走，不然「改了捉 / 宠游戏的什么」会把
+     「捉宠」劈成两半。均衡之后两行各占一半，换行点落在词组之间。英文顺带也好
+     看些 —— 原来第二行比第一行长出一大截。旧浏览器不认识这条，退回默认即可。 */
+  text-wrap:balance;
+}
+
+/* 目录页的卡片。整张仍是 .glance-card（白面、整张可点、悬停换纸色），只是多了
+   一张缩略图，而且这张图**是卡片左边的一块板子，不是一张带边距的小图**：上、下、
+   左三条边都顶在卡片自己的边框上，文字在它右边另起一栏。
+
+   所以卡片自己的内边距在这里归零，内边距搬到 .guide-body 上 —— .glance-card 那
+   18px 是给纯文字卡配的，而**图待在内边距里就永远贴不到边**，这是这一版的前提。
+
+   左栏 260px 是算出来的，不是挑的：右栏那摞字在 1100px 宽的卡上是 147px 高，截图
+   是 1600×900，147 × 16/9 ≈ 261，所以 260px 的板子正好铺满、一个像素都不裁。
+   **比这窄就是在切图**（object-fit:cover 从两侧往中间裁），比这宽则图比文字高、
+   反过来把卡片撑起来 —— 上一版「上下边大了」就是那么来的。
+
+   字高会随语言和折行浮动（同一张卡，英文问句一行、中文两行时能差出十几像素），
+   cover 留着兜这个底：宁可裁掉一点边缘，也不让图变形、或让图反过来定义卡片高度。
+
+   选择器写到三段（`.guide-grid` / `.glance-grid a.glance-card.guide-card`）而不是
+   两段：上面 `.glance-grid` 与 `.glance-grid a.glance-card` 的优先级分别是 (0,1,0)
+   和 (0,2,1)，两段的写法只是靠文件先后赢，而这个文件里别处的覆盖宁可写足选择器
+   （见 .sp-top .sp-head 那条）。 */
+/* grid-auto-rows:1fr 是同一条「等高」落在行上的写法，加在 2026-10-09，和下面那条
+   简介截断是一对。截到三行之后同一排的卡自然等高，但**卡片落在哪一排会决定它的
+   高度**：英文标题占两行的那篇（强度巅峰榜）要是单占一行，那一行就比别的矮一个标题
+   行；缩到一列（≤680px）时每张卡自成一排，这件事立刻显形。1fr 让所有行取同一个
+   高度，于是「一样高」与排列顺序无关。
+
+   1fr 的另一面是**「最高的一张」是按全网格算的**：某一张卡的标题多折一行，整页的卡
+   都跟着长高一行。所以这一页的卡片形状得靠下面两条截断钉死，不能交给内容。
+
+   列宽下限 500px（原来跟着 .glance-grid 的 420px 走），2026-10-09 改。420px 是给纯
+   文字卡配的；这张卡左半边还钉着一块 260px 的板子，420px 的卡只剩 124px 给右边那栏
+   字（19px 字号下每行十来个字），标题会折成六到八行 —— 那正是「加一篇攻略，卡片变
+   大」最厉害的一段窗口。500px 让字栏至少剩 204px；代价是窗口窄于约 1095px 时目录
+   从两列变一列（两列挤着不如一列宽着，图的边也贴得住）。 */
+.glance-grid.guide-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(500px,100%),1fr));
+  grid-auto-rows:1fr;
+}
+.glance-grid a.glance-card.guide-card{
+  display:grid; grid-template-columns:260px minmax(0,1fr);
+  padding:0; align-items:stretch;
+}
+/* aspect-ratio:16/9 是承重的，不是版面偏好，加在 2026-10-09。这条板子多高，只有
+   右边那摞字说了算 —— 这是上面那段定下的规矩。但 width:100% 加 height:auto 意味着
+   图的高度是它自己的天然比例算出来的，只有**天然高度恰好比文字矮**时规矩才成立：
+   1600×900 的横图正是这种情况，所以前两篇一直看不出问题。第三篇的封面是 900×1600
+   的竖图，260px 宽下天然高 462px，于是图反过来定义了整行高度：那一行的卡片全被拉
+   高（实测 462 对文字的 290），而它是目录页的第一张卡，于是整页看起来都变了形。
+   把比例钉死在 16/9 就断掉了这条路：图的贡献永远是 260×146，而 146 正是这条
+   板子一开始的尺寸（见上），所以对站上现有的两张横封面**一个像素都没变**。
+
+   height 仍写 auto，交给 stretch 去填满这一行（也就是右边那摞字定出来的卡片高度）：
+   图和卡片一样高，上下的边才贴得住。**上一版这里写的是 align-self:start，因为那
+   时图是按自己比例算高的、跟行高打架就会变形；现在打架也不会变形了 —— 有
+   object-fit:cover 在，多出来的部分是被裁掉而不是被压扁。**
+   width 上的 width/height 属性仍要留着（本站每张图都带内在尺寸，字节没到时先占好
+   位置），但两者都被这里的两条覆盖：属性只是提示，作者样式永远赢。 */
+.guide-card .guide-thumb{
+  grid-column:1; grid-row:1;
+  display:block; width:100%; aspect-ratio:16/9; height:auto;
+  object-fit:cover; object-position:center;
+  background:var(--surface);
+}
+.guide-card .guide-body{grid-column:2; grid-row:1; padding:18px 18px 20px}
+
+/* 简介截到三行，2026-10-09。目录页每张卡多高只有右边那摞字说了算（上面那段定下的
+   规矩），而三篇的简介长短差出两行 —— 中文 3/5/3 行，英文 5/7/5 行，于是第一排被
+   最长的那张撑到 245.8px，单占一行的第三张却只有 201.2px，一页两种卡高。截到三行
+   之后三张落在同一个数上，**中文 201.2px，正是此前最下面那张的高度**。
+
+   只挂 .guide-card，不碰裸的 .glance-d：那个类同时供物种详情页的速览卡、about 与
+   contact 的卡片使用，那几处的简介是卡片自己的正文而不是导语，截它们是丢内容。
+
+   -webkit-box + -webkit-line-clamp 是这对属性今天的写法（标准 line-clamp 仍只是
+   别名），换行照旧由浏览器算，多出来的部分省略号收尾 —— **一个字都没从 DOM 里拿
+   掉**，源码里和搜索索引里读到的仍是完整句子。 */
+.guide-card .glance-d{
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3;
+  line-clamp:3; overflow:hidden;
+}
+/* 标题也截到四行，2026-10-09 —— 上面那条简介截断漏掉的那一半，而且才是用户实际看见
+   的那次「加了一篇攻略，卡片又变大了」。
+
+   上面 1fr 让所有行取全网格最高的一张，而**标题是那个高度里唯一还没有上限的东西**
+   （简介截在三行、日期一行）。加第五篇（rare-variants）当天实测：窗口 1000px 宽时它
+   的英文标题折成 7 行，压过原本最高的 6 行（第一天那篇），于是五张卡一起从 330.4px
+   涨到 362.7px —— 新卡把整页的卡都撑高了。这跟悬停动效无关，只是那 1% 的缩放按比
+   例跟着卡片一起长，看起来就像「动效又变大了」。
+
+   四行是量出来的上限，不是挑的：1100px 网格、252px 字栏下最长的那条（第一天那篇，
+   英文 98 字）正好 4 行，所以这条在 ≥1195px 的窗口上**一个像素都不改**，只把「更长
+   的标题」这条路堵死 —— 从此每张卡的高度与站上有哪几篇攻略无关，加新攻略不再动到
+   任何一张卡的尺寸。
+
+   代价写在明处：窗口在约 1096–1190px 这段（两列、每列 500px 上下、字栏 204–250px）
+   时，最长的那几条英文标题会被省略号收掉一行。和简介一样，**字一个都没从 DOM 里拿
+   掉**，链接和整篇文章照旧。加新攻略时按同一把尺子：卡片标题压在 4 行内，英文约
+   100 字，超了就先改标题再上线。 */
+.guide-card .glance-v{
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:4;
+  line-clamp:4; overflow:hidden;
+}
+
+/* 悬停与键盘焦点：整张卡微微放大，2026-10-10（第七版）。
+
+   第六版是「整张卡变灰」（底色 --paper ＋ 缩略图 filter:grayscale(1)，实测卡面
+   #FCFDFC→#F2F4F3、图区 sat 58.37→0.00）。用户看过后说「还是不好看，取消掉这个
+   鼠标悬停效果。还是改为放大一点点的动画效果吧」—— 灰整个撤掉，回到 transform
+   这一路，幅度仍停在 **0.5%**（历史：1.02 → 1.01 用户两次说「动作幅度太大」，
+   1.005 是那样收出来的档位，这次说的也还是「一点点」）。
+
+   三条一起做，缺一条都不对：
+     · transform:scale(1.005) —— 内容真的往外长，图和字在同一块变换里，天然
+       「一体」（第一版「只放大缩略图」就是在这里被否掉的）；
+     · box-shadow:0 0 0 1px var(--card-raised) 那圈白边 —— **承重的**，见下；
+     · box-shadow:var(--lift) 投影 —— 让「浮起来」这件事有落点。
+
+   为什么白边必须跟着 scale 一起回来：卡片住在 gap:1px 的网格里，那 1px 就是分隔线
+   本身。放大 0.5% 时横向出边是 548.5×0.005/2＝1.37px（盖得住），**纵向只有
+   265.828×0.005/2＝0.665px**（同一个百分比除的是卡高而不是卡宽），于是上下两条缝
+   各漏约 1/3 像素的灰 —— 那正是上一轮被叫作「模糊」的东西的一半。另一半是小到
+   1% 的缩放会被浏览器按栅格尺度量化成 1.0、整张卡当贴图放大，重采样把图里游戏
+   自带的说明小字抹软（这一半白边治不了，它是 scale 本身的代价，用户这次要的就是
+   scale，所以知情接受）。白边是纯重绘、不参与布局也不重采样，1px 恰好把网格那条
+   缝盖满，四边都是硬的 —— 4 倍探针实测：不悬停时缝是 4 个设备像素的 #DEE2DF；
+   只有 scale 那版缩成「1 个整的＋1 个浅的」；加白边后整段变成 #FFFFFF。
+
+   投影写在白边后面：先 1px 实心、后带模糊的 --lift，顺序不能反（白边那张不带
+   模糊和偏移，负责把卡片边界画到分隔线上面）。
+
+   焦点与悬停同一套：键盘走到这张卡上，该看到和鼠标一样的东西（全站那条
+   :focus-visible 的墨色轮廓照旧会叠上来，两条不冲突）。
+
+   下面是这一处试过、已经作废的几版，留个路标：
+   ① 黑色描边 + 只放大缩略图 —— 用户：「不要黑色边框效果，缩略图跟文字应该看成
+      一体，有什么动画效果都应该一起出现」。「一体」从那时起就是硬约束。
+   ② 只有 transform:scale（1.02 → 1.01 → 1.005）—— 幅度收对了，但上下两条缝
+      本来就盖不满，1.005 又小到会被量化栅格，于是有了 ③ 和那次的「模糊」。
+   ③ 只有白边（第四、五版）—— 缝盖住了、也不重采样，但用户随即要灰：
+      「鼠标悬停，目录变灰，整个变，包括图和文字」。
+   ④ 整张卡变灰（第六版）—— 用户：「还是不好看，取消掉这个鼠标悬停效果」，
+      于是回到 ②＋③ 的组合。 */
+.glance-grid.guide-grid{
+  --card-raised:#FFFFFF;
+  --lift:0 1px 2px rgba(21,24,27,.05), 0 14px 32px -16px rgba(21,24,27,.16);
+}
+.glance-grid a.glance-card.guide-card{
+  transition:background-color .15s, box-shadow .18s ease, transform .18s ease;
+}
+.glance-grid a.glance-card.guide-card:hover,
+.glance-grid a.glance-card.guide-card:focus-visible{
+  position:relative; z-index:1;
+  background:var(--card-raised);
+  transform:scale(1.005);
+  box-shadow:0 0 0 1px var(--card-raised), var(--lift);
+}
+
+.guide-list{margin-top:14px; display:grid; gap:9px}
+.guide-list li{
+  font-size:14.5px; color:var(--ink-2); line-height:1.7;
+  padding-left:16px; position:relative;
+}
+.guide-list li::before{
+  content:""; position:absolute; left:0; top:.62em; width:8px; height:2px;
+  background:var(--line-2);
+}
+.guide-list strong{color:var(--ink); font-weight:600}
+
+/* 图块。站上此前没有 figure/figcaption 规则。说明文字走可见的双语
+   <figcaption class="sp-note">，因为 alt 属性装不下两种语言 —— 原因见
+   src/view-guides.js。img 的 width/height 是数据的内在尺寸（构建读不出
+   PNG 头），这里再把宽度交给容器，两者配合的结果是：字节还没到，图就已经
+   按正确比例占好了位置，正文不会被顶下去。 */
+.guide-fig{margin:20px 0 0}
+.guide-fig img{
+  display:block; width:100%; height:auto;
+  border:1px solid var(--line); background:var(--surface);
+}
+.guide-fig figcaption{margin-top:8px}
+
+/* 首页攻略块。每篇一道细线，标题在上、它回答的问题在下 —— 形状和
+   .faq-item 一样，但不搬它左侧那条色脊：那不是装饰，是 .faq-item:target
+   用的锚点提示，搬过来会让人以为这一条也能被单独链到。
+
+   2026-10-09：每条左边补上一张缩略图（用户：「加上缩略图，加在文字的左边」）。
+   图来自这篇攻略自己的封面，也就是 guides.html 那张卡上的同一张 —— 一段话里
+   再选一张图，等于给「哪张图代表这篇」多开一个真源。
+
+   160px 是照着这条本来就有的高度挑的，不是照着版面挑的：条目里那两行字在
+   1100px 宽的卡上是 78px 高，160 × 16/9 = 90px，两者相差十来像素 —— 也就是
+   说这一栏既不比字矮到无处安放，也不反过来替整条定高。图上下的 15px 内边距
+   仍然留在 .guide-home-item 上（细线在条目的边上，不在图上）。
+
+   **宽度随卡宽走（clamp），不是几个写死的档位。** 22% 在整幅上（卡里侧 1040px）
+   是 229px，正好撞上 160px 的上限，之后一路降下来：640px 的屏给 124px、380px
+   给 88px（下限，实测 340px 的屏也不再往下压）。这样写的好处是**每一档右边都
+   留着 176px 以上的文字栏**，而 160/108 两档配一条 640px 媒体查询做不到 —— 那条
+   在 400px 的屏上会让 160px 的图吃掉卡里侧的一半以上，文字挤成十来个字宽的
+   竖条。中间那几档也不必靠断点硬跳。百分比除的是网格容器自己的宽度（和
+   --gut 那条 clamp 同一个算法），不是视口宽。
+
+   窄屏上**图不搬到文字上面去**（目录卡那一档要搬，是因为 260px 的板子在六百多
+   像素的卡里还当得起板子）：这里它本来就只有一百多像素，一旦通栏变成 16:9 的
+   大图，五条就是五张图，首页这一块会长出一倍。
+
+   aspect-ratio + object-fit:cover 和目录卡那条板子同一套：五篇的封面尺寸各不
+   相同（1600×900、1600×1200、900×1600……），谁都不许替这一行定形状。 */
+.guide-home{margin-top:2px}
+.guide-home-item{
+  padding:15px 0; border-top:1px solid var(--line);
+  display:grid; grid-template-columns:clamp(88px,22%,160px) minmax(0,1fr); gap:16px;
+  /* 图是这一行的第一块，不是这一条的中点 —— 条目标题折成两行时，让图仍然
+     顶在它自己的上沿。stretch（默认值）会把图拉成和整条一样高，aspect-ratio
+     随即作废，图就被压变形了。 */
+  align-items:start;
+}
+.guide-home-item:last-child{border-bottom:1px solid var(--line)}
+/* 缩略图的样式照 .specimen-img（首页自己那张标本墙）走：细线、10px 圆角、
+   纯白底。首页的图就该是一个样子，而这张图和那张之间只隔半屏。
+   没有 padding —— 那圈内边距是给头像留的（头像的图形不顶到描边上），封面截图
+   要的是铺满。 */
+.guide-home-thumb{
+  display:block; width:100%; height:auto; aspect-ratio:16/9;
+  object-fit:cover; object-position:center;
+  background:var(--card-raised);
+  border:1px solid var(--line); border-radius:10px;
+}
+.guide-home-body{min-width:0}
+.guide-home-q{
+  font-family:var(--display); font-size:17px; font-weight:600;
+  letter-spacing:-.012em; line-height:1.45;
+}
+.guide-home-q a{text-decoration:none; border-bottom:1px solid transparent}
+.guide-home-q a:hover{border-bottom-color:var(--ink)}
+.guide-home-a{margin-top:6px; font-size:14px; color:var(--ink-2); max-width:66ch; line-height:1.7}
+.guide-home strong{color:var(--ink); font-weight:600}
 
 /* ── 常见问题（faq.html） ─────────────────────────────────────
    五十条问答一屏装不下，所以页面先给一张分区地图，再按分区摊开。
@@ -1811,6 +2214,17 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   /* 冲突表的行标题已经是自己的标签，不需要再顶一个 data-col */
   .conf-table th[scope="row"]{padding-bottom:8px}
   .conf-table caption{padding-bottom:6px}
+}
+
+/* 攻略目录卡：窄屏时图回到顶上、通栏，也就是又变成一张图加一段字。
+   断点是 680px，跟着上面那一档走（**上一版是 520px，那是对 160px 的小图算的 ——
+   260px 的板子要右边留着 380px 以上才不挤，520 那个数跟着小图一起作废了**）。
+   只需两条：板子留在第一行，文字挪到第二行。**图不用重排 —— 它在 markup 里本来
+   就写在最前面，当初那么写就是为了这一档。**
+   贴边在这一档仍然成立，只是换了一组边：上面那条边和左右两条边。 */
+@media (max-width:680px){
+  .glance-grid a.glance-card.guide-card{grid-template-columns:minmax(0,1fr)}
+  .guide-card .guide-body{grid-column:1; grid-row:2}
 }
 
 @media (prefers-reduced-motion:reduce){

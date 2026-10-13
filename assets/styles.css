@@ -88,9 +88,19 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 /* ── 语言切换按钮 ──
    默认隐藏，等 app.js 跑起来往 <html> 加 .lang-on 才显示。不用 [hidden]：
    作者样式里的 display 规则永远压过浏览器默认的 [hidden]{display:none}，
-   这个坑本文件里已经踩过一次（见下面 .is-hidden 的注释）。 */
+   这个坑本文件里已经踩过一次（见下面 .is-hidden 的注释）。
+
+   按钮上的字是「切过去会得到的那门语言」，所以英文界面印「中文」、中文界面印
+   「EN」。这两个标签不一样宽（CJK 是 1em 定宽的，拉丁字母只有半个多 em：实测
+   「中文」46.39px、「EN」34.89px），而按钮是 .nav 里 space-between 的第三个
+   子项 —— 它一变宽，两个间隙就一起变窄，整条导航连按钮自己一起左右挪。
+
+   所以宽度不跟着标签走：min-width 取宽的那个标签（「中文」= 2×11.5px 字 +
+   2×0.69px 字距 + 2×10px 内边距 + 2×1px 描边 ≈ 46.4px），窄的那个居中。两个
+   标签算出来都是 47px，按钮宽度恒定，布局再无输入。 */
 .lang-toggle{
   display:none; flex:none;
+  min-width:47px; text-align:center;
   font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.06em;
   color:var(--ink-2); background:var(--surface);
   border:1px solid var(--line-2); border-radius:3px;
@@ -155,11 +165,23 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 .spectrum i:nth-child(10){animation-delay:.38s}
 @keyframes spectrumIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
-/* ── 导航 ── */
+/* ── 导航 ──
+   三个子项：品牌 / 导航链接 / 语言按钮，space-between 把两个缝分匀。
+
+   nowrap 是承重的。英文导航比中文宽得多（「Team Building」「Interactive Map」
+   这些词比中文标签长），三项加起来约 1151px，而 1180 的容器扣掉两侧内边距只剩
+   1100 —— 只要允许换行，被挤下去的一定是排在最后的语言按钮：它会掉到第二行
+   最左边，于是同一颗按钮在中文下在右上角、在英文下在品牌底下。不许换行之后，
+   宽度不够时由 .nav-links 自己缩（它本来就是 flex-wrap:wrap，缩到多少折几行），
+   按钮永远待在内容盒的右边。680px 以下重新放开换行，见那条 @media。
+
+   align-items 从 center 改成 flex-start 也是为这件事：英文下 .nav-links 折成
+   两行会把整行撑高，center 会把品牌和按钮一起往下推 —— 那样切换语言时按钮照样
+   会动，只是从左右动变成上下动。三者顶部对齐之后，行高怎么变都与它们无关。 */
 .nav{
   max-width:var(--max); margin:0 auto;
   padding:20px var(--gut);
-  display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:24px; flex-wrap:nowrap;
 }
 .nav-brand{display:flex; align-items:center; gap:10px; text-decoration:none}
 /* 站标不再是两个字母，是 src/brand.js#markHTML() 画的那块点阵 A —— 同一份
@@ -435,7 +457,7 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   overflow:hidden; margin-top:3px;
   font-size:12.5px; line-height:1.5; color:var(--ink-2);
 }
-/* 徽章只有四个（模板里各一份，脚本按 data-kind 克隆），颜色一律墨色 ——
+/* 徽章只有五个（模板里各一份，脚本按 data-kind 克隆），颜色一律墨色 ——
    全站只有属性色一个颜色语义，分类不是属性的就得上灰的。 */
 .search-kind{
   flex:none; margin-top:1px;
@@ -885,9 +907,12 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    四只官方索引里没有的物种没有图，这一格就只剩名字，不需要额外规则。 */
 .dex-head{vertical-align:middle; margin-right:8px}
 /* 道具图标。宽度定在**外框**上而不是 img 上，这是关键：
-   items.html 103 行里只有 41 行有图，图直接把文字推开 ~41px，
-   于是同一列里「有图的」和「没图的」名字对不齐。外框让没图的行
-   也占住同样的宽度，只留空框不画东西。
+   外框让整列占住同样的宽度 —— 图直接把文字推开 ~41px，
+   同一列里「有图的」和「没图的」名字就会错开。没图的行也拿到同样的外框，
+   只留空框不画东西。
+   2026-10-12 之前 103 行里只有 41 行有图，空框是常态；现在每行都有图
+   （见 src/item-icons.js），空框退成兜底：只有一行被手加进 content.js
+   却没配上图时才会出现。机制留着，因为尺寸只声明在外框这一处。
    空框是 <span> 不是占位图 —— 里面什么都没有，读不成「这件道具就长这样」，
    和上面 dex-head 那条「没图就是没图」并不冲突。
    高度也必须给：空 <span> 的高度是 0，没有它的话「有图的行」行盒高 34px、
@@ -1159,7 +1184,11 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    三块卡片共用一套语汇：网格缝隙 1px、底色铺 --line，缝就成了发丝
    分隔线（首页 .sys-grid 那一套），卡片本身是不透明的 --surface。
    不投阴影 —— 纸面本来就是平的，浮起来的卡片会和整站的层级语汇打架，
-   而这一页已经有一个真正需要抢眼的东西了，见下。 */
+   而这一页已经有一个真正需要抢眼的东西了，见下。
+
+   2026-10-12 起**攻略目录页不再属于这一套**：用户要圆角加空隙，那边改成
+   真的空隙＋圆角卡，这套 1px 缝的写法它一条都不用了 —— 见 .guide-grid
+   那一段。速览卡、技能卡、形态卡三处一个字没动。 */
 .glance-grid, .skill-grid, .form-cards{
   display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:1px; background:var(--line); border:1px solid var(--line); margin-top:16px;
@@ -1438,13 +1467,26 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 .sp-guide .sp-lede,
 .sp-guide .sp-note{max-width:none}
 
+/* 日期那行（「更新于 2026 年 10 月 9 日」）是水属性蓝，2026-10-12，用户：
+   「时间帮我改成其他颜色」。色值不在这条规则里 —— view-guides.js 从
+   ANIIMO_TYPES 取、以 --c 内联到元素上（见 :root 上面那两条注释：属性色
+   只有 src/data.js 一个真源）。这里只负责读。
+
+   只写 .sp-guide .sp-no，不碰裸的 .sp-no：那个类是全站每一页的眉行
+   （物种页印编号、目录页印 eyebrow），把日期上色变成把全站眉行上色。
+   优先级 (0,2,0) 压得住上面 .sp-no 的 (0,1,0)，不靠文件先后。
+   var(--c) 带回落：万一哪天真有页面忘了给 --c，这行退回原来的灰，而不是
+   变成一个没有颜色的元素。目录卡那条同款，见 .guide-card 那段。 */
+.sp-guide .sp-no{color:var(--c,var(--ink-3))}
+
 /* 栏窄了，标题就得比物种页那套小一号：56px 那个尺寸是按整幅 1100px 配的，放进
    这条栏里会折成三行、最后一行只剩一个词。44px 时英文标题是两行，中文的 22 个
    字也是一行半到两行。
    行高从 1.04 提到 1.14 —— 1.04 是给单行标题配的，两行以上的大标题挤在一起，
-   行与行之间连气都透不过来。 */
+   行与行之间连气都透不过来。1.22 是用户看过 1.14 之后要的「再大一点点」，
+   只动这里，物种页的 .sp-title 不跟着变。 */
 .sp-guide .sp-title{
-  font-size:clamp(30px,4.4vw,44px); line-height:1.14;
+  font-size:clamp(30px,4.4vw,44px); line-height:1.22;
   /* text-wrap:balance 是为了中文：断行按字走，不然「改了捉 / 宠游戏的什么」会把
      「捉宠」劈成两半。均衡之后两行各占一半，换行点落在词组之间。英文顺带也好
      看些 —— 原来第二行比第一行长出一大截。旧浏览器不认识这条，退回默认即可。 */
@@ -1484,13 +1526,56 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
    字（19px 字号下每行十来个字），标题会折成六到八行 —— 那正是「加一篇攻略，卡片变
    大」最厉害的一段窗口。500px 让字栏至少剩 204px；代价是窗口窄于约 1095px 时目录
    从两列变一列（两列挤着不如一列宽着，图的边也贴得住）。 */
+/* 圆角与空隙，2026-10-12。用户：「帮我把每个目录的四个角换成弧度，并每个目录
+   左右上下都有一点点间隔」。
+
+   三条是一体的，撤任何一条都露馅：
+
+     · `gap:1px` → `gap:16px`。上面 .glance-grid 那段说的「缝就是分隔线」在
+       目录页作废 —— 缝从此是真的空隙。
+     · 那一缝的底色（`.glance-grid` 的 `background:var(--line)`）和网格自己的
+       1px 描边必须一起撤。**底色铺的是整张网格，不是缝**，留着的话 16px 里会
+       露出一整条 16px 宽的灰带。
+     · 卡片自己补一道 1px `--line` 描边。原来卡片的边界是网格铺出来的，底撤了
+       得由卡片接过来；不补的话卡面（--surface #FCFDFC）和纸面（--paper #F2F4F3）
+       只差三个色阶，正是 :root 那条注释说的「读起来不是抬起，而是纸上的洞」。
+       这 2px（上下各 1px）落在卡高上：1100px 网格上卡片从 265.8 变 267.8。
+
+   16px 不是挑的：`.glance-grid` 自己的 `margin-top`、`.sp-block` 那套间距都是
+   16px，用同一个数这块才不像从别处搬来的。半径 12px 同理 —— 首页四类盒子
+   （.about-point / .sys-card / .readout）和 .hub-content 都是 12px，全站卡片
+   只有这一个半径。
+
+   代价写在明处，两条：
+
+     · 两列的窗口门槛跟着抬高：一条轨道要 500px，两列就是 2×500＋缝，门槛从
+       1001px 抬到 1016px。实测（同一条探针，只把 gap 改回 1px 当对照）两列的
+       窗口下限从约 1083px 抬到约 1096px —— 改后 1100px 仍是两列、1095px 已经
+       折成一列。上面那条 500px 列宽下限的注释里写着「窄于约 1095px 变一列」，
+       那个数是在旧写法上量的、偏低一档，**改完之后反而正好是准的**。
+       500px 下限本身、`grid-auto-rows:1fr`、标题 4 行与简介 3 行两条截断，
+       全部留在原处一个字没动。
+     · 两列时每列的字栏窄 7.5px（多出来的 15px 缝由两列对半分）。上面那条
+       「最长标题在 ≥1195px 窗口上一个像素都不改」因此往宽端内缩了一点 ——
+       省略号出现的窗口比原来宽，但它本来就在那个窗口里出现过，不是新开的口子。 */
 .glance-grid.guide-grid{
   grid-template-columns:repeat(auto-fit,minmax(min(500px,100%),1fr));
   grid-auto-rows:1fr;
+  gap:16px; background:none; border:0;
 }
+/* border-radius + overflow:hidden 是一对，理由和 .hub-map 那条一模一样：缩略图是
+   <img>，左半边整块顶在卡片边上，不裁一刀，方角会顶出圆角版面。
+   overflow 裁的是卡片的**子元素**，两样东西不受影响：卡片自己的 box-shadow（悬停
+   那道 --lift 画在边框盒外面）、以及 :focus-visible 的轮廓（outline 画在元素自己
+   的 overflow 之外，全站那条墨色轮廓照旧）。
+
+   **贴边的读法没变**：原来卡片左边那道 1px 是网格画的、图的左边贴着它，现在是
+   卡片自己的描边、图仍贴着它。多出来的 2px 由 box-sizing:border-box 从字栏扣，
+   260px 的板子一个像素不动 —— 上面那段算 260 的依据（146 = 260×9/16）照旧成立。 */
 .glance-grid a.glance-card.guide-card{
   display:grid; grid-template-columns:260px minmax(0,1fr);
   padding:0; align-items:stretch;
+  border:1px solid var(--line); border-radius:12px; overflow:hidden;
 }
 /* aspect-ratio:16/9 是承重的，不是版面偏好，加在 2026-10-09。这条板子多高，只有
    右边那摞字说了算 —— 这是上面那段定下的规矩。但 width:100% 加 height:auto 意味着
@@ -1553,6 +1638,12 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   line-clamp:4; overflow:hidden;
 }
 
+/* 目录卡上那行日期，同一条 --c，理由与回落写在 .sp-guide .sp-no 那条
+   （2026-10-12）。挂 .guide-card 不挂裸的 .card-k：那个类同时是速览卡、
+   技能卡的字段名和形态卡的地点/进化去向，四个地方共用一个类，所以四个
+   地方共用一条规则；这条只认攻略目录卡里那一个。 */
+.guide-card .card-k{color:var(--c,var(--ink-3))}
+
 /* 悬停与键盘焦点：整张卡微微放大，2026-10-10（第七版）。
 
    第六版是「整张卡变灰」（底色 --paper ＋ 缩略图 filter:grayscale(1)，实测卡面
@@ -1561,24 +1652,22 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
    这一路，幅度仍停在 **0.5%**（历史：1.02 → 1.01 用户两次说「动作幅度太大」，
    1.005 是那样收出来的档位，这次说的也还是「一点点」）。
 
-   三条一起做，缺一条都不对：
+   两条一起做：
      · transform:scale(1.005) —— 内容真的往外长，图和字在同一块变换里，天然
        「一体」（第一版「只放大缩略图」就是在这里被否掉的）；
-     · box-shadow:0 0 0 1px var(--card-raised) 那圈白边 —— **承重的**，见下；
      · box-shadow:var(--lift) 投影 —— 让「浮起来」这件事有落点。
 
-   为什么白边必须跟着 scale 一起回来：卡片住在 gap:1px 的网格里，那 1px 就是分隔线
-   本身。放大 0.5% 时横向出边是 548.5×0.005/2＝1.37px（盖得住），**纵向只有
-   265.828×0.005/2＝0.665px**（同一个百分比除的是卡高而不是卡宽），于是上下两条缝
-   各漏约 1/3 像素的灰 —— 那正是上一轮被叫作「模糊」的东西的一半。另一半是小到
-   1% 的缩放会被浏览器按栅格尺度量化成 1.0、整张卡当贴图放大，重采样把图里游戏
-   自带的说明小字抹软（这一半白边治不了，它是 scale 本身的代价，用户这次要的就是
-   scale，所以知情接受）。白边是纯重绘、不参与布局也不重采样，1px 恰好把网格那条
-   缝盖满，四边都是硬的 —— 4 倍探针实测：不悬停时缝是 4 个设备像素的 #DEE2DF；
-   只有 scale 那版缩成「1 个整的＋1 个浅的」；加白边后整段变成 #FFFFFF。
+   **那圈 1px 白边（`0 0 0 1px var(--card-raised)`）2026-10-12 撤掉了 —— 它
+   不是被哪一版动画挤掉的，是它要治的病没了。** 它当初是承重的：卡片住在
+   gap:1px 的网格里，那 1px 就是分隔线本身，而 scale 0.5% 在纵向上只出边
+   265.828×0.005/2＝0.665px（同一个百分比除的是卡高而不是卡宽），上下两条缝各漏
+   约 1/3 像素的灰 —— 那正是上一轮被叫作「模糊」的东西的一半。缝从 1px 变成 16px
+   之后，0.665px 的出边离邻卡还有十几像素，没有东西要盖了；留着反而在卡外多画
+   一圈白晕，而卡片现在是靠自己的描边和 --lift 站着的。
 
-   投影写在白边后面：先 1px 实心、后带模糊的 --lift，顺序不能反（白边那张不带
-   模糊和偏移，负责把卡片边界画到分隔线上面）。
+   另一半「模糊」白边本来就治不了 —— 小到 1% 的缩放会被浏览器按栅格尺度量化成
+   1.0、整张卡当贴图放大，重采样把图里游戏自带的说明小字抹软。它是 scale 本身的
+   代价，用户要的就是 scale，知情接受，这一条今天照旧。
 
    焦点与悬停同一套：键盘走到这张卡上，该看到和鼠标一样的东西（全站那条
    :focus-visible 的墨色轮廓照旧会叠上来，两条不冲突）。
@@ -1591,7 +1680,9 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
    ③ 只有白边（第四、五版）—— 缝盖住了、也不重采样，但用户随即要灰：
       「鼠标悬停，目录变灰，整个变，包括图和文字」。
    ④ 整张卡变灰（第六版）—— 用户：「还是不好看，取消掉这个鼠标悬停效果」，
-      于是回到 ②＋③ 的组合。 */
+      于是回到 ②＋③ 的组合。
+   ⑤ ②＋③（第七版，2026-10-10 至 10-12）—— 目录页改圆角加空隙那天，③ 的白边
+      随那条 1px 缝一起作废，② 的 scale 活到今天。 */
 .glance-grid.guide-grid{
   --card-raised:#FFFFFF;
   --lift:0 1px 2px rgba(21,24,27,.05), 0 14px 32px -16px rgba(21,24,27,.16);
@@ -1604,7 +1695,7 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   position:relative; z-index:1;
   background:var(--card-raised);
   transform:scale(1.005);
-  box-shadow:0 0 0 1px var(--card-raised), var(--lift);
+  box-shadow:var(--lift);
 }
 
 .guide-list{margin-top:14px; display:grid; gap:9px}
@@ -1736,8 +1827,46 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
    钉子列表下面一段、每枚钉子打开的浮窗里还有一段。诚实不是这一页的加分项，
    是它存在的前提 —— 一张看起来像测绘过的图，比一张没有钉的图更糟。
 
-   舞台用深色底：海洋的蓝比纸白更接近它本来的样子，图四周的留白也不会
-   把地图切出一块方的来。 */
+   舞台用深色底：海洋的蓝比纸白更接近它本来的样子。
+
+   全站只有这一页的框通到视口两边。做法不在这一页的正文里，而在阅读栏本身：
+   下面 .sp--map 那几条把 .sp-wrap 的 max-width 让给了每个块自己的左右外边距，
+   于是 .sp-bleed 这一块量出来的就是整扇窗口 —— 地图从左沿铺到右沿，不是从
+   1180 的栏杆里探出去。舞台的高宽比接着写成底图自己的高宽比（1110:874），
+   所以地图恰好填满舞台，四周一条深色底都不剩。 */
+/* ── 地图页破格：把阅读栏从外壳搬到每个块身上 ──
+   .sp-wrap 的 max-width 是阅读栏，全站每个页面都靠它。这一页不要栏，
+   要整扇窗口，但正文还得停在原来的列上 —— 所以外壳不再限宽，改由每个直接
+   子项自己扛左右的外边距。--sp-pad 就是原来那 40px 内边距加上居中让开的那
+   一半，两者合起来正好复现 .sp-wrap 的内容盒（宽屏是 1100），一个像素不差。
+
+   为什么不用 100vw 加一条兜底裁剪：100vw 含滚动条、100% 不含，两者差的
+   十几像素要么压出一条横向滚动条，要么被裁剪悄悄吞掉 —— 前者是 bug，后者
+   是切内容。搬外边距没有这个误差。
+
+   自定义属性按 token 继承，里面的 % 在谁身上求值就以谁为准，所以 --sp-pad
+   定义在外壳上、只在外壳的子项上用：那些子项的内容盒就是窗口宽。 */
+.sp--map .sp-wrap{
+  max-width:none; padding:0;
+  --sp-pad:max(var(--gut), calc((100% - var(--max)) / 2 + var(--gut)));
+}
+.sp--map .sp-wrap > *{margin-inline:var(--sp-pad)}
+/* 全站唯一一条不吃外边距的块：它自己就是整扇窗口，里面的地图从它的左沿
+   到右沿。 */
+.sp--map .sp-wrap > .sp-bleed{margin-inline:0}
+/* 破格之后，这一块里的正文要自己走回阅读栏。尺子和上面同一条：.sp-bleed
+   让开了外边距，它的内容盒仍等于窗口宽。 */
+.sp--map .sp-bleed > .sp-col{margin-inline:var(--sp-pad)}
+/* 这一段的横线不能跟着铺满。别处的线都停在 1100，只有它通到两边就看着像
+   画错了；而 border-top 画在边框盒上、也就是整扇窗口，所以改由 ::before
+   画 —— 伪元素在内容盒里，量到的是阅读栏。22px 是从 .sp-block 那里接过来的
+   那一段上边距。 */
+.sp--map .sp-bleed{border-top:0; padding-top:0}
+.sp--map .sp-bleed::before{
+  content:""; display:block; height:1px;
+  background:var(--line); margin:0 var(--sp-pad) 22px;
+}
+
 .map-frame{
   margin-top:18px; display:grid;
   grid-template-columns:minmax(0,1fr) 232px;
@@ -1747,7 +1876,10 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 .map-stage{
   position:relative; overflow:hidden;
   background:#0C1E32;
-  height:clamp(320px,54vh,560px);
+  /* 1110:874 是底图自身的高宽比，和 <img id="mapImg"> 上的 width/height 同源。
+     用它定高，舞台就等于地图，Leaflet 在 1× 把整张图铺满时四周不剩深色底；
+     高度不再由视口决定，宽屏上地图就跟着框一起长大。 */
+  aspect-ratio:1110 / 874;
   cursor:grab;
   /* touch-action 默认放行纵向滚动，而不是 none。这块地图在手机上占掉半屏，
      若在这里吞掉纵向手势，读者手指停在地图上就翻不动页了 —— 这正是
@@ -1827,14 +1959,66 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 .map-pin-tip:hover .map-pin,
 .map-pin-tip.is-on .map-pin{transform:scale(1.34)}
 
-/* 悬停时钉子自己报名字。内容是区域卡里那个 <h3> 的一串克隆，
-   所以中英文跟着页面走，这里一个字都不用再配一遍。 */
-.map-tip-box{
-  background:var(--ink); color:var(--surface);
-  border:0; border-radius:2px; padding:3px 7px; box-shadow:none;
-  font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+/* 图上没印名字的那两个区域，钉子画成空心圈 —— 圈里的白底就是「这个位置还是
+   我们估的」这句话。用 inset 描边而不是 border：钉子只有 14px，加一圈 border
+   会让这两枚比其余十四枚大一号，而它们正是不该显得更特别的那两枚。 */
+.map-pin-tip.is-est .map-pin{
+  background:var(--surface);
+  box-shadow:inset 0 0 0 3px var(--ink),
+             0 0 0 2.5px var(--surface), 0 0 0 3.5px rgba(21,24,27,.42);
 }
-.map-tip-box::before{display:none}
+
+/* 区域名，印在钉子右边 —— 从第一帧起、任何缩放级别都在，因为游戏自己的地图
+   就是把名字印在图上的，读者拿着两张图对照，同一个名字该在同一个地方。
+
+   内容是区域卡里那个 <h3> 的一串克隆，等级区间是同一个克隆里的一截，所以中英
+   文和「Lv.46~48」都跟着页面走，这里一个字都不用再写一遍。
+
+   **字号跟着地图放大缩小**（`--map-t` 是 assets/map.js 每帧写上的倍数，1 到 5），
+   因为名字是印在地图上的、不是浮在地图上面的一层 UI：地图放到 3 倍，名字就该是
+   3 倍，否则读者放大是为了看清地形，名字却相对越缩越小。**钉子是 14px 不变的**
+   —— 那是我们的东西、还要能点，只有地形和印在地形上的字属于地图。
+
+   **1× 的那个 10px 是用户两次要求的落点。** 先是 12.5px，用户「太大了，遮住地图
+   了，把文字缩小」。1× 时整幅世界图只有 513px 宽，十六个名字加等级区间实测占掉
+   图面约 19%（名字盒总面积 39,577px²，图面 207,252px²），看着就是名字盖着地形。
+   12.5→10 是线性砍两成、**面积砍三成半**（19%→12%）。不能再小太多：中文到这个
+   尺寸已在可读的下限上，而且这已经相对地图是游戏自己印刷尺寸的 3.6 倍了（游戏
+   印的名字约 6 世界像素，等于我们 1× 下的 2.8px，那个尺寸没法看）。
+
+   没有底色，也没有描边（用户：不要白色底色）。压在深绿森林和深蓝海面上仍然要
+   读得出来，靠的是一圈跟着字号走的纸白晕（`text-shadow` 的模糊半径也写 em），
+   不是一块板子。**这圈晕要窄**：模糊半径是实打实的距离，一宽，相邻字母的晕就
+   在整行字背后连成一条浅色带 —— 板子撤了，看上去还是一块板子（实测 0.34em
+   在 1.4× 下是 6px，就是一条带子）。现在这两个数是照游戏自己印的那张图配的：
+   参考图里「雪麓草甸」的晕约合 0.05em。pointer-events:none —— 名字横在图上，
+   但它不能替旁边的钉子吃掉点击。
+
+   排得下与排不下都是量出来的，不是随手取的：1400×900 的窗口下框是 865×404，整幅
+   世界图按高缩成 0.462 倍（宽 513px），而「丹岩高地」和「海角丘谷」这一对竖直只
+   隔 17 个世界像素 —— 名字盒真的会叠，实测（镜像版）重叠 123×14px。所以保底的
+   不是间距，而是下面的 .is-edge：伸到框外的名字自己让一行。宁可挤，也不把名字
+   藏起来 —— 藏起来就等于这页又变回「不放大看不到名字」。 */
+.map-name{
+  position:absolute; left:1.5em; top:50%; transform:translateY(-50%);
+  white-space:nowrap; pointer-events:none;
+  font-family:var(--cjk);
+  font-size:calc(10px * var(--map-t, 1));
+  font-weight:600; line-height:1.5;
+  color:var(--ink);
+  text-shadow:0 0 .1em var(--surface), 0 0 .035em var(--surface);
+}
+/* 名字要伸出右框的那几枚：往下让一行，水平位置由 assets/map.js 量完宽度写进
+   style（只往左让到刚好不出框，不镜像到钉子左边）。1× 时整幅图已经在框里，
+   没有地方可以拖过去，名字伸到框外就是永远读不到。两个数都是 em，理由同上。 */
+.map-pin-tip.is-edge .map-name{top:calc(50% + 2.1em)}
+/* 等级区间在图上得跟名字同色、同着长。.area-lv 默认是 11px 的灰字（那是给侧栏和
+   浮窗标题用的），灰字压在深绿地形上根本读不出来 —— 游戏自己印的是同一个墨色；
+   而写死的 11px 还会把 --map-t 的缩放整条吃掉，名字长到三倍、数字还是 11px。
+   这条只作用在 .map-name 里面，所以侧栏和浮窗那两处一点没动。0.86em 是个比例，
+   名字缩到 10px 它就跟着变成 8.6px —— 参考图里游戏印的名字和等级本来就是同
+   字号，这里留一点差只是为了让「Lv.」那截不跟名字抢。 */
+.map-name .area-lv{font-size:.86em; color:inherit; margin-left:.45em}
 
 /* ── 浮窗 ──
    Leaflet 自带的是圆角白卡片加投影，和本站的方角细线不是一套。连它那个
@@ -1872,8 +2056,15 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 .map-pop-list a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--line-2)}
 .map-pop-list a:hover{color:var(--ink); border-bottom-color:var(--ink)}
 
-/* ── 侧栏 ── */
-.map-side{background:var(--surface); padding:15px 15px 17px; overflow:auto; max-height:560px}
+/* ── 侧栏 ──
+   这一栏的高度由舞台说了算，不是由它自己的内容说了算：网格的行高按内容取
+   最大值，而这一栏（搜索框 + 十六条区域 + 两段说明）约 950px 高，几乎不随
+   窗口变；舞台却随窗口在 250px 到 1300px 之间伸缩。两者一比，窄一点的窗口
+   上这一栏就会把整行撑到 950，舞台被拉高、地图上下重新露出深色底。
+   contain:size 就是为这件事存在的：声明自己不吃内容的影响，于是行高完全由
+   舞台的高宽比定，这一栏被拉伸到行高再由 overflow 自己滚。
+   900px 以下布局竖过来，那时该由内容说话，见那条 @media。 */
+.map-side{background:var(--surface); padding:15px 15px 17px; overflow:auto; contain:size}
 .map-side-h{
   font-family:var(--mono); font-size:10.5px; letter-spacing:.1em;
   text-transform:uppercase; color:var(--ink-3); font-weight:500;
@@ -2037,11 +2228,25 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   font-family:var(--display); font-size:16.5px; font-weight:800;
   letter-spacing:-.015em; line-height:1.3;
 }
+/* 等级区间，读在区域名后面。它住在 <h3> 里面是有意的：钉子悬停的小签、
+   浮窗的标题、图上印的名字，三处都是这一串 <h3> 的克隆，所以一个 span 到头，
+   三处都不用知道有这么个数。 */
+.area-lv{
+  margin-left:7px;
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  color:var(--ink-3); letter-spacing:.02em;
+}
 .area-count{flex:none; font-family:var(--mono); font-size:11px; color:var(--ink-3)}
 .area-forms{margin-top:10px; font-size:13.5px; color:var(--ink-2); line-height:1.78}
 /* 每条一个块。这一串被读了两次：地图的搜索框拿它当搜索域，区域钉的浮窗
    整个照搬它。之前用 <br> 分隔，那两处就没法单独取到一行。 */
 .area-entry{display:block}
+/* 名字前面的官方头像。写法和 dex 表里那个 .dex-head 一样：走行内 +
+   vertical-align:middle，不为它改行的排版。
+   20px 是按浮窗里 13px 的字定的 —— 那一行本身就有 22px 的行盒，头像
+   塞得进去，行高一行都不改。这里不预留空框（道具图标那边要），因为这
+   张表上 86 只全都有官方头像，没有「有图/没图」两种行要对付。 */
+.area-head{vertical-align:middle; margin-right:7px}
 .area-forms .form-name{color:var(--ink); font-weight:600}
 .area-forms a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--line-2)}
 .area-forms a:hover{color:var(--ink); border-bottom-color:var(--ink)}
@@ -2094,7 +2299,7 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 
 @media (max-width:900px){
   .map-frame{grid-template-columns:minmax(0,1fr)}
-  .map-side{max-height:none; border-top:1px solid var(--line)}
+  .map-side{contain:none; border-top:1px solid var(--line)}
   .map-search{margin-bottom:16px}
   .map-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0 16px}
   .map-list li + li{border-top:0}
@@ -2132,8 +2337,30 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   /* 导航从 5 项长到 11 项后，原来的 24px 间距在窄屏会把它折成三行，
      并且比品牌行还抢眼。收紧行内间距和字号，让它停在两行 —— 换行本身
      仍然允许，不做汉堡菜单（那要多一份 JS，现在还不值）。
-     下拉菜单在窄屏跟着缩一号字，否则它比触发它的按钮还大。 */
-  .nav-links{gap:9px 15px}
+     下拉菜单在窄屏跟着缩一号字，否则它比触发它的按钮还大。
+
+     .nav 这里把上面那条 nowrap 放开：窄到这一步，让三个子项挤在一行已经不是
+     「按钮不动」的问题了 —— .nav-links 只能分到一百多像素，会被折成五六行的一条
+     细柱（见 .nav 那段注释）。
+
+     但按钮得钉在品牌那一行，否则它会掉到链接底下、单独占一行：那一行的位置取决于
+     链接折了几行，而英文标签比中文长（「Interactive Map」一个词顶中文四个字），
+     两种语言折出来的行数不一样 —— 等于把刚修好的毛病换个方向搬到窄屏上。
+
+     所以把视觉顺序显式写死成「品牌 → 占位条 → 按钮 → 链接」：order 在分行之前
+     就生效，第一行排不下第三个东西，链接只能去第二行、拿满整行，按钮永远跟品牌
+     同一行，占位条吃满中间的空位把它顶到最右。三行都得写 order，因为默认值是 0 ——
+     只写一半会让按钮和品牌并列在前、占位条反而落到它们后面，那时它占着右边却
+     推不动任何东西。
+
+     占位条不能让 .nav-brand 自己 flex-grow 顶替：那会把 <a> 撑到整行宽，
+     点站名右边一大片空白也会跳首页。
+     代价是按钮的视觉顺序在链接之前、DOM 顺序仍在之后，键盘 Tab 会先过完链接
+     再到按钮。 */
+  .nav{flex-wrap:wrap}
+  .nav::before{content:""; order:1; flex:1 1 auto}
+  .lang-toggle{order:2}
+  .nav-links{order:3; gap:9px 15px}
   .nav-links a{font-size:13px}
   .nav-links .nav-menu a{font-size:12.5px}
 

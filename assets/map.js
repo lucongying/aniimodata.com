@@ -19,6 +19,15 @@
        inside it, and a species link in a popup works. It cannot drift from
        the list it came from, because it IS the list it came from.
 
+       The area's name and level range drawn beside its pin on the map is the
+       same clone, off the same heading — so neither this file nor
+       assets/styles.css knows the number exists. They are on from the first
+       frame and at every zoom, because the game's own map screen prints them
+       on the map, and a reader holding the two side by side should find each
+       name in the same place — at the same SIZE, too, which is why they grow
+       with the map instead of sitting on it at a fixed size. See .map-name in
+       assets/styles.css.
+
      · SEARCH. A filter over those same rows.
 
      · THE READER'S OWN MARKERS. The only thing on this page the build did
@@ -139,6 +148,15 @@
        so it is the single switch for all of it — not a display detail. */
     stage.classList.toggle("is-zoomed", t > 1.001);
 
+    /* The area names are painted on the map rather than pinned over it, so
+       they grow with it: this one number is what .map-name multiplies its
+       size, its offset from the pin and its own line drop by. Written here,
+       on the zoom/move end, which is the moment Leaflet drops the CSS
+       transform it animates a zoom with — the transform has been scaling the
+       names along with the terrain all the way through, so the number lands
+       exactly where the animation left them. */
+    stage.style.setProperty("--map-t", t);
+
     if (scaleEl) scaleEl.textContent = (t < 1.05 ? "1" : t.toFixed(1)) + "×";
 
     /* Wheel zoom, but only for a reader who has arrived: the rest of the
@@ -245,7 +263,7 @@
 
   var pinIcon = L.divIcon({
     className: "map-pin-tip",
-    html: '<span class="map-pin"></span>',
+    html: '<span class="map-pin"></span><span class="map-name"></span>',
     iconSize: [18, 18],
     iconAnchor: [9, 9],
     popupAnchor: [0, -11]
@@ -268,6 +286,19 @@
     var title = box.querySelector(".map-pop-title");
     var name = card.querySelector(".area-name");
     if (title && name) copyChildren(name, title);
+
+    /* Two areas the game's own map screen never names, so their pin is still
+       an estimate and the line under this popup's title has to say so. The
+       sentence is a hidden element on the page, cloned like every other
+       string here — nothing in this file writes one. */
+    if (card.getAttribute("data-named") === "false") {
+      var plain = box.querySelector(".map-pop-approx");
+      var alt = document.getElementById("mapPopUnprinted");
+      if (plain && alt) {
+        while (plain.firstChild) plain.removeChild(plain.firstChild);
+        copyChildren(alt, plain);
+      }
+    }
 
     var count = card.querySelector(".area-count");
     if (title && count) title.appendChild(count.cloneNode(true));
@@ -344,6 +375,19 @@
       var m = L.marker(toLatLng(x, y), { icon: pinIcon, keyboard: false, riseOnHover: true });
       m.addTo(map);
 
+      /* The area's name and level range, printed beside the pin. It is a
+         clone of the card's own heading, so it switches language with the
+         page. `data-named="false"` is on the card because the card is the
+         data; a pin drawn from it in the hollow style says "the game's map
+         never named this one". */
+      var heading = card.querySelector(".area-name");
+      var pinEl = m.getElement();
+      if (pinEl) {
+        if (card.getAttribute("data-named") === "false") pinEl.classList.add("is-est");
+        var label = pinEl.querySelector(".map-name");
+        if (label && heading) copyChildren(heading, label);
+      }
+
       var pop = popupFor(key);
       if (pop) {
         m.bindPopup(pop, {
@@ -359,18 +403,81 @@
         m.getPopup().areaKey = key;
       }
 
-      /* A hovered pin names itself, in whichever language is showing —
-         another clone, so it costs nothing and needs no pairing here. */
-      var tip = document.createElement("span");
-      tip.className = "map-tip";
-      copyChildren(card.querySelector(".area-name") || card, tip);
-      m.bindTooltip(tip, {
-        className: "map-tip-box", direction: "top", offset: [0, -10], opacity: 1
-      });
-
+      /* No tooltip. It used to say the name on hover, which was the only way
+         to read it below the zoom threshold; now that the name is on the map
+         at every zoom, a hover tag would be the same words a second time,
+         one line above the first. */
       m.on("click", function () { markPicked(key); });
       pins[key] = m;
     })(picks[p]);
+  }
+
+  /* A pin near the right edge of the frame would print its name off the side
+     of the map, and at 1x there is nothing to pan to: the whole world is
+     already in the frame, so the name would just be cut. Such a pin drops its
+     name a line and slides it left until it fits.
+
+     Dropping the line is what stops it landing on the name to its left: the
+     pin that needs this sits ten pixels above a neighbour whose own name runs
+     a long way to the right, so sliding alone would put the two boxes through
+     each other. Sliding alone is also why this is not a mirror image of the
+     usual placement — mirroring moves the box a whole name's width, which
+     lands it squarely on that neighbour.
+
+     Nothing is moved unless moving it works: a name slides only if the whole
+     of it fits to the left of its pin, and one that cannot come in whole
+     stays on its pin and runs off the edge. So the slide has no cap — the
+     test is "can it come in", and a name that cannot is left alone. A cap is
+     the wrong shape: at 1.4x a cap of 3em cut 海角丘谷 while the full slide
+     (7.5em) brought it in, and at 3.8x it no longer mattered how far a name
+     slid, because there the names are wider than the frame on their own.
+
+     What that buys, counted at a 1400x900 window with the map at 3.8x: eight
+     overlaps and five names cut, against five overlaps and eight cut when
+     nothing is slid at all. The three names that come in are worth the three
+     overlaps they add, because a name that has been cut at the frame edge is
+     the only one of the two the reader cannot get back by panning.
+
+     Measured rather than guessed at, because whether a name overflows depends
+     on how wide it is in the language currently showing, and the language can
+     be changed after the page has loaded — which is what the observer below
+     is for. Reading the box forces the reflow that clearing `left` needs. */
+  var EDGE_PAD = 10;
+  function keepNamesInFrame() {
+    var box = host.getBoundingClientRect();
+    for (var k in pins) {
+      if (!Object.prototype.hasOwnProperty.call(pins, k)) continue;
+      var el = pins[k].getElement();
+      var label = el && el.querySelector(".map-name");
+      if (!label) continue;
+      el.classList.remove("is-edge");
+      label.style.left = "";
+      var icon = el.getBoundingClientRect();
+      /* In `em`, not `px`, because the name grows with the map and so does
+         the gap it sits at — one factor, so the two can never drift apart
+         at the far end of the zoom range. */
+      var em = parseFloat(window.getComputedStyle(label).fontSize) || 10;
+      var wide = label.getBoundingClientRect().width;
+      var fit = (box.right - EDGE_PAD - wide - icon.left) / em;
+      if (fit >= 1.5) continue;
+      /* A pin that is itself off the frame keeps its name off the frame too.
+         Without this the rule is actively wrong once the map is zoomed in:
+         the pin of a region east of the view has all the room in the world to
+         its left, so the name gets dragged the full width of the frame and
+         lands across the regions that are actually being looked at. */
+      if (icon.left < box.left + EDGE_PAD) continue;
+      if (wide > icon.left + 1.5 * em - (box.left + EDGE_PAD)) continue;
+      el.classList.add("is-edge");
+      label.style.left = Math.max(fit, (box.left + EDGE_PAD - icon.left) / em).toFixed(3) + "em";
+    }
+  }
+  keepNamesInFrame();
+  map.on("zoomend", keepNamesInFrame);
+  window.addEventListener("resize", keepNamesInFrame);
+  if (window.MutationObserver) {
+    new MutationObserver(keepNamesInFrame).observe(document.documentElement, {
+      attributes: true, attributeFilter: ["data-lang"]
+    });
   }
 
   map.on("popupopen", function (e) {

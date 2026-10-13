@@ -50,12 +50,12 @@
   if (!emptyEl || !countEl || !list) return;
 
   /* How many results the panel shows before it stops listing and starts
-     counting. The index is 259 entries; a one-letter query matches most
+     counting. The index is 288 entries; a one-letter query matches most
      of them, and past a screenful the list stops being a list. */
   var MAX = 8;
 
   /* ── read the index ──────────────────────────────────────────
-     Once, on load. Four badge spans (one per kind) and 259 links.
+     Once, on load. Five badge spans (one per kind) and 288 links.
 
      `name`, `meta` and `sub` are the lowercased text of the three
      spans, kept separately rather than as one haystack because their
@@ -116,9 +116,15 @@
   }
 
   /* Ties keep index order, which is the order build.js emits: species by
-     dex number, then items, then bosses, then the FAQ by question number.
-     So a tie is never arbitrary, and it never reshuffles between two
-     keystrokes that match the same set. */
+     dex number, then items, then bosses, then the FAQ by question number,
+     then the guides. So a tie is never arbitrary, and it never reshuffles
+     between two keystrokes that match the same set.
+
+     That order is also the reason the guides are last. A guide title is a
+     sentence, so almost any query that matches one matches it in the middle
+     — tier 1, the same tier as a species whose name merely contains the
+     query. On that tie the page whose name IS what the reader typed should
+     come first, and the article that happens to mention it second. */
   function rank(q) {
     var out = [];
     for (var i = 0; i < ENTRY.length; i++) {
@@ -166,7 +172,7 @@
       var a = r.e.el.cloneNode(true);
       a.id = "searchResult" + i;
       /* The badge is written once per kind in the template and cloned
-         here, rather than written into all 259 entries. */
+         here, rather than written into all 288 entries. */
       if (r.e.badge) a.insertBefore(r.e.badge.cloneNode(true), a.firstChild);
       list.appendChild(a);
       shown.push(a);

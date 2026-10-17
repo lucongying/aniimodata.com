@@ -27,6 +27,26 @@
   /* 属性的色值不在这里定义 —— 唯一来源是 src/data.js 的 ANIIMO_TYPES，
      由 build.js 烘进页面。元素色通过内联 style="--c:…" 注入，避免两处定义产生偏差。 */
 
+  /* ── 正文里的链接（2026-10-17）──────────────────────────────
+     上面第 61 行的 a{color:inherit} 意味着全站没有一个链接自带颜色。它本来
+     是条好规矩（导航、页脚、卡片都是整块可点的面，颜色由面来说话），但它也
+     管住了行文里的链接：一个句子里的 <a> 和周围的字长得一模一样，读者要等
+     指针变成手才知道那里能点。这条只管行文，下面「不做的事」写在每一条规则
+     自己那里。
+
+     **它不是属性色。** 全站唯一有含义的颜色仍然是 ANIIMO_TYPES 那九个，这条
+     是控件语义，所以它进 :root 而不是进那张表 —— 上面那句话说的是「元素的
+     色值不在这里」，这一个是链接的，不是元素的。
+
+     色值来历也是明说的：就是日期那行已经在用的水属性蓝（src/view-guides.js
+     的 dateC）加深一档。不另起一个色相，是因为读者已经在站上见过它 ——
+     加深的理由只有一个，原色 #2D7DD2 压在纸色上只有 3.82:1，过不了 AA；
+     #1F6FB2 在 --paper 上 4.78:1、在白卡（--card-raised #FFFFFF）上 5.28:1。
+     --link-line 是链接底下那道发丝线，比字浅一档，滚到链接上时转成
+     currentColor（写死成 --ink 的话，线是墨的、字是蓝的）。 */
+  --link:#1F6FB2;
+  --link-line:#A9C7E3;
+
   --display:"Bricolage Grotesque","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --cjk:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
@@ -353,7 +373,10 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   margin-top:14px;
   font-family:var(--mono); font-size:12px; color:var(--ink-2);
 }
-.specimen-note a{color:var(--ink)}
+/* 这句是行文（「All Aniimo →」接在一句话后面），所以走链接色而不是墨色 ——
+   理由见 :root 里 --link 那一段。它是首页第一屏里唯一的正文链接。 */
+.specimen-note a{color:var(--link); text-decoration:none; border-bottom:1px solid var(--link-line); transition:border-bottom-color .15s}
+.specimen-note a:hover{border-bottom-color:currentColor}
 
 /* 搜索 */
 .search{position:relative; margin-top:32px; max-width:560px}
@@ -518,19 +541,20 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    类型列，都还是从 ANIIMO_TYPES 取的 --c。 */
 
 /* ── 本站是什么 ──
-   三张卡从左往右一排，第四张的位置留着。2026-09-30 晚用户说「用四个卡片从左
-   往右排列」，并点名了四张各写什么：完整的流程 / 完善的数据库 / 全面的攻略 /
-   游戏的各种问题解答。**「全面的攻略」这一张还没进来** —— 它要指的是
-   guides.html，而那一页仍是全站唯一的骨架页（页面自己写着「这一页目前只有
-   框架」）。首页不许印一个站里没有的板块，所以那张卡等那页毕业再补。
+   四张卡从左往右一排。2026-09-30 晚用户说「用四个卡片从左往右排列」，并点名
+   了四张各写什么：完整的流程 / 完善的数据库 / 全面的攻略 / 游戏的各种问题
+   解答。**「全面的攻略」那一张当时没进来** —— 它要指的是 guides.html，而那时
+   那一页还是骨架页，首页不许印一个站里没有的板块。
 
-   补的时候是三处一起改：points 数组按顺序插进第三位、这里的列数改成 4、
-   三张卡的正文按 285px 的卡宽重写一遍（现在是照 380px 写的）。
+   2026-10-17 补上：guides.html 有 17 篇了，points 数组按顺序插进第三位，
+   列数改成 4，四张卡的正文一起重写。**重写是必须的，不是顺手**：3 列时每张
+   卡内宽 340px（正文是照 380px 写的），4 列时只有 209px，照搬会变成四根很高
+   的窄柱。现在的预算是每张两句话、英文 150 字符上下。
 
-   排列本身没有先后，所以没有 01/02/03 —— 编号会暗示一个顺序，而三者之间
+   排列本身没有先后，所以没有 01/02/03/04 —— 编号会暗示一个顺序，而四者之间
    没有顺序。 */
 .about-list{
-  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
   gap:14px;
 }
 .about-point{background:var(--surface); border:1px solid var(--line); padding:22px 20px}
@@ -544,9 +568,10 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    一块都改成整幅宽的单栏 —— 四张系统卡上下四张、元素图例九行铺满。
 
    **唯一一处后来改回去的是「本站是什么」那一排**：当天晚些用户说「用四个
-   卡片从左往右排列」，所以 .about-list 又变回三列（第四列留着，理由见它自己
-   那一段）。其余的仍然单列 —— 所以下面这条规则现在只管 .sys-grid，不要顺手
-   把 .about-list 加回选择器里。
+   卡片从左往右排列」，所以 .about-list 回到了多列（2026-10-17 起是四列，
+   理由见它自己那一段）。其余的仍然单列 —— 所以下面这条规则现在只管
+   .sys-grid，不要顺手把 .about-list 加回选择器里；那一排的收拢有自己的
+   两档（1060 / 620，在文件末尾的响应式那一段）。
 
    选择器一律带 .home，因为下面这几个类里有三个是 team.html 也在用的共用类
    （.readout / .sys-grid / .sys-card），直接改会改到那一页去。.home 只挂在
@@ -594,9 +619,9 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   padding:clamp(22px,2.6vw,30px);
   box-shadow:var(--lift);
 }
-/* 三列之后卡内宽只有三百多，86ch 够不着，这条现在是空转的 —— **保留是有意的**：
-   900px 以下这三张卡叠回单列（见那条 @media），那时卡内宽七百多，上限又回来了。
-   86ch 和 .hub-body 同一个数。 */
+/* 四列之后卡内宽只有两百出头，86ch 够不着，这条现在是空转的 —— **保留是有意的**：
+   620px 以下这四张卡叠回单列（这一排的断点在文件末尾，1060 / 620 两档），那时
+   卡内宽七百多，上限又回来了。86ch 和 .hub-body 同一个数。 */
 .home .about-body{max-width:86ch}
 /* 系统卡的四段正文原来也是这样：.sys-card p / li 没有行长上限，两列时代
    无所谓（内宽五百多），单列之后每行要排一百三十多个西文字符。 */
@@ -755,9 +780,12 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    上一版它上面还有一道虚线，那是给卡内用的：卡片的下沿就是虚线的位置，读者
    因此看得见内容区到哪儿为止。现在卡自己的下边缘已经说了这件事，再来一道
    虚线就是重复。
-   它留在 .hub-content 外面还有一个用处：没有任何内容块的那一条（攻略，还是
-   骨架页）不会剩下一个空盒子，也不会凭空多出一道画在空白上的虚线 —— 它和
-   另外十一条收尾的方式一模一样。
+   它留在 .hub-content 外面还有一个用处：没有任何内容块的那一条（一篇攻略都
+   还没写的时候）不会剩下一个空盒子，也不会凭空多出一道画在空白上的虚线 ——
+   它和另外十一条收尾的方式一模一样。
+   **两条例外现在由块自己印这枚药丸**（build.js#hubHTML 的 ownExit）：地图那条
+   和攻略那条，因为它们的块根本不在 .hub-content 里，药丸得跟着块排版。选择器
+   是后代选择器，在不在白盒里都命中，所以这两处一个字都不用改。
    下划线换成描边之后，hover 就翻成实底：描边颜色变深这一招在细线上看得出来，
    在药丸的圆角上几乎看不出来。 */
 .hub-card .hub-more{
@@ -776,6 +804,21 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 .hub-card .hub-more a:hover{
   background:var(--ink); border-color:var(--ink); color:var(--card-raised);
 }
+
+/* ── 首页攻略块：目录页的卡片，铺在纸面上（2026-10-17）────────
+   这一块是第二条不走 homeWrap 的（第一条是下面的地图），理由在
+   src/view-pages.js 的 HOME_BLOCKS.guides 里写着：它渲染的是 guides.html 的
+   目录卡本身，而一个白底带描边的卡放进 .hub-content 那个白盒里就是盒子里套
+   盒子；把卡压平又等于站上出现第二种卡片。
+
+   它需要在这里的**只有一条**：白盒那条 22px 的上边距得自己补 —— 和
+   .hub-media 取同一个数，理由见它上面那段（网格两侧都不自带间距，不写就会
+   贴着上面的 .hub-stat 走）。
+   其余全部白拿：卡、网格、悬停的 scale 与 --lift、标题 4 行与简介 3 行的
+   截断、封面 16/9、680px 以下收成一列，都是 .glance-grid.guide-grid /
+   .glance-card.guide-card 自己那几条，一个字没重写。 */
+.hub-card > .glance-grid.guide-grid{margin-top:22px}
+
 /* 地图块的静态预览。首页不引 Leaflet，所以这里就是那张世界图本身，点它进地图页。
    底色用海洋色，图片加载出来之前那一格是地图的一部分而不是一块白。
 
@@ -1111,8 +1154,12 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   font-family:var(--mono); font-size:11px; letter-spacing:.06em;
   text-transform:uppercase; color:var(--ink-3);
 }
-.crumb a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid transparent; transition:color .15s, border-bottom-color .15s}
-.crumb a:hover{color:var(--ink); border-bottom-color:var(--line-2)}
+/* 面包屑里的可点节点走链接色，当前页那个 <span> 仍是 --ink-3 的灰 ——
+   「能去的」和「你在这」因此是两种颜色，这正是这行字要说的两件事。
+   字体是 11px 大写等宽，比正文小得多，所以这里不再画下划线：小字上的
+   一道线比颜色更碍眼，颜色已经够了。 */
+.crumb a{color:var(--link); text-decoration:none; transition:color .15s}
+.crumb a:hover{color:var(--ink)}
 .crumb-sep{color:var(--line-2)}
 
 .sp-head{margin-top:20px; border-top:1px solid var(--ink); padding-top:20px}
@@ -1149,23 +1196,34 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   text-transform:uppercase; color:var(--ink-3); margin:20px 0 0;
 }
 .sp-note{font-size:14px; color:var(--ink-2); max-width:66ch; line-height:1.65}
-.sp-note a{color:var(--ink-2)}
+
+/* 行文里的裸链接。2026-10-17 之前这里是 --ink-2，和它周围的字同一个颜色 ——
+   也就是说这段文字里的链接只有下划线能认出来，而大部分连下划线都没有。
+   现在走 :root 里的 --link，理由写在那一段。 */
+.sp-note a{color:var(--link)}
 /* 正文色比周围深一档、字重 600 —— 和 .quick-body / .faq-a / .open-list 等处
    的 strong 规则同一套写法。少了这条，<strong> 会退回浏览器默认的 700 并
    保持 .sp-note 的灰，加粗反而比周围淡。 */
 .sp-note strong{color:var(--ink); font-weight:600}
 .sp-clean{font-family:var(--mono); font-size:12px; color:var(--ink-3)}
 
-/* 骨架页「先看这些」的链接。顶部的 a{color:inherit} 意味着 .sp-note 里
-   一个裸 <a> 和正文长得一模一样 —— 在这段文字里等于没有链接。
-   选择器写成 .sp-note a.sp-link 而不是单个 .sp-link：上面那条
-   .sp-note a 的优先级是 0,1,1，单个类名压不过它。 */
-.sp-note a.sp-link{
-  color:var(--ink); text-decoration:none;
-  border-bottom:1px solid var(--line-2);
+/* 「正文里指向另一个页面」的那个类。它是数据页把读者交给攻略时用的元素
+   （src/view-pages.js#guideNote），也是骨架页「先看这些」用的。
+
+   颜色和上面那条 .sp-note a 一样，多出来的是那道发丝下划线 —— 单独一段的
+   链接值得多一条线，而它整段只有这一个链接。
+
+   **选择器为什么是复合的**：上面那条 .sp-note a 的优先级是 0,1,1，单个类名
+   （0,1,0）压不过它，所以 .sp-note 里那部分必须写全。但复合写法够不着不在
+   .sp-note 里的 .sp-link —— 404 页那一列就在 <ul class="open-list"> 里，
+   从有这个类起它就没有颜色（旧注释把这件事写成了「.sp-link 没有独立规则」，
+   那说的其实是同一个洞）。所以两个选择器并列，后面那个裸的负责这些。 */
+.sp-note a.sp-link, a.sp-link{
+  color:var(--link); text-decoration:none;
+  border-bottom:1px solid var(--link-line);
   transition:border-bottom-color .15s;
 }
-.sp-note a.sp-link:hover{border-bottom-color:var(--ink)}
+.sp-note a.sp-link:hover, a.sp-link:hover{border-bottom-color:currentColor}
 .muted{color:var(--ink-3)}
 
 /* 只给读屏用的内容。六边形是 aria-hidden 的图，六个数字的可读版本只剩
@@ -1344,16 +1402,26 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
    所以名字实际拿到的约 168px —— Scorchhowl 这一类长名字正好卡在换行线上，
    窄一点就会折成两行、头像只跟第一行对齐。改小之前先回去看一眼那两张表。 */
 .f-name{width:210px; color:var(--ink)}
-/* 名字上有页面才画下划线 —— 没页面的名字在表里保持纯文本。 */
-.form-link{color:var(--ink); font-weight:600; text-decoration:none; border-bottom:1px solid var(--line-2)}
-.form-link:hover{border-bottom-color:var(--ink)}
+/* 名字上有页面才画下划线 —— 没页面的名字在表里保持纯文本。
+   下划线在 2026-10-17 从 --line-2 换成 --link-line，颜色换成 --link，理由见
+   :root 那一段：这一列里「能点」和「不能点」原本只差一道发丝线。 */
+.form-link{color:var(--link); font-weight:600; text-decoration:none; border-bottom:1px solid var(--link-line)}
+.form-link:hover{border-bottom-color:currentColor}
+
+/* 表格格子里指向另一个页面的名字，和 .form-link 一个意思。单独一条是因为
+   它俩的线不在同一个元素上、也用不着同一套字重场景：这个只有两处，都是区域名
+   （beginner 的地区表和首页的地区表块），旁边没有头像，所以线可以直接画在
+   <a> 上。没挂这个类的话它们是格子里的裸 <a>，而那格旁边的两格是纯文本 ——
+   读者分不出哪格能点。 */
+a.cell-link{color:var(--link); font-weight:600; text-decoration:none; border-bottom:1px solid var(--link-line)}
+a.cell-link:hover{border-bottom-color:currentColor}
 /* 图鉴表的名字链接比形态表多一个官方头像，所以两条规则在这里分家：
    下划线画在 .dex-name 上，不画在整条 <a> 上 —— 挂在 <a> 上的话那条线会
    从名字一路跑到头像底下。链接本身因此不带任何盒子（行内、无内边距），
    有页面和没页面两种行排出来完全一样，.cell-name 也就不用改 display。 */
-.dex-link{color:var(--ink); font-weight:600; text-decoration:none}
-.dex-name{border-bottom:1px solid var(--line-2); transition:border-bottom-color .15s}
-.dex-link:hover .dex-name{border-bottom-color:var(--ink)}
+.dex-link{color:var(--link); font-weight:600; text-decoration:none}
+.dex-name{border-bottom:1px solid var(--link-line); transition:border-bottom-color .15s}
+.dex-link:hover .dex-name{border-bottom-color:currentColor}
 .form-base{font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
 .f-hab{font-size:13px}
 .f-evo{font-family:var(--mono); font-size:12.5px}
@@ -1591,11 +1659,22 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
    时图是按自己比例算高的、跟行高打架就会变形；现在打架也不会变形了 —— 有
    object-fit:cover 在，多出来的部分是被裁掉而不是被压扁。**
    width 上的 width/height 属性仍要留着（本站每张图都带内在尺寸，字节没到时先占好
-   位置），但两者都被这里的两条覆盖：属性只是提示，作者样式永远赢。 */
+   位置），但两者都被这里的两条覆盖：属性只是提示，作者样式永远赢。
+
+   object-position 从 --cov-x 读，2026-10-17。裁的永远是左右两边：板子只会比
+   16/9 更高、不会更宽（右边那摞字最矮也有 150px 出头，见上），所以「裁哪边」
+   只有横向一个自由度。而它每篇攻略不一样 —— 默认仍是居中，封面主体偏在一边的
+   那篇在自己的 src/guides/<slug>.js 里写一个 coverFocus 百分比，view-lib.js 把
+   它内联成 --cov-x（同一套「值由数据层给、属性由样式表读」的写法，见上面
+   .card-k 的 --c）。**没写这个变量的十六篇走的还是 center 这个回落值，和从前
+   一个像素都不差**；有 var() 才能在不再写第二条类的情况下做到这件事。
+
+   第一条用上它的是抢蛋大作战（coverFocus:75）：那张地图屏的左半边是空背景，
+   地图本体偏在右边，居中裁法把地图切掉一截、左边留着空。 */
 .guide-card .guide-thumb{
   grid-column:1; grid-row:1;
   display:block; width:100%; aspect-ratio:16/9; height:auto;
-  object-fit:cover; object-position:center;
+  object-fit:cover; object-position:var(--cov-x,center);
   background:var(--surface);
 }
 .guide-card .guide-body{grid-column:2; grid-row:1; padding:18px 18px 20px}
@@ -1721,62 +1800,25 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 }
 .guide-fig figcaption{margin-top:8px}
 
-/* 首页攻略块。每篇一道细线，标题在上、它回答的问题在下 —— 形状和
-   .faq-item 一样，但不搬它左侧那条色脊：那不是装饰，是 .faq-item:target
-   用的锚点提示，搬过来会让人以为这一条也能被单独链到。
+/* ── 首页攻略块 ──────────────────────────────────────────────
+   2026-10-17：**这一套（.guide-home / .guide-home-item / .guide-home-thumb /
+   .guide-home-body / .guide-home-q / .guide-home-a）全部删除**，首页那一块
+   改用 guides.html 目录页自己的卡片 —— 也就是上面那一整段的 .glance-grid
+   .guide-grid / .glance-card .guide-card，类名一个都没换。
 
-   2026-10-09：每条左边补上一张缩略图（用户：「加上缩略图，加在文字的左边」）。
-   图来自这篇攻略自己的封面，也就是 guides.html 那张卡上的同一张 —— 一段话里
-   再选一张图，等于给「哪张图代表这篇」多开一个真源。
+   当时的形状是「每篇一道细线，左边 160px 缩略图」，从 2026-10-09 用到这里。
+   换掉的直接理由：它是全站最重的内容（17 篇攻略），而它是首页那一墙上最轻的
+   一块；卡片语言调了七轮（见上面「悬停与键盘焦点」那段），首页一次都没跟上。
 
-   160px 是照着这条本来就有的高度挑的，不是照着版面挑的：条目里那两行字在
-   1100px 宽的卡上是 78px 高，160 × 16/9 = 90px，两者相差十来像素 —— 也就是
-   说这一栏既不比字矮到无处安放，也不反过来替整条定高。图上下的 15px 内边距
-   仍然留在 .guide-home-item 上（细线在条目的边上，不在图上）。
+   被删掉的那几条里只有一条论据还成立，其余的（160px 是怎么按行高挑出来的、
+   clamp 那几档为什么比断点好）随形状一起失效了，不再抄在这里 ——
+   **封面必须 aspect-ratio:16/9 + object-fit:cover**，因为攻略封面的原始尺寸
+   各不相同（1600×900、1600×1200、900×1600……），谁都不许替这一行定形状。
+   这一条目录卡那边写着，见 .guide-card .guide-thumb（2026-10-09 第三篇竖封面
+   把整行拉高那次）。
 
-   **宽度随卡宽走（clamp），不是几个写死的档位。** 22% 在整幅上（卡里侧 1040px）
-   是 229px，正好撞上 160px 的上限，之后一路降下来：640px 的屏给 124px、380px
-   给 88px（下限，实测 340px 的屏也不再往下压）。这样写的好处是**每一档右边都
-   留着 176px 以上的文字栏**，而 160/108 两档配一条 640px 媒体查询做不到 —— 那条
-   在 400px 的屏上会让 160px 的图吃掉卡里侧的一半以上，文字挤成十来个字宽的
-   竖条。中间那几档也不必靠断点硬跳。百分比除的是网格容器自己的宽度（和
-   --gut 那条 clamp 同一个算法），不是视口宽。
+   首页那一块自己的规则只有一条，在 .hub-more 下面（补 22px 上边距）。 */
 
-   窄屏上**图不搬到文字上面去**（目录卡那一档要搬，是因为 260px 的板子在六百多
-   像素的卡里还当得起板子）：这里它本来就只有一百多像素，一旦通栏变成 16:9 的
-   大图，五条就是五张图，首页这一块会长出一倍。
-
-   aspect-ratio + object-fit:cover 和目录卡那条板子同一套：五篇的封面尺寸各不
-   相同（1600×900、1600×1200、900×1600……），谁都不许替这一行定形状。 */
-.guide-home{margin-top:2px}
-.guide-home-item{
-  padding:15px 0; border-top:1px solid var(--line);
-  display:grid; grid-template-columns:clamp(88px,22%,160px) minmax(0,1fr); gap:16px;
-  /* 图是这一行的第一块，不是这一条的中点 —— 条目标题折成两行时，让图仍然
-     顶在它自己的上沿。stretch（默认值）会把图拉成和整条一样高，aspect-ratio
-     随即作废，图就被压变形了。 */
-  align-items:start;
-}
-.guide-home-item:last-child{border-bottom:1px solid var(--line)}
-/* 缩略图的样式照 .specimen-img（首页自己那张标本墙）走：细线、10px 圆角、
-   纯白底。首页的图就该是一个样子，而这张图和那张之间只隔半屏。
-   没有 padding —— 那圈内边距是给头像留的（头像的图形不顶到描边上），封面截图
-   要的是铺满。 */
-.guide-home-thumb{
-  display:block; width:100%; height:auto; aspect-ratio:16/9;
-  object-fit:cover; object-position:center;
-  background:var(--card-raised);
-  border:1px solid var(--line); border-radius:10px;
-}
-.guide-home-body{min-width:0}
-.guide-home-q{
-  font-family:var(--display); font-size:17px; font-weight:600;
-  letter-spacing:-.012em; line-height:1.45;
-}
-.guide-home-q a{text-decoration:none; border-bottom:1px solid transparent}
-.guide-home-q a:hover{border-bottom-color:var(--ink)}
-.guide-home-a{margin-top:6px; font-size:14px; color:var(--ink-2); max-width:66ch; line-height:1.7}
-.guide-home strong{color:var(--ink); font-weight:600}
 
 /* ── 常见问题（faq.html） ─────────────────────────────────────
    五十条问答一屏装不下，所以页面先给一张分区地图，再按分区摊开。
@@ -2053,8 +2095,11 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 .map-pop-list{margin-top:9px; max-height:188px; overflow:auto}
 .map-pop-row + .map-pop-row{margin-top:4px}
 .map-pop-list .form-name{color:var(--ink); font-weight:600}
-.map-pop-list a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--line-2)}
-.map-pop-list a:hover{color:var(--ink); border-bottom-color:var(--ink)}
+/* 浮窗里那串物种名，和区域卡里那串是同一份 formEntry（见 .area-forms a）。
+   没页面的那几只走 .form-name（墨色、无链接），有页面的走 <a> —— 两种行并排
+   列在同一串里，所以「能点」必须看得出来，靠的就是这个颜色。 */
+.map-pop-list a{color:var(--link); text-decoration:none; border-bottom:1px solid var(--link-line)}
+.map-pop-list a:hover{border-bottom-color:currentColor}
 
 /* ── 侧栏 ──
    这一栏的高度由舞台说了算，不是由它自己的内容说了算：网格的行高按内容取
@@ -2248,8 +2293,8 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
    张表上 86 只全都有官方头像，没有「有图/没图」两种行要对付。 */
 .area-head{vertical-align:middle; margin-right:7px}
 .area-forms .form-name{color:var(--ink); font-weight:600}
-.area-forms a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--line-2)}
-.area-forms a:hover{color:var(--ink); border-bottom-color:var(--ink)}
+.area-forms a{color:var(--link); text-decoration:none; border-bottom:1px solid var(--link-line)}
+.area-forms a:hover{border-bottom-color:currentColor}
 /* 形态名。缩到 mono 小号，是为了让「哪只」和「哪个形态」在读的时候分得开 ——
    这两件事在别的地图上是被合并成一条的，而它们不是一回事。 */
 .area-form{font-family:var(--mono); font-size:11.5px; color:var(--ink-3)}
@@ -2319,10 +2364,8 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   /* 系统卡叠成一列。首页那四张系统卡不用这一条了 —— 首页从 2026-09-30 起
      本来就是单列（见 .home 那一段），剩下的这个 .sys-grid 是 team.html 的。 */
   .sys-grid{grid-template-columns:minmax(0,1fr)}
-  /* 「本站是什么」那三张卡在 900px 以下也叠成一列 —— 卡内宽掉到 220px 左右
-     时，一行的字只剩不到三十个，读起来是一列竖条。这里回到整幅宽，正文的
-     86ch 上限正好接着管。 */
-  .home .about-list{grid-template-columns:minmax(0,1fr)}
+  /* 「本站是什么」那一排 2026-10-17 有了自己的两档（1060 / 620，在下面），
+     所以它不再跟着这条 900px 一列到底 —— 四张卡在这一档正好排 2×2。 */
   /* 地图那条的左图右文也叠回上下。卡内宽到这一档只剩六百多，0.85fr 那一栏
      不足三百，图缩到看不清地形的程度 —— 那时它就不是地图，是个花纹了。
      叠成上下之后图回到整幅宽，和删卡片以前一样。 */
@@ -2331,6 +2374,20 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
      各行本来就靠自己那条行线分开），叠起来之后没有行距两张表会连成一张，
      而表头只该出现在它自己那半的头上。 */
   .hub-card .hub-split{grid-template-columns:minmax(0,1fr); row-gap:28px}
+}
+
+/* 「本站是什么」那一排自己的两档。四列那一档的字栏实测在 180–205px 之间
+   （1184px 视口上卡 265、字栏 205；到 1060px 视口卡 235、字栏 180，因为卡片
+   的内边距是 clamp(22,2.6vw,30)，越窄掐得越少）。180px 是这一排能读下去的底
+   —— 再窄就不是窄栏，是要竖着读的一条；所以 1060 落成 2×2，620 以下才一列
+   到底，那时正文的 86ch 上限接着管。两档都出过图核对，四列最紧那一档（视口
+   1064）没有断词、没有只剩一个字的末行。 */
+@media (max-width:1060px){
+@media (max-width:1060px){
+  .home .about-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .home .about-list{grid-template-columns:minmax(0,1fr)}
 }
 
 @media (max-width:680px){

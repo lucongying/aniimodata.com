@@ -904,9 +904,10 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    或者每格都折成三行。182→200 只加 70px，表格其余部分不动。 */
 .dex-table{min-width:952px; font-size:14px}
 
+/* 与 .form-table th 同改（2026-10-17）：--ink + 600、11.5px，理由见那一条。 */
 .dex-table thead th{
-  font-family:var(--mono); font-size:10.5px; font-weight:500;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  font-family:var(--mono); font-size:11.5px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
   text-align:left; padding:0 12px 10px; border-bottom:1px solid var(--ink);
   white-space:nowrap;
 }
@@ -1387,9 +1388,15 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
 /* 表格。桌面端 1180px 内放得下，窄屏靠下面的断点改成卡片，不用横向滚动 ——
    这两张表里的内容（栖息地、别人的说法）正是最不该逼人横滑的那部分。 */
 .form-table, .conf-table{width:100%; border-collapse:collapse; font-size:14px; margin-top:16px}
+/* 2026-10-17 表头从 --ink-3 提到 --ink、字重 500→600。10.5px 的大写等宽字
+   本来就细，--ink-3 那档灰在纸底上要凑近才认得出（用户：「很难看清楚」）；
+   先试了 --ink-2，量出来与正文同色，但小字号+大写仍然显轻，所以再压一档。
+   等宽字的字重不改变字宽，所以这一改不会动任何一列的宽度。
+   字号同日 10.5 → 11.5px（用户：「字体也放大一点」）；跟踪仍是 .08em，
+   跟着字号一起放大，所以看起来的疏密不变。 */
 .form-table th, .conf-table th{
-  font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.08em;
-  text-transform:uppercase; color:var(--ink-3); text-align:left;
+  font-family:var(--mono); font-size:11.5px; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink); text-align:left;
   padding:0 14px 10px 0; border-bottom:1px solid var(--ink); vertical-align:bottom;
 }
 .form-table td, .conf-table td{
@@ -2488,10 +2495,12 @@ a.cell-link:hover{border-bottom-color:currentColor}
     display:block; width:auto; padding:0 0 8px; border-bottom:0;
   }
   .form-table td:last-child, .conf-table td:last-child{padding-bottom:0}
+  /* 这一档 thead 藏了，这些就是表头本身 —— 跟着桌面端一起加深放大
+     （2026-10-17，--ink-3 → --ink，字重 600，10 → 11px）。 */
   .form-table td::before, .conf-table td::before{
     content:attr(data-col-en); display:block;
-    font-family:var(--mono); font-size:10px; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--ink-3); margin-bottom:4px;
+    font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink); margin-bottom:4px;
   }
   html[data-lang="zh"] .form-table td::before,
   html[data-lang="zh"] .conf-table td::before{content:attr(data-col-zh)}

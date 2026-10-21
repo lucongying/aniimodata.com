@@ -1399,6 +1399,10 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   text-transform:uppercase; color:var(--ink); text-align:left;
   padding:0 14px 10px 0; border-bottom:1px solid var(--ink); vertical-align:bottom;
 }
+/* 家园表那条跨三栏的分组表头（2026-10-22，「Aniimo Homeland Codes by Server」）。
+   字号、字重、跟踪都跟其他表头一致，只有下面那条线换成 --line：表头惯用的
+   --ink 是整张表最重的一道横线，留着它会在表头中间横出第二道。 */
+.form-table th.th-group{border-bottom-color:var(--line)}
 .form-table td, .conf-table td{
   padding:13px 14px 13px 0; border-bottom:1px solid var(--line);
   vertical-align:top; color:var(--ink-2);
@@ -1806,6 +1810,21 @@ a.cell-link:hover{border-bottom-color:currentColor}
   border:1px solid var(--line); background:var(--surface);
 }
 .guide-fig figcaption{margin-top:8px}
+
+/* 攻略页里的表格（2026-10-21，第一张表——抢蛋大作战·噩梦难度那篇的十张图速查）。
+   表本身走的是全站那张 .form-table，一个字没改；这里只管它的栏宽。
+
+   auto 版式把余量几乎全分给了最后一栏：那一栏（蛋点分布）本来就是最长的，
+   它一长，前面三栏就被压到「lower / middle」「EGG / SPAWNS」这样折成两行，
+   表头四格里三格在第二行、一格在第一行。定死前三栏，第四栏拿走剩下的。
+
+   只挂 .sp-guide：资料页和主权页上的 .form-table 不受影响。≤680px 那一档
+   更不受影响——那一档 thead 整个隐藏、每一格改成 display:block，栏宽不再
+   参与计算，读者看到的柱子标签来自 td 上的 data-col-*。 */
+.sp-guide .form-table{table-layout:fixed}
+.sp-guide .form-table th:nth-child(1){width:56px}
+.sp-guide .form-table th:nth-child(2){width:96px}
+.sp-guide .form-table th:nth-child(3){width:124px}
 
 /* ── 首页攻略块 ──────────────────────────────────────────────
    2026-10-17：**这一套（.guide-home / .guide-home-item / .guide-home-thumb /

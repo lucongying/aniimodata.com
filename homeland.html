@@ -180,9 +180,13 @@
         <table class="form-table">
           <thead>
             <tr>
-              <th scope="col"><span class="t-en">RV level</span><span class="t-zh">房车等级</span></th>
-              <th scope="col">Aniimo</th>
-              <th scope="col"><span class="t-en">What opens</span><span class="t-zh">开出什么</span></th>
+              <th scope="col" rowspan="2"><span class="t-en">RV level</span><span class="t-zh">房车等级</span></th>
+              <th scope="col" rowspan="2">Aniimo</th>
+              <th scope="col" rowspan="2"><span class="t-en">What opens</span><span class="t-zh">开出什么</span></th>
+              <th scope="colgroup" colspan="3" class="th-group"><span class="t-en">Aniimo Homeland Codes by Server</span><span class="t-zh">各服务器家园码</span></th>
+
+            </tr>
+            <tr>
               <th scope="col"><span class="t-en">America code</span><span class="t-zh">美洲家园码</span></th>
               <th scope="col"><span class="t-en">Europe code</span><span class="t-zh">欧洲家园码</span></th>
               <th scope="col"><span class="t-en">APAC code</span><span class="t-zh">亚太家园码</span></th>
@@ -355,6 +359,39 @@
         <p class="sp-note"><span class="t-en">A home code is the eight-character string attached to a shared build; open the Build Menu&#39;s Shared Designs screen and paste it into the combo-code box. A code only works on the server it was shared on, and the player who shared it can withdraw it at any time. In the code columns an em dash means no code has been collected for that level yet — not that no layout exists.</span><span class="t-zh">家园码是分享出来的布置所带的八位字符码 —— 在家园里打开「家园设计」，进「共享设计」点「导入组合」，把码粘进输入框。它只在分享它的那个服务器有效；分享者撤掉之后，码也就失效了。码栏里的破折号表示这一级还没收到码，不是这一级没有布置。</span></p>
       </section>
 
+      <section class="sp-block" id="power">
+        <h2 class="sp-h2"><span class="t-en">Power, from RV 12</span><span class="t-zh">电力：从房车 12 级开始</span></h2>
+        <p class="sp-note"><span class="t-en">The <strong>Power Module</strong> is the first thing in the base that costs something to keep running. What it charges follows the <strong>level of the building</strong>, not how many buildings there are — a Lv.3 Mine draws three times what a Lv.1 does — so a grid worked out by counting facilities runs short the moment you upgrade one.</span><span class="t-zh"><strong>电力模块</strong>是基地里第一样要花钱维持运转的东西。它按<strong>建筑等级</strong>收费，不按建筑数量 —— 一座 3 级矿场是用电量的三倍，1 级只是一倍 —— 所以只数设施个数搭出来的电网，升一级就不够用了。</span></p>
+        <div class="table-wrap">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th scope="col"><span class="t-en">Facility</span><span class="t-zh">设施</span></th>
+              <th scope="col"><span class="t-en">Draw</span><span class="t-zh">用电</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-col-en="Facility" data-col-zh="设施"><span class="t-en">Mine, Well, and the two machines that make Aniipods and energy</span><span class="t-zh">矿山、水井、谜立方制造机、能量机</span></td>
+              <td data-col-en="Draw" data-col-zh="用电"><span class="t-en"><strong>30 W</strong> per level</span><span class="t-zh"><strong>每级 30 W</strong></span></td>
+            </tr>
+            <tr>
+              <td data-col-en="Facility" data-col-zh="设施"><span class="t-en">Every other processing facility</span><span class="t-zh">其他所有加工设施</span></td>
+              <td data-col-en="Draw" data-col-zh="用电"><span class="t-en"><strong>15 W</strong> per level</span><span class="t-zh"><strong>每级 15 W</strong></span></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <ul class="req-list">
+          <li><span class="t-en"><strong>A generator is 800 W, and the curve breaks at 500.</strong> Everything supplied while the load is at or under <strong>500 W</strong> runs at <strong>120%</strong>; past that the rate slides with the shortfall, so the last building you connect is the slowest thing in the base. Pick the buildings worth powering first and leave the rest on Aniimo.</span><span class="t-zh"><strong>一台发电机 800 W，效率在 500 W 处拐弯。</strong> 负载在 <strong>500 W 及以下</strong>时，接上电网的东西全部按 <strong>120%</strong> 跑；超过之后效率跟着缺口往下掉，所以最后接上的那一座，就是全基地最慢的。先挑你最在意的几座接电，剩下的继续靠 Aniimo。</span></li>
+          <li><span class="t-en"><strong>A selected formula draws power even when it cannot run.</strong> An empty bench with a recipe still queued is a load producing nothing. Clear the idle formulas before you log off.</span><span class="t-zh"><strong>只要选了配方就耗电，哪怕它转不动。</strong> 空着材料还挂着配方的加工台，是在耗电却不产出。下线前把闲置配方清掉。</span></li>
+          <li><span class="t-en"><strong>A powered building is also a connection point.</strong> The grid chains through whatever is already live, so a run of benches needs one post rather than a wire each.</span><span class="t-zh"><strong>通电的建筑本身就是接线点。</strong> 电网会顺着已经通电的建筑往下接，所以一排加工台只要一个接点，不必每台拉一根线。</span></li>
+          <li><span class="t-en"><strong>The ability has to keep pace with the generator.</strong> Power opens at Lv.1 with the module at RV 12. RV 14 brings the Lv.2 generator and asks for a Lv.2 Power ability to run it; RV 16 does the same at Lv.3. A generator one level ahead of the ability is not a bigger grid, it is a grid that does not come on.</span><span class="t-zh"><strong>电力能力要跟着发电机一起升。</strong> 房车 12 级开电力，能力 1 级；14 级出 2 级发电机，电力能力也得是 2 级才带得动；16 级同理，要 3 级。发电机比能力高一级，不是电网更大，是电网根本开不起来。</span></li>
+          <li><span class="t-en"><strong>What it is really buying is space.</strong> Folding the processing line into the grid frees five or six cells, and it keeps the dark-ability Aniimo out of the crafting queue: that worker both harvests and cures, so a bench it has to run is a harvest it is not doing. A powered line that runs a little slower is a fair trade for that.</span><span class="t-zh"><strong>它真正买的是格子。</strong> 把加工线并进电网，能省出五六格；而且暗属性伊莫不会再卡在制作上 —— 采收和腌制本来就是它，被叫去开加工台，田里就少一个人。加工慢一点，换这个很划算。</span></li>
+        </ul>
+        <p class="sp-note"><span class="t-en">There is a reason to keep the grid small beyond the efficiency figure: every watt spent on a bench is a watt the Mine does not get, and the Mine is what produces the materials the next RV level asks for.</span><span class="t-zh">把电网做小还有一个理由：花在加工台上的每一瓦，都是矿场拿不到的一瓦，而下一级房车要的材料，正是矿场产出来的。</span></p>
+      </section>
+
       <section class="sp-block" id="staff">
         <h2 class="sp-h2"><span class="t-en">Stationing Aniimo</span><span class="t-zh">派驻 Aniimo</span></h2>
         <p class="sp-note"><span class="t-en">Aniimo do the work. Each one has Homeland abilities, and the ones you station <strong>cannot come with you</strong> — an Aniimo working a facility cannot be in your battle team or in the open world at the same time. Want a species in both places and you need a second copy of it.</span><span class="t-zh">干活的是 Aniimo。它们各有家园能力，而<strong>派驻的不能带出门</strong> —— 在设施上上班的 Aniimo 不能同时进你的战斗队，也不能在大世界里跟着你。想同一只两边都用，你得有第二只。</span></p>
@@ -473,6 +510,12 @@
           </tbody>
         </table>
         </div>
+        <h3 class="sp-h3"><span class="t-en">The order the base hands work out</span><span class="t-zh">基地派活的顺序</span></h3>
+        <p class="sp-note"><span class="t-en">Work is not claimed by the most capable Aniimo first. The base sends the <strong>lowest</strong> matching ability, and a higher one takes the job off it partway there: a Lv.1 sower sets off, a Lv.3 arrives and claims the plot, the Lv.1 turns around. The job gets done — the two walks are what it cost.</span><span class="t-zh">派活不是谁能力高谁先上。基地会先派<strong>等级最低</strong>的那只，走到一半又被高等级的抢走：1 级播种出发，3 级到了把地块接过去，1 级再原路走回来。活是干完了 —— 代价是白走的两趟。</span></p>
+        <ul class="req-list">
+          <li><span class="t-en"><strong>Keep the short jobs on one level.</strong> Sowing, watering, tilling and harvesting finish in seconds, so a level gap there buys less than the walking it causes. All Lv.2 or all Lv.3 both work; a mix is the arrangement that costs you.</span><span class="t-zh"><strong>快工种保持同一等级。</strong> 播种、浇水、开垦、收割都是几秒钟的事，在那里留一个等级差，赚的还没有多走的那些路多。全 2 级或全 3 级都行，混着最亏。</span></li>
+          <li><span class="t-en"><strong>Place the fixed posts yourself.</strong> The Mine, the Well, the temperature pair and the leisure buildings are the ones the automatic distribution gets wrong often enough that moving those Aniimo onto them by hand is the habit worth keeping. Leave the fields to sort themselves out.</span><span class="t-zh"><strong>固定岗位自己摆。</strong> 矿场、水井、温度组（加热炉和制冷机）以及游乐建筑，是自动分配经常摆错的那几座；把这几个位置的伊莫手动挪过去，是值得养成的习惯。田那边交给它自己排就行。</span></li>
+        </ul>
         <p class="sp-note"><span class="t-en">Take both into account when you assign: the element the facility asks for, and whether the worker&#39;s traits match it. The base&#39;s ability distribution screen — the exclamation mark beside it — lists the elements it currently needs, which is faster than working it out facility by facility.</span><span class="t-zh">派人时两件事一起看：设施要的属性，以及工人的人格对不对得上。基地里那个能力分布面板（旁边有个感叹号的那个）会直接列出它当前缺哪些元素，比一个个设施去对要快。</span></p>
         <p class="sp-note"><a class="sp-link" href="guides/homeland-workers/"><span class="t-en">Which Aniimo to station, and the 400,000-a-night layout</span><span class="t-zh">该派哪几只打工，以及一夜四十万的布局</span></a></p>
       </section>
@@ -485,9 +528,51 @@
           <li><span class="t-en"><strong>Wheatmeal is the cheap answer.</strong> Grinding Wheat makes it, Wheat is free to grow, and one Wheatmeal is worth <strong>9,370</strong> food energy against the <strong>1,000</strong> a purchasable Energy Bite gives.</span><span class="t-zh"><strong>小麦糊（Wheatmeal）是最省的做法。</strong> 磨小麦就有，小麦是免费种的，一份小麦糊顶 <strong>9,370</strong> 食物能量，而商店买的 Energy Bite 只有 <strong>1,000</strong>。</span></li>
           <li><span class="t-en"><strong>A sick Aniimo stops working</strong> and has to be given medicine in person, which means going back to the base to do it.</span><span class="t-zh"><strong>生病的 Aniimo 直接停工</strong>，而且得本人回去喂药 —— 也就是说你必须回一趟基地。</span></li>
           <li><span class="t-en"><strong>Visit once a day.</strong> Workers can slack off, get sick or get injured if you are away too long, and the Warehouse needs restocking.</span><span class="t-zh"><strong>每天回来一次。</strong> 离开太久工人会偷懒、生病或者受伤，仓库也需要补货。</span></li>
-          <li><span class="t-en"><strong>Buy seeds before you log off.</strong> A facility keeps running while you are away as long as it has its inputs, and you collect the finished goods when you next log in.</span><span class="t-zh"><strong>下线前把种子囤够。</strong> 只要输入材料够，设施在你离线时继续运转，下次上线直接收成品。</span></li>
+          <li><span class="t-en"><strong>Buy seeds before you log off — the night is not free.</strong> The base keeps running while you are away, but it falls into a slower idle state; it only runs at its normal rate with <strong>someone in the base</strong>. A full input buffer is still what makes the night worth anything, but it gets less done than the same hours would with you there.</span><span class="t-zh"><strong>下线前把种子囤够 —— 这一夜不是白赚的。</strong> 基地在你离线时照样运转，不过会掉进一种更慢的<strong>怠惰状态</strong>：<strong>基地里得有人</strong>，它才按正常速度跑。把输入材料填满仍然是这一夜唯一有价值的地方，只是同样几小时，产出的比你在场时少。</span></li>
         </ul>
         <p class="sp-note"><span class="t-en">The last line is the one worth acting on. A base that ran out of seeds overnight produced nothing, and no amount of levelling fixes a night of that.</span><span class="t-zh">最后一条是真正要动手的。一晚上没种子的基地等于什么都没产，而且这不是升级能补回来的 —— 那一夜就是没了。</span></p>
+
+        <h3 class="sp-h3"><span class="t-en">What to feed them</span><span class="t-zh">喂什么</span></h3>
+        <p class="sp-note"><span class="t-en">The bowl takes cooked dishes, not the raw ingredients they come from. Each batch fills the pool by a fixed amount, which is what the table compares — a batch, not a rate. These are the five that matter, highest first, and every one of them but the soybean is a <strong>Quick formula</strong> — so the ceiling is set by your Ecological Module as much as by the kitchen.</span><span class="t-zh">池子里填的是做好的菜，不是它们的原料。做一份就往池子里填固定的一笔能量 —— 这张表比的是<strong>一份</strong>，不是每分钟。下面五样是排得上的五样，从高到低；除烤大豆之外全是<strong>高速配方</strong>，所以天花板一半由生态模块决定，一半由厨房决定。</span></p>
+        <div class="table-wrap">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th scope="col"><span class="t-en">Dish</span><span class="t-zh">食物</span></th>
+              <th scope="col"><span class="t-en">One batch</span><span class="t-zh">一份</span></th>
+              <th scope="col"><span class="t-en">Made from</span><span class="t-zh">用什么做</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-col-en="Dish" data-col-zh="食物"><span class="t-en">Potato chips</span><span class="t-zh">洋芋片</span></td>
+              <td data-col-en="One batch" data-col-zh="一份"><strong>36,627</strong></td>
+              <td data-col-en="Made from" data-col-zh="用什么做"><span class="t-en">Quick-formula Potato</span><span class="t-zh">高速马铃薯</span></td>
+            </tr>
+            <tr>
+              <td data-col-en="Dish" data-col-zh="食物"><span class="t-en">White rice</span><span class="t-zh">白米</span></td>
+              <td data-col-en="One batch" data-col-zh="一份"><strong>34,540</strong></td>
+              <td data-col-en="Made from" data-col-zh="用什么做"><span class="t-en">Quick-formula Rice</span><span class="t-zh">高速水稻</span></td>
+            </tr>
+            <tr>
+              <td data-col-en="Dish" data-col-zh="食物"><span class="t-en">Dried strawberry</span><span class="t-zh">草莓干</span></td>
+              <td data-col-en="One batch" data-col-zh="一份"><strong>29,445</strong></td>
+              <td data-col-en="Made from" data-col-zh="用什么做"><span class="t-en">Quick-formula Strawberry</span><span class="t-zh">高速草莓</span></td>
+            </tr>
+            <tr>
+              <td data-col-en="Dish" data-col-zh="食物"><span class="t-en">Roast soybean</span><span class="t-zh">烤大豆</span></td>
+              <td data-col-en="One batch" data-col-zh="一份"><strong>26,230</strong></td>
+              <td data-col-en="Made from" data-col-zh="用什么做"><span class="t-en">Soybean, and Salt</span><span class="t-zh">大豆，还要盐</span></td>
+            </tr>
+            <tr>
+              <td data-col-en="Dish" data-col-zh="食物"><span class="t-en">Wheat flour</span><span class="t-zh">小麦粉</span></td>
+              <td data-col-en="One batch" data-col-zh="一份"><strong>17,610</strong></td>
+              <td data-col-en="Made from" data-col-zh="用什么做"><span class="t-en">Quick-formula Wheat</span><span class="t-zh">高速小麦</span></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="sp-note"><span class="t-en">The reason to climb the ladder is duration rather than the number: a pool filled with roast soybean holds for about <strong>twelve days</strong>, and one filled with potato chips for about <strong>three</strong>. A long absence wants the soybean; a short one can afford the chips.</span><span class="t-zh">往上爬这一梯买的是<strong>时长</strong>，不是数字：一池烤大豆大概顶 <strong>12 天</strong>，一池洋芋片大概 <strong>3 天</strong>。长时间不在家就塞大豆，短时间出门洋芋片够用。</span></p>
       </section>
 
       <section class="sp-block" id="orders">
@@ -499,8 +584,20 @@
           <li><span class="t-en"><strong>How many you get depends on your RV level</strong>, and later levels raise the cap.</span><span class="t-zh"><strong>能拿几个取决于房车等级</strong>，后面几级会提高上限。</span></li>
           <li><span class="t-en"><strong>Reroll what you cannot make.</strong> An order for something you are not producing is dead weight; refreshing for something you can produce is the better move.</span><span class="t-zh"><strong>做不了的就刷掉。</strong> 一条你现在根本不产的订单就是废纸；换成能产的才是正解。</span></li>
           <li><span class="t-en"><strong>Refreshing unlocks at RV level 4</strong> (see the table above).</span><span class="t-zh"><strong>刷新在房车 4 级解锁</strong>（见上表）。</span></li>
+          <li><span class="t-en"><strong>Keep slots free.</strong> Orders stack rather than expire, and an RV upgrade adds more of them, so a full board is a board with no room on it. Empty it, or leave at least five slots open before you upgrade.</span><span class="t-zh"><strong>留着空位。</strong> 订单会累积、不会过期，而每升一级房车还会再加几条 —— 板子满了就是没地方接新单。要么清空，要么升级前至少留五格。</span></li>
+          <li><span class="t-en"><strong>Reroll toward wood.</strong> If you are going to spend a refresh, spend it on the reward the ladder actually eats: an order paying wood is worth more than one paying a currency you are not short of. And a normal order that is going to survive the reset is better left alone than thrown away.</span><span class="t-zh"><strong>刷新就洗木头。</strong> 真要花一次刷新，就花在房车升级真正吃的那个奖励上：一条付木头的订单，比一条付你根本不缺的货币的订单值钱。而刷新后本来就留得住的普通单，留着比洗掉好。</span></li>
         </ul>
         <p class="sp-note"><span class="t-en">Keep the base staffed and producing even when you are not chasing a level. The orders are the reason to fill the element roles rather than treat the base as decoration.</span><span class="t-zh">就算你这一阵不冲等级，也让基地一直有人干活、一直产。订单正是「把属性岗位填满」的理由，别把基地当成装修。</span></p>
+      </section>
+
+      <section class="sp-block" id="daily">
+        <h2 class="sp-h2"><span class="t-en">The daily five minutes</span><span class="t-zh">每天的五分钟</span></h2>
+        <p class="sp-note"><span class="t-en">A few things on the base pay out once a day and none of them is on a screen you would open on your way past.</span><span class="t-zh">基地上有几件事一天只结一次，而且没有一件摆在你顺路会点开的界面上。</span></p>
+        <ul class="req-list">
+          <li><span class="t-en"><strong>Pet the ones that ask.</strong> An Aniimo will occasionally want attention, and a pet pays a <strong>Wish Star</strong>. Five a day, and it costs nothing but the walk.</span><span class="t-zh"><strong>该摸的就摸。</strong> 伊莫偶尔会想被摸一下，摸一次给一颗<strong>许愿星</strong> —— 一天五次，成本就是走过去那两步。</span></li>
+          <li><span class="t-en"><strong>Loosen soil for other players.</strong> Five plots at any one base, <strong>thirty a day</strong> in total. At fifteen you come home to a crate of speed-up items waiting at your own base, which is the part worth doing the other fifteen for.</span><span class="t-zh"><strong>去帮别人松土。</strong> 任何一处基地一次 5 块，<strong>一天合计 30 次</strong>。松满 15 次，回自己基地会看到一个装着加速道具的箱子 —— 后面那 15 次就是为它松的。</span></li>
+          <li><span class="t-en"><strong>Answer the strike.</strong> Walk into the base and an Aniimo may have stopped working over something. Clicking the notice moves you to it and <strong>F</strong> soothes it; leave it standing there and the facility stays down until you do.</span><span class="t-zh"><strong>处理罢工。</strong> 走进基地时，可能有伊莫因为什么事停手了。点那条提示会直接把你带过去，按 <strong>F</strong> 安抚；不管它，那座设施就会一直停到你管为止。</span></li>
+        </ul>
       </section>
 
       <section class="sp-block" id="level">
@@ -513,6 +610,7 @@
           <li><span class="t-en"><strong>Plant Growth Tonic and Energizing Work Meal finish a job instantly.</strong> Useful both for an order deadline and for running Woodlands and Mines purely for byproducts.</span><span class="t-zh"><strong>Plant Growth Tonic 和 Energizing Work Meal 能立刻完工。</strong> 既救订单的截止时间，也用来纯刷副产物。</span></li>
           <li><span class="t-en"><strong>Modification Toolkits unlock recipes.</strong> <strong>Premium</strong> recipes make an item worth more than the plain version; <strong>Quick</strong> recipes make Farmlands, Woodlands, Mines and the Well yield more.</span><span class="t-zh"><strong>Modification Toolkit 解锁配方。</strong> <strong>Premium</strong> 配方做出的东西比普通版值钱；<strong>Quick</strong> 配方让农田、林地、矿场和水井产得更多。</span></li>
           <li><span class="t-en"><strong>Index Score is where the late toolkits come from.</strong> Spending <strong>Bud Tickets</strong> on furniture raises it, and it pays out more Dream Sparks and Modification Toolkits. Furnishing is not only cosmetic.</span><span class="t-zh"><strong>后期工具包靠 Index Score。</strong> 用 <strong>Bud Ticket</strong> 买家具就能抬它，而它给更多 Dream Spark 和 Modification Toolkit。摆家具不只是好看。</span></li>
+          <li><span class="t-en"><strong>Check the yield against the carry cap.</strong> A Hauling Lv.3 Aniimo brings back <strong>100</strong> at a time. The highest Woodland returns more than <strong>128</strong> and Maple <strong>105</strong>, so both take two trips however good the worker is — the plot is not the problem, the trip is. A slightly smaller tree that arrives in one carry can beat the biggest one that does not.</span><span class="t-zh"><strong>看一眼产量和搬运上限对不对得上。</strong> 搬运 3 级的伊莫一趟只带 <strong>100</strong>。最高一级林地一次收 <strong>超过 128</strong>、枫树 <strong>105</strong>，所以这两样不管工人多好都得跑两趟 —— 问题不在树，在那一趟。小一点、一趟能搬完的树，能赢过最大但那趟搬不完的。</span></li>
         </ul>
         <p class="sp-note"><span class="t-en">Toolkits get rarer the higher your RV goes, so the Index stops being optional — later on it is the supply.</span><span class="t-zh">房车等级越高，工具包越稀，所以 Index 这块迟早绕不开 —— 到后面它就是你的进货渠道。</span></p>
       </section>
@@ -523,9 +621,23 @@
         <ul class="req-list">
           <li><span class="t-en"><strong>Overlap two zones and you get a third.</strong> A plot inside a Scorching area and a Cool area at the same time reads as <strong>Warm</strong>, so two buildings cover three growing conditions.</span><span class="t-zh"><strong>两个区重叠就出第三种。</strong> 一块地同时落在极热区和凉爽区里，读作 <strong>温暖</strong>，于是两栋建筑管住三种生长条件。</span></li>
           <li><span class="t-en"><strong>The two extremes overlap into neutral.</strong> Freezing plus Scorching gives a temperature-neutral zone, not a hotter or a colder one.</span><span class="t-zh"><strong>两个极端叠出来的是中性。</strong> 严寒加极热得到的是温度中性区，不会更热也不会更冷。</span></li>
+          <li><span class="t-en"><strong>Bands add up a step at a time.</strong> The Cooling Unit at Lv.2 leaves a plot Freezing; lay the Heat Furnace&#39;s Lv.1 band over the same plot and it reads Cool — one step back from the cold, not back to nothing. That is how a plot gets pulled to the temperature you want without moving either building.</span><span class="t-zh"><strong>温度带是一档一档往上加的。</strong> 冰机二级盖到的地方是严寒；把火机一级的带子叠在上面，同一块地就读作<strong>凉爽</strong> —— 是往回退一档，不是退到没有。想要哪一档，与其挪机器，不如让两条带子叠一下。</span></li>
+          <li><span class="t-en"><strong>At RV 7 it is how three temperatures coexist.</strong> The plots start asking for Freezing, Cool and Warm at once, and two machines serve all three: keep the Cool crops inside the strip where the two bands overlap, the Warm ones inside the Heat Furnace band and outside the Cooling Unit, the Freezing ones in the cold alone.</span><span class="t-zh"><strong>七级就是这么同时养三种作物的。</strong> 到那一级，地块会同时要严寒、凉爽和温暖，两栋机器够用：要凉爽的作物放进两条带子重叠的那一条，要温暖的留在火机带子里、躲开冰机，要严寒的只吃冰机。</span></li>
           <li><span class="t-en"><strong>A plot only has to be touched.</strong> Any part of a plot inside a temperature zone carries that temperature for the whole plot, so the placement does not have to be precise.</span><span class="t-zh"><strong>碰到一点点就算。</strong> 地块只要有任意一角落在温度区里，整块地就按这个温度算，所以位置不用摆得很精准。</span></li>
         </ul>
         <p class="sp-note"><span class="t-en">Getting this wrong does not kill the crop. It grows slower, which is the same thing as losing the time.</span><span class="t-zh">摆错了不会把作物弄死。它只是长得慢 —— 而长得慢和浪费掉那些时间是同一件事。</span></p>
+      </section>
+
+      <section class="sp-block" id="build">
+        <h2 class="sp-h2"><span class="t-en">Build mode&#39;s four quiet controls</span><span class="t-zh">建造模式里四个不显眼的开关</span></h2>
+        <p class="sp-note"><span class="t-en">Every layout is placed in Build Mode, and the controls the game never points at are the ones that decide how closely you can place what you have in mind.</span><span class="t-zh">布置全在建造模式里做，而真正决定「摆得准不准」的那几个开关，游戏一个都不会指给你。</span></p>
+        <ul class="req-list">
+          <li><span class="t-en"><strong>F3 turns grid snapping off.</strong> With it off, furniture and facilities can sit half a cell out of line, which is how a tight production block takes one more bench without pushing the next row out of a temperature band. Turn it back on for the next block, or the rows stop lining up.</span><span class="t-zh"><strong>F3 关掉网格吸附。</strong> 关掉之后，家具和设施可以错开半格对齐 —— 产线挤的时候，半格就是多塞一张工作台的位置，前提是它还在温度带里。铺完这一段记得打开，否则下一段的行距就对不上了。</span></li>
+          <li><span class="t-en"><strong>F1 is multi-select.</strong> Drag a box over the objects you want and save the selection from the panel on the right of the screen. That saved selection is what a combo is.</span><span class="t-zh"><strong>F1 是多选。</strong> 拉个框把要的东西圈进去，再从屏幕右边的面板把这一选存下来 —— 存下来的那一选，就是「组合」。</span></li>
+          <li><span class="t-en"><strong>There are fifteen saved combos, and deleting one destroys it.</strong> The slot comes back; the layout in it does not. Keep the one you are happy with and build the next experiment somewhere else rather than overwriting it.</span><span class="t-zh"><strong>最多存 15 组，删掉就没了。</strong> 格子会空出来，里面那套布置不会。所以满意的那套留着，下一个实验换个地方摆，别覆盖它。</span></li>
+          <li><span class="t-en"><strong>Sharing is one menu deep.</strong> Build Mode&#39;s rightmost tab is the combos tab; click the combo&#39;s picture, and under its description there is a magnifier — the eight-character code sits under the name, ready to copy.</span><span class="t-zh"><strong>分享藏在菜单里一层。</strong> 建造模式最右边那个分类就是组合；点开组合的图，说明下面有一个放大镜 —— 八位组合码就在名字下面，可以直接复制。</span></li>
+        </ul>
+        <p class="sp-note"><span class="t-en">This is the other half of the home code: the RV table lists codes to bring in, and this is where the code you hand out comes from. Both directions use the same eight characters.</span><span class="t-zh">这是上面家园码的另一半：房车表列的是「导入别人的」，这一段说的是<strong>你自己的码从哪来</strong>。两个方向用的是同一串八位字符。</span></p>
       </section>
     </div>
   </article>

@@ -50,12 +50,12 @@
   if (!emptyEl || !countEl || !list) return;
 
   /* How many results the panel shows before it stops listing and starts
-     counting. The index is 288 entries; a one-letter query matches most
-     of them, and past a screenful the list stops being a list. */
+     counting. The index is a few hundred entries; a one-letter query matches
+     most of them, and past a screenful the list stops being a list. */
   var MAX = 8;
 
   /* ── read the index ──────────────────────────────────────────
-     Once, on load. Five badge spans (one per kind) and 288 links.
+     Once, on load. One badge span per kind, and one link per entry.
 
      `name`, `meta` and `sub` are the lowercased text of the three
      spans, kept separately rather than as one haystack because their
@@ -64,7 +64,23 @@
      holds BOTH languages, so a reader who switched to Chinese searches
      Chinese. The badge is deliberately not in any of them — it is the
      one word on the row that is the same for every result of its kind,
-     and matching it would make "aniimo" return all 86 species. */
+     and matching it would make "aniimo" return all 86 species.
+
+     Each span's two languages are joined with a space, not read as one
+     `textContent`. Glued together, the last character of the English
+     half sits directly against the first character of the Chinese one,
+     and a Chinese query would then read as starting mid-word whenever
+     that English half ends in a letter or digit — which is exactly the
+     shape of a home code's line ("… RV level 8" then "家园码"). */
+  function textOf(el) {
+    if (!el) return "";
+    var parts = el.querySelectorAll(".t-en, .t-zh");
+    if (!parts.length) return el.textContent.toLowerCase();
+    var out = [];
+    Array.prototype.forEach.call(parts, function (p) { out.push(p.textContent); });
+    return out.join(" ").toLowerCase();
+  }
+
   var ENTRY = [];
   (function () {
     var badges = {};
@@ -72,15 +88,12 @@
       badges[b.dataset.kind] = b;
     });
     Array.prototype.forEach.call(tpl.content.querySelectorAll(".search-hit"), function (a) {
-      var n = a.querySelector(".search-hit-name");
-      var m = a.querySelector(".search-hit-meta");
-      var s = a.querySelector(".search-hit-sub");
       ENTRY.push({
         el: a,
         badge: badges[a.dataset.kind] || null,
-        name: n ? n.textContent.toLowerCase() : "",
-        meta: m ? m.textContent.toLowerCase() : "",
-        sub: s ? s.textContent.toLowerCase() : ""
+        name: textOf(a.querySelector(".search-hit-name")),
+        meta: textOf(a.querySelector(".search-hit-meta")),
+        sub: textOf(a.querySelector(".search-hit-sub"))
       });
     });
   })();
@@ -172,7 +185,7 @@
       var a = r.e.el.cloneNode(true);
       a.id = "searchResult" + i;
       /* The badge is written once per kind in the template and cloned
-         here, rather than written into all 288 entries. */
+         here, rather than written into every entry. */
       if (r.e.badge) a.insertBefore(r.e.badge.cloneNode(true), a.firstChild);
       list.appendChild(a);
       shown.push(a);

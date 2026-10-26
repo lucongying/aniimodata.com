@@ -47,6 +47,14 @@
   --link:#1F6FB2;
   --link-line:#A9C7E3;
 
+  /* ── 表格里的「领跑项」（2026-10-26）──────────────────────────
+     队伍页 #roles 那张表，每行有一个数字被标红加粗，含义只有一个：
+     这一格是全表该列最高的均值。这是全站第二个非属性色（第一个是上面的
+     --link），所以同样进 :root、同样写明来历。#B3261E 压在纸色 --paper 上
+     5.9:1、在白卡 #FFFFFF 上 6.4:1，14px 正文过 AA；不取更亮的红，是因为
+     它要跟旁边 --ink-2 那档灰在同一行里读。 */
+  --lead:#B3261E;
+
   --display:"Bricolage Grotesque","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --cjk:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
@@ -296,16 +304,43 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   font-family:var(--display);
   font-size:clamp(34px,6.2vw,62px);
   font-weight:800; letter-spacing:-0.035em; line-height:1.02;
+  /* 2026-10-26，用户：「网站标题改成其他颜色」。
+     色值取 :root 的 --link（#1F6FB2）—— 全站唯一的非属性色，就是正文链接
+     那个深一档的水属性蓝，压在纸面上 4.78:1。
+     **不新开一个色相**：这个蓝读者已经在站上见过两处（行内链接、攻略的日期
+     那行），标题要的是「换个颜色」，不是再来一套配色；再开一个等于给
+     「颜色 = 属性」这条读法多加一个例外。
+     只上第一行（「AniimoData」）。第二行「粉丝做的 wiki 站。」当天又被用户
+     点回去：「这几个字换回之前的颜色」—— 见下面 .hero-sub。
+     <em> 那一长串「家园码、家园、攻略……」仍是 --ink-2 的灰，它在版式里
+     是标题下面的第二档，跟着变蓝就和站名一样重了。 */
+  color:var(--link);
 }
+/* H1 的第二行。**它不是 <em>**：标记里是 <br> 换开的第二行，build.js 的
+   heroTitleHTML() 给它包了这个 span（<br> 不是 CSS 选得过去的边界）。
+   色值就是改版前的 --ink —— 用户要的「之前的颜色」。 */
+.hero-title .hero-sub{color:var(--ink)}
 .hero-title em{
   font-style:normal; font-weight:400;
   color:var(--ink-2);
   display:block; font-size:clamp(20px,3.2vw,30px);
   letter-spacing:-0.015em; margin-top:10px; line-height:1.3;
+  /* 中文断行按字走，两行时平衡一下 —— 2026-10-26 那版副标题在 1440px 上
+     断成「……一页一页」+「查。」，一个光秃秃的「查。」悬在第二行。和
+     .sp-guide .sp-title 用的是同一条理由。 */
+  text-wrap:balance;
 }
 .hero-lede{
   margin-top:20px; max-width:56ch;
   font-size:16px; color:var(--ink-2);
+  /* 2026-10-26：中文按字断行，这段四行的导语最后一行只剩「对过。」三个字。
+     **`pretty` 不够**（试过：它只救得了「最后一行只有一个词」，中文每个字都算
+     一个词，所以孤儿照样留着，只是从「过。」变成「对过。」）。
+     `balance` 才真的收掉它 —— 代价是四行被拉成一样长，读起来像一段排齐的引文；
+     这一块就四行、又坐在大标题下面，这个代价是划算的。
+     ⚠️ 两条都是 Chrome 117+ 才有的；不支持的浏览器退回普通断行，只是多一个
+     短尾巴，不会坏掉。 */
+  text-wrap:balance;
 }
 
 /* ── 标本墙：hero 的第三条 ──
@@ -459,6 +494,11 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 }
 .search-scope{
   margin-top:9px;
+  /* The sentence grew a sixth category (the Homeland's home codes) and no
+     longer fits one line at the hero's column width in English. Balanced
+     wrapping splits the remainder into two even lines rather than leaving
+     one orphaned word; browsers without it wrap the old way. */
+  text-wrap:balance;
   font-family:var(--mono); font-size:11.5px; line-height:1.5; color:var(--ink-3);
 }
 .search-hit{
@@ -529,6 +569,15 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 .readout-list dt{font-size:13px; color:var(--ink-2)}
 .readout-list dd{font-family:var(--mono); font-size:15px; font-weight:500}
 .readout-list dd.warn{font-size:11.5px; color:var(--fire)}
+/* 2026-10-25：首页「一览」的七行现在各自指向它点名的那一页。链接只包住
+   <dt> 里的名字，整行的可点范围靠一个铺满的 ::after 撑开（stretched
+   link）—— 一条目因此只有一个 tab stop、一个可及名，右边那个数不会变成
+   指向同一处的第二个链接。只对首页写：team.html 也有一张 .readout，
+   那里的行没有链接，一条规则都不该落过去。 */
+.home .readout-list > div{position:relative}
+.home .readout-link{color:inherit; text-decoration:none}
+.home .readout-link::after{content:""; position:absolute; inset:0; border-radius:2px}
+.home .readout-link:hover{text-decoration:underline; text-underline-offset:3px}
 .readout-foot{
   margin-top:14px; padding-top:12px; border-top:1px solid var(--line);
   font-size:12px; color:var(--ink-3);
@@ -540,27 +589,13 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    色带没了，但属性色本身还在用在别处：光谱条、物种页的类型标签、图鉴表的
    类型列，都还是从 ANIIMO_TYPES 取的 --c。 */
 
-/* ── 本站是什么 ──
-   四张卡从左往右一排。2026-09-30 晚用户说「用四个卡片从左往右排列」，并点名
-   了四张各写什么：完整的流程 / 完善的数据库 / 全面的攻略 / 游戏的各种问题
-   解答。**「全面的攻略」那一张当时没进来** —— 它要指的是 guides.html，而那时
-   那一页还是骨架页，首页不许印一个站里没有的板块。
-
-   2026-10-17 补上：guides.html 有 17 篇了，points 数组按顺序插进第三位，
-   列数改成 4，四张卡的正文一起重写。**重写是必须的，不是顺手**：3 列时每张
-   卡内宽 340px（正文是照 380px 写的），4 列时只有 209px，照搬会变成四根很高
-   的窄柱。现在的预算是每张两句话、英文 150 字符上下。
-
-   排列本身没有先后，所以没有 01/02/03/04 —— 编号会暗示一个顺序，而四者之间
-   没有顺序。 */
-.about-list{
-  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:14px;
-}
-.about-point{background:var(--surface); border:1px solid var(--line); padding:22px 20px}
-.about-title{font-family:var(--display); font-size:18px; font-weight:600; letter-spacing:-0.015em}
-.about-body{margin-top:9px; font-size:14px; color:var(--ink-2)}
-.about-body strong{color:var(--ink); font-weight:600}
+/* ── 本站是什么（2026-10-25 整段删除）──
+   这一排四张卡（完整的流程 / 完善的数据库 / 全面的攻略 / 游戏的各种问题解答）
+   随首页那一段一起撤掉了：用户说它没什么用、留不住读者，并要家园那一块搬到
+   它的位置上（见 build.js 的 HUB_LEAD 与 styles.css 的 .hub 段）。
+   .about-list / .about-point / .about-title / .about-body 四条规则、它们在
+   1060 / 620 两档的断点、以及卡面共用规则里的 .home .about-point 一起删了；
+   标记不再产生，留着就是没人读的死样式。 */
 
 /* ── 首页：hero 以下，基本一列到底 ────────────────────────────────
    2026-09-30 用户点名的第二件事：除了最上面那一处，首页下面全部改成一列。
@@ -575,7 +610,8 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 
    选择器一律带 .home，因为下面这几个类里有三个是 team.html 也在用的共用类
    （.readout / .sys-grid / .sys-card），直接改会改到那一页去。.home 只挂在
-   首页从 hero 开始的五个 <section> 上（build.js 的 page()），全站没有第二处。
+   首页从 hero 开始的三个 <section> 上（build.js 的 page()；2026-10-25 去掉
+   「本站有什么」之后是三个 —— hero / 页面墙 / 系统 —— 全站没有第二处。
 
    ── 2026-09-30 晚，第三次：用户附了一张参考图，要求「板块做成这个样式」。
    参考图的语言和本站原来的几乎相反 —— 圆角、纯白浮面、软投影、卡片顶上
@@ -592,7 +628,7 @@ html:not([data-lang="zh"]) .t-zh{display:none}
       「颜色 = 属性」这条读法弄脏。真按属性来的地方（下面的元素图例）照旧
       一行一色，用 --c。
 
-   --lift / --card-raised 定义在 .home 上而不是 :root：它们只服务于首页这五段，
+   --lift / --card-raised 定义在 .home 上而不是 :root：它们只服务于首页这几段，
    而 :root 是另外十二页也在读的地方。--card-raised 比 --surface(#FCFDFC) 再白
    一档 —— 参考图的卡是纯白压在浅灰纸上，而 --surface 压在 --paper 上只差十个
    色阶，抬不起来。投影补一部分，纯白再补一部分。 */
@@ -600,16 +636,20 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   --card-raised:#FFFFFF;
   --lift:0 1px 2px rgba(21,24,27,.05), 0 14px 32px -16px rgba(21,24,27,.16);
 }
+/* 首页板块的底色交替试过一版（2026-10-26 当天撤掉，用户：「不好看，换回之前的吧」）：
+   页面墙那一段铺 --band:#E7EBE8、上下两段仍是纸色，通栏靠 max-width:none +
+   一条和地图页 .sp--map 同式的 padding-inline。**别再照着改回去** —— 判据在
+   用户眼里，不在「边界更清楚」这件事上；这里只留一句，好让下次知道它试过。 */
 .home .sys-grid{
   display:grid; grid-template-columns:minmax(0,1fr);
   gap:clamp(14px,1.8vw,20px);
 }
-/* 卡片长相。四类盒子共用一套，否则一页里会出现两种卡片 —— 上一版正是栽在
-   这里：页面墙是一种，这两块是另一种。
+/* 卡片长相。三类盒子共用一套，否则一页里会出现两种卡片 —— 上一版正是栽在
+   这里：页面墙是一种，这两块是另一种。（.home .about-point 原来在这张表里，
+   2026-10-25 随那一段一起删了。）
 
    顶那道 4px 墨条取代了上一版的 3px 左脊。直角换成圆角之后左脊会被圆角切掉
    两头，读起来是断的；顶条在圆角上拐得过去，而参考图用的也正是这一道。 */
-.home .about-point,
 .home .sys-card,
 .home .readout{
   background:var(--card-raised);
@@ -619,11 +659,8 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   padding:clamp(22px,2.6vw,30px);
   box-shadow:var(--lift);
 }
-/* 四列之后卡内宽只有两百出头，86ch 够不着，这条现在是空转的 —— **保留是有意的**：
-   620px 以下这四张卡叠回单列（这一排的断点在文件末尾，1060 / 620 两档），那时
-   卡内宽七百多，上限又回来了。86ch 和 .hub-body 同一个数。 */
-.home .about-body{max-width:86ch}
-/* 系统卡的四段正文原来也是这样：.sys-card p / li 没有行长上限，两列时代
+/* （.home .about-body 的 86ch 上限原来在这里，2026-10-25 随那四张卡一起删。）
+   系统卡的四段正文也是这样：.sys-card p / li 没有行长上限，两列时代
    无所谓（内宽五百多），单列之后每行要排一百三十多个西文字符。 */
 .home .sys-card p,
 .home .sys-card li{max-width:86ch}
@@ -701,6 +738,11 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    正文在卡的左半边就折行，右边空出四成，读起来不像留白，像卡没填满。 */
 .hub-body{margin-top:12px; font-size:15px; color:var(--ink-2); max-width:86ch}
 .hub-body strong{color:var(--ink); font-weight:600}
+/* 卡片正文结尾那对括号（今天是队伍搭配卡的更新日期）。build.js#nowrapTail
+   把它包成这个 span：中文里「（」不能起行，不 nowrap 的话浏览器会从日期
+   中间断行 —— 「（最后更新：2026」＋「年 10 月 24 日）」。只在行内生效，
+   放不下就整组挪到下一行。 */
+.hub-body .nowrap{white-space:nowrap}
 
 /* 这条条目自己的内容 —— 整条里唯一的那个盒子。圆角、纯白、软投影、顶上 4px
    墨条，和上面 .home 那一段里的四类盒子是同一套值，全部来自 .home 上的
@@ -738,37 +780,12 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    .dex-table 有自己的 min-width，不受这条影响，仍旧退回 .table-wrap 里横滑。 */
 .hub-card .hub-content .form-table,
 .hub-card .hub-content .conf-table{width:100%; max-width:100%}
-/* 铺满这一招救不了家园那张表。上面那段写的是「让余量由浏览器按各列的
-   max-content 按比例分掉」—— 那是假设各列都有 max-content 可要。RV 那张表
-   的第三栏（开出什么）通栏是「储物单元」「生态模块」，max-content 只有四五个字，
-   整幅宽 1038 里它只占不到 300，剩下的七百多像素全堆在它右边，看上去像没加载完。
-   （2026-10-01 用户：「首页的家园板块右边有点空」。）
-   所以换成结构：前十条拆成两张半表并排，表头各带一份。**这不是 CSS 能补的洞** ——
-   三四个字的单元格，怎么写列宽都不会往右挪。
-   栏距比 .hub-media 大一点（表格相邻两栏挨太近会读成一张六列表）。 */
-.hub-card .hub-split{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:0 clamp(24px,3vw,44px);
-}
-/* 表头不许折。两个半表的栏宽是各算各的（auto 版式按内容算），右半「开出什么」
-   那栏内容长，就把「RV level」挤成上下两行的「RV / LEVEL」—— 同一行表头左右
-   两半一个一行一个两行，看着像坏了。不许折之后浏览器会给第一栏留出表头那么宽，
-   两半的第一、第二栏因此都是同一个宽度。.dex-table 的表头早就是这么办的。
-   全局的 .form-table th 不动：这一条只对半宽的表成立。 */
-.hub-card .hub-split th{white-space:nowrap}
-/* 两半的栏宽要对上。auto 版式是按内容分余量的：右半「开出什么」那栏内容长，
-   分到的余量就多，连带把前两栏挤窄 —— 结果左半的表头在 204 / 296 / 366，
-   右半在 214 / 306 / 366，「RV LEVEL」和「ANIIMO」两栏左右差十几个像素。单看
-   不觉得，并排看就是两张没对齐的表。定死前两栏的宽度，两半就完全一样，读起来
-   才像一张表折成两半。
-   用 px 不用 fr/ch：这一页的列宽全是 px（.dex-table 的和就写在上面那条注释里）。
-   80/76 是「RV LEVEL」「ANIIMO」在最宽的那个 monospace 下再加右内边距的值。 */
-.hub-card .hub-split .form-table{table-layout:fixed}
-.hub-card .hub-split th:first-child{width:80px}
-.hub-card .hub-split th:nth-child(2){width:76px}
-/* 两张半表各自 100% 铺满自己那一栏，所以那两条 width:100% 在这里仍然生效，
-   `.hub-card .hub-content .form-table` 是祖先选择器，不用另写。 */
+/* 「两张半表并排」那一套（.hub-split）随 2026-10-25 的家园码一起删了。
+   它存在的理由见上一条注释的末尾：三栏表的第三栏只有四五个字，铺满之后余量
+   全堆在右边（2026-10-01 用户：「首页的家园板块右边有点空」）。现在这张表带着
+   三栏家园码、总共六栏，自己就把卡填满了；半表那几条定宽规则本来又是照三栏
+   写的（前两栏 80/76px、table-layout:fixed），留下来只会把六列挤坏。
+   以后再有哪张表需要拆成两半，理由仍然是「这张表窄得填不满卡」，不是「想并排」。 */
 /* 被截断的块下面那行「前 N 条 / 共 M 条」。它是标注，不是行文，所以走等宽小字，
    并且压掉 .sp-note 给正文的 66ch 上限 —— 它只有一行，不该被折。 */
 .hub-card .sp-note{
@@ -864,8 +881,9 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 .hub-card[id]{scroll-margin-top:24px}
 
 /* ── 区块通用 ── */
-/* `.game` 原来在这条选择器表里，2026-09-30 晚那一整段撤掉后它就没有标记了。 */
-.systems,.about,.hub{
+/* `.game` 原来在这条选择器表里，2026-09-30 晚那一整段撤掉后它就没有标记了；
+   `.about` 同理，2026-10-25 随「本站有什么」那一段删掉。 */
+.systems,.hub{
   max-width:var(--max); margin:0 auto;
   padding:clamp(48px,6vw,80px) var(--gut);
 }
@@ -1066,6 +1084,137 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   font-size:13px !important; color:var(--ink-3) !important;
 }
 
+/* ── 定位卡底下的元素头像（team.html）──────────────────────────
+   五格，写死五列，顺序是电、火、草、水、暗。列数写死而不是 auto-fit：
+   五格是这一页的口径，折成 4＋1 或 3＋2 会让读者以为少了一格 —— 真正
+   缺格子的那种情况（治疗只有水能填）是**整格不印**，和折行要分得开。
+
+   每一格是一整块可点区域的竖排：元素名（复用 .type 那套圆点标签）、
+   官方头像、物种名。头像 48px 与 build.js 的 ROLE_HEAD_PX 是同一个数 ——
+   一处改两处改，属性写错了图落地时那一格会跳。
+
+   分隔线只画一道，在网格顶上：五格之间再画竖线就成了表格，而这里读的是
+   「这张卡有哪几个元素」，不是「哪个元素排第一」。 */
+.role-heads{
+  display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px;
+  margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
+}
+/* 这句是定位卡那一排的说明，紧跟在 rolesFoot 后面。两条 .sp-note 之间
+   本来就没有间距（这一段共用 .sp-note，而 .sp-note 本身不带 margin），
+   不补这一条，它会读成上一段多出来的一行。 */
+.role-heads-note{margin-top:12px}
+
+/* 同一行的两张卡高度一样（.sys-grid 默认 stretch），但头像排在正文下面 ——
+   正文长短不同，两张卡的头像就一高一低（右卡正文短，整排往上浮）。卡片改成
+   竖排 flex、把这一排推到卡底，同一行两排头像就落在同一条横线上；正文短的
+   那张多出来的空白留在文字和分隔线之间，而不是把头像顶上去。
+   p 的 16px 下边距是地板：没有余量可分时（正文最长的那张卡）分隔线不会贴着字。 */
+.role-card{display:flex; flex-direction:column}
+.role-card > p{margin-bottom:16px}
+.role-card .role-heads{margin-top:auto}
+.role-head{
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:2px 2px 4px; text-align:center; text-decoration:none;
+}
+.role-head-img{display:block; width:48px; height:48px; margin-top:2px}
+/* 名字的线画在名字上，不画在整格上 —— 和 .form-link 同一条理由（头像不该
+   跟着一起被划一道）。整格可点，但能点的提示只出现在文字下面。
+   用 text-decoration 而不是 .form-link 的 border-bottom：这里要允许折行
+   （Little Fire Spirit），border 会变成整块底下的一条，而 decoration 跟着
+   每一行走。 */
+.role-head-name{
+  font-size:12.5px; line-height:1.35; font-weight:600; color:var(--link);
+  text-decoration:underline; text-decoration-thickness:1px;
+  text-decoration-color:var(--link-line); text-underline-offset:3px;
+}
+.role-head:hover .role-head-name{text-decoration-color:currentColor}
+/* 英文名字长短不齐，「Little Fire Spirit」在 93px 的格子里会折两行 —— 折行的
+   那格比同排别的格子高一整行，而头像排是贴卡底的，于是头像被顶高一截，正是
+   要避免的那种一上一下。英文按两行预留名字位，五行头像就落在同一条线上。
+   中文名最长四个字（全 86 只里量过），在这个宽度永远不会折行，所以不预留，
+   免得每格底下多出一行空白。 */
+html:not([data-lang="zh"]) .role-head-name{min-height:2.7em}
+
+/* ── 属性配队（team.html 的 #teams）──────────────────────────────
+   八支队伍、两列卡片，每张卡固定四个位置。四列写死的理由和上面
+   .role-heads 写死五格是同一条：四个位置是这一页的口径，折成 3＋1 会被
+   读成「少了一个位置」，而八张卡只有列数一致才左右对得齐。
+
+   带备选的那个位置把两只并排挤在同一格里、中间夹一个「或」：备选和主选争
+   的是同一个位置，排到下一行就成了第五只、第六只，还会把整张卡拉高、和旁
+   边的卡错开。改成一格之内左右平分之后，八张卡都是同样四行，网格的
+   align-items:start 也留着兜底。
+
+   每格只印三样：头像、名字、官方的定位。头像底下曾经还挂属性标签，2026-10-26
+   用户要求整条去掉 —— 卡片表头已经写着这一队是哪个属性，标签是重复的。 */
+.team-grid{align-items:start}
+.team-card .sys-title{display:flex; align-items:center}
+.team-card .sys-title .type{font-size:15px}
+.team-card .sys-title .type::before{width:10px; height:10px}
+/* 四个位置，每格 = 「自己内容要多宽」＋「剩下的地平均分一份」。这就是
+   `flex:1 1 auto`：基准宽度取内容（flex-basis:auto），多出来的空间按 grow
+   平均分。**不要退回 grid + fr** —— `2fr 2fr 1fr 1fr` 是按份数分，有「或」
+   那格会白占一倍宽；`minmax(max-content,…)` 又不许和 25% 上限混写（min()
+   不吃 max-content 这种关键字），窄屏会顶出卡片。这里没有「或」那格特殊处理，
+   它更宽只是因为两个名字比一个宽。
+   ≤680px 那条媒体查询把它改回两列 grid，照样赢。 */
+.team-slots{
+  display:flex; gap:6px;
+  margin-top:14px; padding-top:14px; border-top:1px solid var(--line);
+}
+/* 一格之内横着排：只有一个成员时它照样居中（flex:1 只把它撑满，内容还是
+   align-items 居中的），有两个时两个平分这一格、中间那个「或」定在头像那
+   一行的中线上 —— 所以它不跟着缩，只吃 padding-top。 */
+.team-slot{
+  display:flex; flex-direction:row; align-items:flex-start;
+  justify-content:center; gap:4px;
+  flex:1 1 auto; min-width:0;
+}
+.team-member{
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  flex:1 1 0; min-width:0;
+  padding:2px; text-align:center; text-decoration:none;
+}
+/* 备选把一格劈成两半时，48px 头像会比半格还宽一点点，max-width 让它跟着
+   收；object-fit 保住方形，不然那一个像素会把它压扁。 */
+.team-member-img{
+  display:block; width:48px; height:48px;
+  max-width:100%; object-fit:contain;
+}
+/* 名字的线画在名字上、不画在整格上 —— 和 .role-head-name 同一套。
+   英文名的断点写在 view-pages.js 的 NAME_SHY 里（软连字符），这里不管：
+   overflow-wrap 在这里帮不上忙（它只改断行、不改 min-content，名字照样
+   把盒子撑宽），hyphens:auto 在没装断词词典的 Chrome 上是空转。 */
+.team-member-name{
+  font-size:12.5px; line-height:1.35; font-weight:600; color:var(--link);
+  text-decoration:underline; text-decoration-thickness:1px;
+  text-decoration-color:var(--link-line); text-underline-offset:3px;
+  /* 中文默认可以在任意两个字之间断，于是窄格里「Prismana 蓬蓬羊」会断成
+     「Prismana 蓬蓬」＋「羊」。keep-all 把汉字之间的断点关掉，只剩那个空
+     格能断，结果就是「Prismana」／「蓬蓬羊」。英文名不受影响（本来就在
+     空格处断），最长的四个汉字「熔岩暴龙」46px 也远窄过任何一格。 */
+  word-break:keep-all;
+}
+.team-member:hover .team-member-name{text-decoration-color:currentColor}
+.team-member-role{font-size:11.5px; color:var(--ink-2)}
+/* 「或」定在头像那一行的中线上：头像 48px、中线 24px，line-height:1 时盒子
+   就 13px 高，所以 padding-top 是 24 − 6.5 ≈ 17.5。字号/粗细/墨色是 2026-10-26
+   用户要求加的（原来 11px 的浅灰在缩略图里几乎看不见）。 */
+.team-or{
+  font-size:13px; font-weight:700; line-height:1; color:var(--ink);
+  flex:0 0 auto; padding-top:17.5px;
+}
+/* 一格挤两只时把缝和内边距收一收、名字降半号。**两只贴着「或」**（用户
+   2026-10-26：『或字左右的两个伊莫靠近一点』）——所以这里的成员按内容宽、不再
+   去平分这一格（1:1:1:1 那份会把两只推开）；多出来的宽度靠 .team-slot 的
+   justify-content:center 落在两端。 */
+.team-slot--pair{gap:3px}
+.team-slot--pair .team-member{flex:0 1 auto; padding:1px}
+.team-slot--pair .team-member-name{font-size:11.5px}
+/* 英文名比中文长（Little Fire Spirit、Rainstorm Turbo），两行在这个宽度是
+   常态；中文名最长四个字，一行就够 —— 和 .role-head-name 同一条理由。 */
+html:not([data-lang="zh"]) .team-member-name{min-height:2.7em}
+
 /* ── 页脚 ──
    一条横贯的墨线底下分两段：先是一行品牌块加五栏链接，再是一条细线、
    线下居中两行小字（免责声明与版权）。
@@ -1186,6 +1335,14 @@ html:not([data-lang="zh"]) .t-zh{display:none}
 .sp-h2{
   font-family:var(--display); font-size:clamp(19px,2.6vw,25px); font-weight:800;
   letter-spacing:-.025em; margin-bottom:10px;
+}
+/* 挂在某个 h2 后面的「最后更新」括号（2026-10-26，目前只有队伍页 #teams 用）。
+   它是标题的注脚，不是标题的第二行，所以降两档字号、颜色退到 --ink-2、
+   字距归零（--display 的负字距在 12px 上会把括号和中文挤到一起）。
+   括号与前面的空格写在内容文件里，中英两侧各自负责自己的标点宽度；
+   窄屏允许折行 —— 中文那一串 17 个字，硬不换行会在 375px 上顶出纸边。 */
+.sp-h2-date{
+  font-size:.6em; font-weight:600; letter-spacing:0; color:var(--ink-2);
 }
 /* .sp-block 里的第三级标题。和 .map-side-h 同一套处理 —— 小号等宽、
    大写、灰。它标的是「这一段讲什么」，不是往标题层级上再加一格音量，
@@ -1407,6 +1564,14 @@ html:not([data-lang="zh"]) .radar text.t-zh{display:none}
   padding:13px 14px 13px 0; border-bottom:1px solid var(--line);
   vertical-align:top; color:var(--ink-2);
 }
+/* 2026-10-26 队伍页 #roles 表里「该定位领跑的那一项」：红 + 700（用户：
+   「用红色标出来，字体加深加粗」）。颜色挂在 <td> 上而不是数字上 ——
+   用户看过第一版后要「整格一个颜色」，也就是后面的区间也跟着变红；区间
+   平时是 .muted 的灰，所以只能用 td 上的类把它压回 inherit，单包住数字
+   做不到。数字本身仍加粗，红是给这一格的、粗是给那个均值的。 */
+.form-table td.is-lead{color:var(--lead)}
+.form-table td.is-lead strong{font-weight:700}
+.form-table td.is-lead .muted{color:inherit}
 .f-no{font-family:var(--mono); font-size:12.5px; color:var(--ink-3); width:56px}
 /* 210px 这个宽度现在被第二张表用着：boss.html 的 Alpha / Omega 两张表的
    第一格也挂 .f-name，那一格里除了名字还有一个 34px 的官方头像（.dex-head），
@@ -2390,31 +2555,49 @@ a.cell-link:hover{border-bottom-color:currentColor}
   /* 系统卡叠成一列。首页那四张系统卡不用这一条了 —— 首页从 2026-09-30 起
      本来就是单列（见 .home 那一段），剩下的这个 .sys-grid 是 team.html 的。 */
   .sys-grid{grid-template-columns:minmax(0,1fr)}
-  /* 「本站是什么」那一排 2026-10-17 有了自己的两档（1060 / 620，在下面），
-     所以它不再跟着这条 900px 一列到底 —— 四张卡在这一档正好排 2×2。 */
   /* 地图那条的左图右文也叠回上下。卡内宽到这一档只剩六百多，0.85fr 那一栏
      不足三百，图缩到看不清地形的程度 —— 那时它就不是地图，是个花纹了。
      叠成上下之后图回到整幅宽，和删卡片以前一样。 */
   .hub-card .hub-media{grid-template-columns:minmax(0,1fr)}
-  /* 家园那两张半表也叠回上下。这里要另给 row-gap —— 并排时行距是 0（两张表
-     各行本来就靠自己那条行线分开），叠起来之后没有行距两张表会连成一张，
-     而表头只该出现在它自己那半的头上。 */
-  .hub-card .hub-split{grid-template-columns:minmax(0,1fr); row-gap:28px}
 }
 
-/* 「本站是什么」那一排自己的两档。四列那一档的字栏实测在 180–205px 之间
-   （1184px 视口上卡 265、字栏 205；到 1060px 视口卡 235、字栏 180，因为卡片
-   的内边距是 clamp(22,2.6vw,30)，越窄掐得越少）。180px 是这一排能读下去的底
-   —— 再窄就不是窄栏，是要竖着读的一条；所以 1060 落成 2×2，620 以下才一列
-   到底，那时正文的 86ch 上限接着管。两档都出过图核对，四列最紧那一档（视口
-   1064）没有断词、没有只剩一个字的末行。 */
-@media (max-width:1060px){
-@media (max-width:1060px){
-  .home .about-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* 首页「队伍搭配」那张卡的分栏规则（.role-split / .role-copy / 452px 那套，
+   2026-10-26 早上为「正文在左、五格头像在右」写的）随当天晚些的换内容一起
+   删了：那张卡现在印的是 #teams 的八支属性队伍，用的是 team.html 那套
+   .team-grid / .team-card，不再有「左边正文、右边头像」的分栏。
+   .role-heads / .role-card / .role-head* 都留着 —— team.html 的定位卡还在用。
+   以下是墓碑，不是留着不用的死规则。
+
+   换内容之后这里补了一条：那八张卡在 team.html 上是两列，这里照那个形状排。
+   首页的 .home .sys-grid 是单列（2026-09-30 起），单列时每支队伍横跨
+   1038px、四个头像被摊开成一排稀疏的点；两列之后八支正好四行、每张卡
+   ~508px（和 team.html 上量到的卡宽是同一档），矮一半。≤900px 交回全局那条
+   单列 —— 那时卡里宽不足三百五，四个位置会挤成一团。
+
+   两列之间那道竖线（2026-10-26 晚，用户：「中间两种队伍要隔开」）。原来两列
+   只隔着一个 gap，而每张卡自己顶上的那道发丝线在自己的列里横着画 —— 一行
+   读起来是「一道横线上排着八只」，电系和草系被当成同一支队伍。竖线画在第一
+   列卡片的右边界上（`column-gap:0` 之后正好落在两列中间），并把左右两列各自
+   让出 26px，所以它不是紧贴内容的边线，是两条队伍之间的分界。 */
+@media (min-width:901px){
+  .hub-card .hub-content .team-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:0;
+  }
+  .hub-card .hub-content .team-grid > .team-card:nth-child(odd){
+    padding-right:clamp(20px,2vw,26px);
+  }
+  .hub-card .hub-content .team-grid > .team-card:nth-child(even){
+    border-left:1px solid var(--line);
+    padding-left:clamp(20px,2vw,26px);
+  }
 }
-@media (max-width:620px){
-  .home .about-list{grid-template-columns:minmax(0,1fr)}
-}
+
+/* 「本站是什么」那一排的 1060 / 620 两档断点原来在这里，2026-10-25 随那一段
+   一起删了。
+   ⚠️ 那个块里还埋着一个笔误：`@media (max-width:1060px){` 连写了两遍、却只有
+   一个 `}` 收尾。整份样式表因此一直少一个右括号 —— 从那一行到文件末尾的所有
+   规则（包括最后那条 prefers-reduced-motion）都被套进了这层 media 里，在宽屏
+   上等于没写。删掉这段时括号自然配平了（改完数过，去掉注释里的花括号后左右相等）。 */
 
 @media (max-width:680px){
   /* 导航从 5 项长到 11 项后，原来的 24px 间距在窄屏会把它折成三行，
@@ -2537,6 +2720,20 @@ a.cell-link:hover{border-bottom-color:currentColor}
 @media (max-width:680px){
   .glance-grid a.glance-card.guide-card{grid-template-columns:minmax(0,1fr)}
   .guide-card .guide-body{grid-column:1; grid-row:2}
+}
+
+/* 定位卡的五格在窄屏折成 3＋2。卡内宽到这一档只剩三百上下，五列每格
+   六十像素出头 —— 「Electric」那个标签自己就要六十，会顶破格子。折行
+   仍然读得出「这一档有哪几个元素」，所以这里不比桌面端差。 */
+@media (max-width:680px){
+  .role-heads{grid-template-columns:repeat(auto-fit,minmax(74px,1fr))}
+}
+
+/* 属性配队那八个位置：卡内宽到这一档只剩三百上下，四列各七十出头，
+   头像 48 加上「Rainstorm 蓬蓬羊」那种名字就顶破了。折成两列 ——
+   仍然是四个位置，只是两行。 */
+@media (max-width:680px){
+  .team-slots{display:grid; grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
 @media (prefers-reduced-motion:reduce){

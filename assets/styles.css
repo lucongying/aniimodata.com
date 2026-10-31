@@ -960,6 +960,13 @@ html:not([data-lang="zh"]) .t-zh{display:none}
   border-left:3px solid var(--row-c,var(--line-2));
   padding-left:11px;
 }
+/* 第二套编号（耳语群岛）的番号上压一行图鉴名。两套编号都从 001 起，
+   只印数字一张表里就有两个 001；图鉴名放在数字上面一行，比横着排省宽度
+   —— .c-no 只有 64px，横排的 "Whisperwake Isles 001" 会把整列撑开。 */
+.no-dex{
+  display:block; font-family:var(--mono); font-size:9px; font-weight:400;
+  letter-spacing:.02em; line-height:1.4; color:var(--ink-3); opacity:.85;
+}
 .cell-name{
   font-family:var(--display); font-weight:600; font-size:16px;
   letter-spacing:-0.01em; line-height:1.2;
@@ -1016,6 +1023,10 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    一个地区名。 */
 .cell-region{font-size:13px; color:var(--ink-2); white-space:normal}
 .cell-region .t-en,.cell-region .t-zh{white-space:nowrap}
+/* 那一格印的不是地区名，而是一句来路说明（.muted，2026-10-31 起）时，
+   nowrap 会把句子顶出行右缘 —— 390px 实测占了 504px、只看得到半句，
+   而且没有任何省略号提示。地区名仍旧不折，说明句按普通文本折。 */
+.cell-region .muted .t-en,.cell-region .muted .t-zh{white-space:normal}
 
 .cell-tier{display:flex; align-items:center; gap:7px}
 .tier-badge{
@@ -1990,6 +2001,13 @@ a.cell-link:hover{border-bottom-color:currentColor}
 .sp-guide .form-table th:nth-child(1){width:56px}
 .sp-guide .form-table th:nth-child(2){width:96px}
 .sp-guide .form-table th:nth-child(3){width:124px}
+
+/* 攻略页表格里的 <strong>（2026-10-27，十级家园那篇把「设施」「产物」两栏
+   整格写粗，用户：「字体加深加粗，这样更明显的表示什么设施产什么东西」）。
+   和 .prose strong / .sp-note strong 同一套写法：正文色 + 600。少了这条，
+   <strong> 会退回浏览器默认的 700 并继续吃 .form-table td 的 --ink-2，
+   加粗反而比周围淡。 */
+.sp-guide .form-table td strong{color:var(--ink); font-weight:600}
 
 /* ── 首页攻略块 ──────────────────────────────────────────────
    2026-10-17：**这一套（.guide-home / .guide-home-item / .guide-home-thumb /

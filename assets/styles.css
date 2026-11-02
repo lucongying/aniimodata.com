@@ -1355,6 +1355,13 @@ html:not([data-lang="zh"]) .team-member-name{min-height:2.7em}
 .sp-h2-date{
   font-size:.6em; font-weight:600; letter-spacing:0; color:var(--ink-2);
 }
+/* 同一条注脚挂在 h1 上（2026-11-01，任务页）。h1 是 34–56px，照 .6em 会跟着
+   涨到二三十像素，所以这里改成定区间 12–15px —— 落到 h2 旁边时的那个视觉档。
+   字号不跟标题缩放，窄屏上这串日期才不会被顶出纸边。 */
+.sp-title-date{
+  font-size:clamp(12px,1.5vw,15px); font-weight:600; letter-spacing:0;
+  color:var(--ink-2); margin-left:.45em;
+}
 /* .sp-block 里的第三级标题。和 .map-side-h 同一套处理 —— 小号等宽、
    大写、灰。它标的是「这一段讲什么」，不是往标题层级上再加一格音量，
    所以不走 --display。目前只有 progression 用：整个「通关之后」是一个

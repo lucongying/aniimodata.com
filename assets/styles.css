@@ -2016,6 +2016,11 @@ a.cell-link:hover{border-bottom-color:currentColor}
    加粗反而比周围淡。 */
 .sp-guide .form-table td strong{color:var(--ink); font-weight:600}
 
+/* 2026-11-03：试过给攻略正文单列一条 `.sp-guide strong`（700 + 0.3px 描边，
+   因为中文的 600 在系统 CJK 字上常常落回正文那一档），用户看过之后
+   「加了之后不好看，回退到之前的」，已整条撤掉。攻略正文的 <strong> 仍旧走
+   上面 .prose strong / .sp-note strong 那一套：--ink + 600。 */
+
 /* ── 首页攻略块 ──────────────────────────────────────────────
    2026-10-17：**这一套（.guide-home / .guide-home-item / .guide-home-thumb /
    .guide-home-body / .guide-home-q / .guide-home-a）全部删除**，首页那一块

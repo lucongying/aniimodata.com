@@ -237,6 +237,41 @@ html:not([data-lang="zh"]) .t-zh{display:none}
    颜色只是把它画出来；看不见颜色的读者同样得到这条信息。 */
 .nav-links a[aria-current]{color:var(--ink); border-bottom-color:var(--ink)}
 
+/* ── 触屏的可点范围（2026-11-07）──────────────────────────────
+   手机上这一排链接只有 25px 高，页脚那二十条只有 20px —— 后者在 WCAG 2.2
+   的 24×24 下面，前者也远在 44 那条常规线以下。手指点偏一格就跳到隔壁页面，
+   而这一站现在过半是手机流量。
+
+   **这里不加 padding。** 导航这一排的高度、以及悬停/当前页那条下划线离字的
+   距离，都是定死的（见 .nav 那段注释）：pad 一下，下划线会被推到离字 6px 的
+   地方，整排还要再高一行，而它已经吃掉首屏五分之一了。做法改成一层透明的
+   ::after 往四边伸 —— 盒子不动、字不动、线不动，只有可点的面积变大。
+
+   伸多少是量出来的，不是拍的：
+   · .nav-links 同排的行间距是 9px，**上下各只伸 4px** —— 那样 9px 被相邻
+     两行平分、中间留 1px 谁也不碰。试过伸满 9px，两层的 ::after 会把整条
+     缝叠在一起，后画的下一行把上一行那份整个吃掉，点缝里跳的是下面那一行。
+   · 列间距 15px，左右各伸 6px，中间还留 3px。
+   · 页脚 ul 的间距也是 9px、链接是行内盒的 19px 高，同样上下各伸 4px。
+   有效高度因此是 25→33（导航）与 19→27（页脚）。再往上要 44 就只能动
+   排版本身了 —— 行距加到 44，这一排导航会从 187px 长到 217px，而它已经在
+   首屏占掉五分之一。
+   下拉菜单里的项本来就是 34px 高，不动 —— 那里三项之间没有多余间隙可以借，
+   硬伸会让它们互相盖住。 */
+.nav-links > a,
+.nav-links > .nav-item > a,
+.lang-toggle,
+.foot-col a{position:relative}
+.nav-links > a::after,
+.nav-links > .nav-item > a::after{
+  /* 下沿写 -5 而不是 -4：链接自带一条 1px 的透明下划线（悬停时它才显色），
+     ::after 是从内边距盒伸的，那 1px 得补回来，上下才真的一样多。 */
+  content:""; position:absolute; inset:-4px -6px -5px;
+}
+/* 语言按钮独占品牌那一行，上下没有邻居可以撞，伸展多少都是纯赚。 */
+.lang-toggle::after{content:""; position:absolute; inset:-9px -8px}
+.foot-col a::after{content:""; position:absolute; inset:-4px 0}
+
 /* ── 分组按钮与下拉菜单 ──
    物种、物品、BOSS 三张表收进一个「数据库」按钮，菜单挂在它下面。点击和
    悬停都展开它，两者都不离开当前页。
@@ -1159,9 +1194,25 @@ html:not([data-lang="zh"]) .role-head-name{min-height:2.7em}
    每格只印三样：头像、名字、官方的定位。头像底下曾经还挂属性标签，2026-10-26
    用户要求整条去掉 —— 卡片表头已经写着这一队是哪个属性，标签是重复的。 */
 .team-grid{align-items:start}
-.team-card .sys-title{display:flex; align-items:center}
+.team-card .sys-title{display:flex; align-items:center; flex-wrap:wrap}
 .team-card .sys-title .type{font-size:15px}
 .team-card .sys-title .type::before{width:10px; height:10px}
+/* 名字右边那截空着的表头，印的是这张卡的名单最后一次重排的日子（2026-11-07
+   用户要求）。它靠 margin-left:auto 顶到右侧，和 .type 之间至少留 10px，所以
+   名字再长也不会贴着日期。字号比 .type 的 15px 退一档、颜色退到 --ink-3 ——
+   它是注脚，不是标题的第二行，所以不加 --display 的负字距。
+   **日期本身不折行**（一个日期断成两截读不了），但它是可以整体换行的：
+   .sys-title 带着 flex-wrap:wrap，放不下时它整段落到第二行、仍旧靠右。
+   ⚠️ 2026-11-07 加这条时漏了 wrap，日期把卡片顶穿了 —— 两张「抢蛋大作战」
+   卡的标题 207px＋日期 166px = 373px，卡内只有 308px，多出来的 65px 一路
+   顶到屏幕外，首页和 team.html 因此整页能横拖 24px（360 屏 55px、320 屏
+   94px）。窄屏八张卡是单列堆着的，不存在「对不齐」的问题，所以这一档换行
+   是安全的；桌面两列那一档 373px 本来就在 ~450px 的卡内宽里，wrap 不会触发。 */
+.team-card .sys-title .team-updated{
+  margin-left:auto; padding-left:10px;
+  font-size:12px; font-weight:600; letter-spacing:0;
+  color:var(--ink-3); white-space:nowrap;
+}
 /* 四个位置，每格 = 「自己内容要多宽」＋「剩下的地平均分一份」。这就是
    `flex:1 1 auto`：基准宽度取内容（flex-basis:auto），多出来的空间按 grow
    平均分。**不要退回 grid + fr** —— `2fr 2fr 1fr 1fr` 是按份数分，有「或」
@@ -1424,13 +1475,18 @@ html:not([data-lang="zh"]) .team-member-name{min-height:2.7em}
    真的空隙＋圆角卡，这套 1px 缝的写法它一条都不用了 —— 见 .guide-grid
    那一段。速览卡、技能卡、形态卡三处一个字没动。 */
 .glance-grid, .skill-grid, .form-cards{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));
   gap:1px; background:var(--line); border:1px solid var(--line); margin-top:16px;
 }
 /* 技能卡里要放一整段描述，两列时会窄到每行只剩五六个词；给它们更高的
    最小宽度，宁可早一点折成一列。 */
-.skill-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.form-cards{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+/* min(320px,100%)，不是 320px：轨道的最小值过去写死 320，而小于 356px 的
+   屏（320 的 iPhone SE、280 的 Galaxy Fold 外屏）减掉两侧 18px 边距只剩
+   284，轨道硬要 320 就把整页撑出横向滚动 —— 技能卡比屏幕还宽。min() 让下限
+   在窄屏退成「容器有多宽就多宽」，宽屏仍是原来那个数，一个字都不变。
+   下面 .glance-grid / .form-cards 那两个 250 / 280 是同一个毛病，一起套。 */
+.skill-grid{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
+.form-cards{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
 
 .glance-card{background:var(--surface); padding:18px 18px 20px}
 /* 攻略目录页的卡片整张是链接（guides.html），而速览卡、技能卡、形态卡画的
@@ -2363,9 +2419,16 @@ a.cell-link:hover{border-bottom-color:currentColor}
   text-transform:uppercase; color:var(--ink-3); font-weight:500;
 }
 .map-search-box{position:relative}
+/* 16px 是 iOS 画的线，不是排版上的决定（2026-11-07）。
+   Safari 只在聚焦的输入框字号**小于 16px** 时把整页放大，而且松手不还原 ——
+   读者敲了两个字母，页面就停在放大状态，得自己捏回去。这一栏原来是 13.5px
+   （和侧栏正文一致），看着更齐，但输入框跟正文不是一回事：正文永远不会被聚焦。
+   宽度不用动，padding 也留着 —— 16px 只让这个框从 36px 长到 42px，而它在
+   232px 宽、本来就能滚的侧栏里。站内搜索框（.search-input）早就是 16px，
+   这一处是漏网的。 */
 .map-search-input{
   width:100%; padding:8px 32px 8px 10px;
-  font-family:var(--cjk); font-size:13.5px; line-height:1.5; color:var(--ink);
+  font-family:var(--cjk); font-size:16px; line-height:1.5; color:var(--ink);
   background:var(--paper); border:1px solid var(--line-2); border-radius:3px;
 }
 .map-search-input:focus{outline:none; border-color:var(--ink); box-shadow:0 0 0 3px rgba(21,24,27,.08)}
